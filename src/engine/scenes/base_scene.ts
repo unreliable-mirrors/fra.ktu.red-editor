@@ -9,6 +9,7 @@ export class BaseScene implements IScene {
   public constructor() {
     this.layers = [];
     this.container = new Container();
+    this.container.eventMode = "none";
   }
 
   addLayer(layer: ILayer): void {

@@ -1,7 +1,7 @@
-import { Container } from "pixi.js";
-import { ILayer } from "../ilayer";
+import { Container, FederatedPointerEvent, Ticker } from "pixi.js";
+import { IEditorLayer } from "./ieditor_layer";
 
-export class ContainerLayer implements ILayer {
+export class ContainerLayer implements IEditorLayer {
   container: Container;
 
   public constructor() {
@@ -15,4 +15,8 @@ export class ContainerLayer implements ILayer {
   unbind(): void {
     this.container.parent.removeChild(this.container);
   }
+
+  tick(time: Ticker): void {}
+
+  pointerDown(event: FederatedPointerEvent): void {}
 }

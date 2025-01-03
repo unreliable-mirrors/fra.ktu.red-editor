@@ -1,14 +1,28 @@
-import { Assets, Sprite } from "pixi.js";
-import DataStore from "../../ui/core/data_store";
-import EventDispatcher from "../../ui/core/event_dispatcher";
-import { ILayer } from "../ilayer";
+import { Assets, FederatedPointerEvent, Sprite, Ticker } from "pixi.js";
+import DataStore from "../ui/core/data_store";
+import EventDispatcher from "../ui/core/event_dispatcher";
+import { ILayer } from "../../engine/ilayer";
 import { ContainerLayer } from "../layers/container_layer";
-import { BaseScene } from "./base_scene";
+import { BaseScene } from "../../engine/scenes/base_scene";
 import { ShaderLayer } from "../layers/shader_layer";
+import { IEditorLayer } from "../layers/ieditor_layer";
 
 export class EditorScene extends BaseScene {
+  activeLayer?: IEditorLayer;
   public constructor() {
     super();
+    this.container.eventMode = "static";
+    Ticker.shared.add((time) => {
+      for (var layer of this.layers) {
+        layer.tick(time);
+      }
+    });
+
+    this.container.on("pointerdown", (event: FederatedPointerEvent) => {
+      console.log("CLICK");
+      this.activeLayer?.pointerDown(event);
+    });
+
     EventDispatcher.getInstance().addEventListener(
       "scene",
       "addSpriteLayer",
@@ -27,6 +41,7 @@ export class EditorScene extends BaseScene {
 
   addLayer(layer: ILayer): void {
     super.addLayer(layer);
+    this.activeLayer = layer as IEditorLayer;
     DataStore.getInstance().setStore("layers", this.layers);
   }
 
