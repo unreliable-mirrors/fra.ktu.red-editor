@@ -1,4 +1,11 @@
-import { Assets, FederatedPointerEvent, Sprite, Ticker } from "pixi.js";
+import {
+  Application,
+  Assets,
+  FederatedPointerEvent,
+  Graphics,
+  Sprite,
+  Ticker,
+} from "pixi.js";
 import DataStore from "../ui/core/data_store";
 import EventDispatcher from "../ui/core/event_dispatcher";
 import { ILayer } from "../../engine/ilayer";
@@ -12,6 +19,12 @@ export class EditorScene extends BaseScene {
   public constructor() {
     super();
     this.container.eventMode = "static";
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    this.container.addChild(
+      new Graphics().rect(0, 0, width, height).fill(0x000000)
+    );
     Ticker.shared.add((time) => {
       for (var layer of this.layers) {
         layer.tick(time);
