@@ -10,6 +10,7 @@ export class EditorUI {
       <div>
         <create-sprite-layer-button></create-sprite-layer-button>
         <create-shader-layer-button></create-shader-layer-button>
+        <layers-list binding="layers" pirulito="TOTAL"></layers-list>
       </div>
     );
   }

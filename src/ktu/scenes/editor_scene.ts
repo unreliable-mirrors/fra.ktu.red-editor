@@ -1,5 +1,4 @@
 import {
-  Application,
   Assets,
   FederatedPointerEvent,
   Graphics,

@@ -4,18 +4,17 @@ import DataStore from "./data_store";
 import EventDispatcher from "./event_dispatcher";
 
 export class KTUComponent extends HTMLElement {
-  binding: any;
+  bindingData: any;
 
   constructor() {
     super();
     this.updateState();
-    this.bindEvents();
   }
 
   connectedCallback() {
-    console.log("CONNECTED CALLBACK");
     this.updateState();
     this.reRender();
+    this.bindEvents();
   }
 
   updateStateWrapper() {
@@ -25,7 +24,7 @@ export class KTUComponent extends HTMLElement {
   }
 
   updateState() {
-    this.binding =
+    this.bindingData =
       this.getAttribute("binding") &&
       DataStore.getInstance().getStore(this.getAttribute("binding")!)
         ? DataStore.getInstance().getStore(this.getAttribute("binding")!)

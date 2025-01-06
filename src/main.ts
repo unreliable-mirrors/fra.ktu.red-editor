@@ -3,6 +3,7 @@ import "./style.css";
 import { CreateShaderLayerButtonComponent } from "./ktu/ui/components/add_shader_layer";
 import { CreateSpriteLayerButtonComponent } from "./ktu/ui/components/add_sprite_layer";
 import EventDispatcher from "./ktu/ui/core/event_dispatcher";
+import { LayersList } from "./ktu/ui/components/layers_list";
 
 declare global {
   interface Window {
@@ -19,4 +20,5 @@ editor.init();
 export default {
   CreateShaderLayerButtonComponent,
   CreateSpriteLayerButtonComponent,
+  LayersList,
 };
