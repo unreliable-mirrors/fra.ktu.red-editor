@@ -10,8 +10,8 @@ import EventDispatcher from "../ui/core/event_dispatcher";
 import { ILayer } from "../../engine/ilayer";
 import { ContainerLayer } from "../layers/container_layer";
 import { BaseScene } from "../../engine/scenes/base_scene";
-import { ShaderLayer } from "../layers/shader_layer";
 import { IEditorLayer } from "../layers/ieditor_layer";
+import { MonoPixelDrawLayer } from "../layers/mono_pixel_draw_layer";
 
 export class EditorScene extends BaseScene {
   activeLayer?: IEditorLayer;
@@ -33,6 +33,14 @@ export class EditorScene extends BaseScene {
     this.container.on("pointerdown", (event: FederatedPointerEvent) => {
       console.log("CLICK");
       this.activeLayer?.pointerDown(event);
+    });
+    this.container.on("pointerup", (event: FederatedPointerEvent) => {
+      console.log("CLICK");
+      this.activeLayer?.pointerUp(event);
+    });
+    this.container.on("pointermove", (event: FederatedPointerEvent) => {
+      console.log("CLICK");
+      this.activeLayer?.pointerMove(event);
     });
 
     EventDispatcher.getInstance().addEventListener(
@@ -59,18 +67,13 @@ export class EditorScene extends BaseScene {
 
   async addSpriteLayer() {
     console.log("ADD SPRITE LAYER");
-    const layer = new ContainerLayer();
-    //
-    const texture = await Assets.load("/day1_1.png");
-    const sprite = new Sprite(texture);
-    sprite.x = Math.random() * 1000;
-    layer.container.addChild(sprite);
+    const layer = new MonoPixelDrawLayer();
     this.addLayer(layer);
   }
 
   addShaderLayer() {
     console.log("ADD SHADER LAYER");
-    const layer = new ShaderLayer();
+    const layer = new MonoPixelDrawLayer();
     this.addLayer(layer);
   }
 }

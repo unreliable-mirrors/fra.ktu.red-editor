@@ -1,5 +1,4 @@
 import {
-  Application,
   Container,
   FederatedPointerEvent,
   Filter,
@@ -8,13 +7,11 @@ import {
   UniformGroup,
 } from "pixi.js";
 
-import vertex from "../shaders/defaultFilter.vert?raw";
-import fragment from "../shaders/firstShader.frag?raw";
 import { IEditorLayer } from "./ieditor_layer";
 
-export class ShaderLayer implements IEditorLayer {
+export abstract class ShaderLayer implements IEditorLayer {
   parent?: Container;
-  uniforms = new UniformGroup({
+  uniforms: UniformGroup = new UniformGroup({
     u_mouse: { value: new Point(1, 1), type: "vec2<f32>" },
     u_x: { value: 0, type: "f32" },
     u_y: { value: 0, type: "f32" },
@@ -22,17 +19,10 @@ export class ShaderLayer implements IEditorLayer {
 
   public constructor() {}
 
+  abstract getShader(): Filter;
+
   bind(container: Container): void {
-    const uniforms = this.uniforms;
-    var shader = Filter.from({
-      gl: {
-        vertex: vertex,
-        fragment: fragment,
-      },
-      resources: {
-        uniforms,
-      },
-    });
+    var shader = this.getShader();
     container.filters = [shader];
     this.parent = container;
   }
@@ -49,4 +39,7 @@ export class ShaderLayer implements IEditorLayer {
     this.uniforms.uniforms.u_x = event.clientX / this.parent!.width;
     this.uniforms.uniforms.u_y = event.clientY / this.parent!.height;
   }
+
+  pointerUp(event: FederatedPointerEvent): void {}
+  pointerMove(event: FederatedPointerEvent): void {}
 }
