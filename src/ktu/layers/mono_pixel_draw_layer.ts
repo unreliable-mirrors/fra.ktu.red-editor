@@ -61,13 +61,25 @@ export class MonoPixelDrawLayer extends ContainerLayer {
     }
   }
 
+  repaint() {
+    this.graphics.clear();
+    for (var key in this.state.points) {
+      const x = parseInt(key.split("X")[0]);
+      const y = parseInt(key.split("X")[1]);
+      this.graphics.rect(x, y, this.pixelSize, this.pixelSize).fill(0xffffff);
+    }
+  }
+
   paint(x: number, y: number) {
     if (!this.state.points[`${x}X${y}`]) {
       this.graphics.rect(x, y, this.pixelSize, this.pixelSize).fill(0xffffff);
       this.state.points[`${x}X${y}`] = true;
     } else {
-      this.graphics.rect(x, y, this.pixelSize, this.pixelSize).fill(0x000000);
+      this.graphics
+        .rect(x, y, this.pixelSize, this.pixelSize)
+        .fill({ color: 0x000000, alpha: 0 });
       delete this.state.points[`${x}X${y}`];
+      this.repaint();
     }
   }
 }
