@@ -11,13 +11,17 @@ export class CreateSpriteLayerButtonComponent extends KTUComponent {
   render(): Element {
     return (
       <div>
-        <button onclick={this.handleClick}>Add Sprite Layer</button>
+        <button onclick={this.handleClick}>Add Draw Layer</button>
       </div>
     );
   }
 
   handleClick() {
-    EventDispatcher.getInstance().dispatchEvent("scene", "addSpriteLayer", {});
+    EventDispatcher.getInstance().dispatchEvent(
+      "scene",
+      "add_mono_pixel_draw_layer",
+      {}
+    );
   }
 }
 

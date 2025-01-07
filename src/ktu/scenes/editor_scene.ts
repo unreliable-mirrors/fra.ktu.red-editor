@@ -1,22 +1,21 @@
-import {
-  Assets,
-  FederatedPointerEvent,
-  Graphics,
-  Sprite,
-  Ticker,
-} from "pixi.js";
+import { FederatedPointerEvent, Graphics, Ticker } from "pixi.js";
 import DataStore from "../ui/core/data_store";
 import EventDispatcher from "../ui/core/event_dispatcher";
 import { ILayer } from "../../engine/ilayer";
-import { ContainerLayer } from "../layers/container_layer";
 import { BaseScene } from "../../engine/scenes/base_scene";
-import { IEditorLayer } from "../layers/ieditor_layer";
-import { MonoPixelDrawLayer } from "../layers/mono_pixel_draw_layer";
+import { EditorLayerState, IEditorLayer } from "../layers/ieditor_layer";
+import {
+  MonoPixelDrawLayer,
+  MonoPixelDrawLayerState,
+} from "../layers/mono_pixel_draw_layer";
 
 export class EditorScene extends BaseScene {
   activeLayer?: IEditorLayer;
+  layers: IEditorLayer[];
+
   public constructor() {
     super();
+    this.layers = [];
     this.container.eventMode = "static";
 
     const width = window.innerWidth;
@@ -45,16 +44,29 @@ export class EditorScene extends BaseScene {
 
     EventDispatcher.getInstance().addEventListener(
       "scene",
-      "addSpriteLayer",
+      "add_mono_pixel_draw_layer",
       () => {
-        this.addSpriteLayer();
+        this.addMonoPixelDrawLayer();
       }
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
-      "addShaderLayer",
+      "loadState",
+      (payload: EditorLayerState[]) => {
+        console.log("PAYLOAD", payload, payload[0].points);
+        for (const state of payload) {
+          if (state.name === "mono_pixel_draw_layer") {
+            this.addMonoPixelDrawLayer(state as MonoPixelDrawLayerState);
+          }
+        }
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "exportState",
       () => {
-        this.addShaderLayer();
+        const state = this.layers.map((e) => e.state);
+        console.log(JSON.stringify(state));
       }
     );
   }
@@ -65,15 +77,8 @@ export class EditorScene extends BaseScene {
     DataStore.getInstance().setStore("layers", this.layers);
   }
 
-  async addSpriteLayer() {
-    console.log("ADD SPRITE LAYER");
-    const layer = new MonoPixelDrawLayer();
-    this.addLayer(layer);
-  }
-
-  addShaderLayer() {
-    console.log("ADD SHADER LAYER");
-    const layer = new MonoPixelDrawLayer();
+  async addMonoPixelDrawLayer(state?: MonoPixelDrawLayerState) {
+    const layer = new MonoPixelDrawLayer(state);
     this.addLayer(layer);
   }
 }

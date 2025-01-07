@@ -14,7 +14,6 @@ class DataStore {
   }
 
   getStore(key: string): any {
-    console.log("DATA", this._data);
     return this._data[key];
   }
 

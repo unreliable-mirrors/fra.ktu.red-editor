@@ -4,6 +4,8 @@ import { CreateShaderLayerButtonComponent } from "./ktu/ui/components/add_shader
 import { CreateSpriteLayerButtonComponent } from "./ktu/ui/components/add_sprite_layer";
 import EventDispatcher from "./ktu/ui/core/event_dispatcher";
 import { LayersList } from "./ktu/ui/components/layers_list";
+import { ExportStateButtonComponent } from "./ktu/ui/components/export_state";
+import { LoadStateComponent } from "./ktu/ui/components/load_state";
 
 declare global {
   interface Window {
@@ -21,4 +23,6 @@ export default {
   CreateShaderLayerButtonComponent,
   CreateSpriteLayerButtonComponent,
   LayersList,
+  ExportStateButtonComponent,
+  LoadStateComponent,
 };

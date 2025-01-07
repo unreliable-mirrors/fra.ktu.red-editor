@@ -9,7 +9,8 @@ export class EditorUI {
     this.anchor.appendChild(
       <div>
         <create-sprite-layer-button></create-sprite-layer-button>
-        <create-shader-layer-button></create-shader-layer-button>
+        <export-state-button></export-state-button>
+        <load-state></load-state>
         <layers-list binding="layers" pirulito="TOTAL"></layers-list>
       </div>
     );

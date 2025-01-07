@@ -10,14 +10,19 @@ import {
 import { IEditorLayer } from "./ieditor_layer";
 
 export abstract class ShaderLayer implements IEditorLayer {
+  layerId: string;
   parent?: Container;
   uniforms: UniformGroup = new UniformGroup({
     u_mouse: { value: new Point(1, 1), type: "vec2<f32>" },
     u_x: { value: 0, type: "f32" },
     u_y: { value: 0, type: "f32" },
   });
+  abstract state: { name: string; layerId: string; [key: string]: any };
 
-  public constructor() {}
+  public constructor() {
+    //TODO: REPLACE THIS FOR A GLOBAL SAFE COUNTER
+    this.layerId = Math.floor(Math.random() * 9999999999) + "";
+  }
 
   abstract getShader(): Filter;
 
