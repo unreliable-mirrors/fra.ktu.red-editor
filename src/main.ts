@@ -6,6 +6,7 @@ import EventDispatcher from "./ktu/ui/core/event_dispatcher";
 import { LayersList } from "./ktu/ui/components/layers_list";
 import { ExportStateButtonComponent } from "./ktu/ui/components/export_state";
 import { LoadStateComponent } from "./ktu/ui/components/load_state";
+import { CreateBackgroundLayerButtonComponent } from "./ktu/ui/components/add_background_layer";
 
 declare global {
   interface Window {
@@ -22,6 +23,7 @@ editor.init();
 export default {
   CreateShaderLayerButtonComponent,
   CreateSpriteLayerButtonComponent,
+  CreateBackgroundLayerButtonComponent,
   LayersList,
   ExportStateButtonComponent,
   LoadStateComponent,

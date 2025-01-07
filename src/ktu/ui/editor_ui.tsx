@@ -8,10 +8,11 @@ export class EditorUI {
   public init() {
     this.anchor.appendChild(
       <div>
+        <create-background-layer-button></create-background-layer-button>
         <create-sprite-layer-button></create-sprite-layer-button>
         <export-state-button></export-state-button>
         <load-state></load-state>
-        <layers-list binding="layers" pirulito="TOTAL"></layers-list>
+        <layers-list binding="layers"></layers-list>
       </div>
     );
   }

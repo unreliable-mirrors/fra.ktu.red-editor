@@ -8,6 +8,10 @@ import {
   MonoPixelDrawLayer,
   MonoPixelDrawLayerState,
 } from "../layers/mono_pixel_draw_layer";
+import {
+  BackgroundLayer,
+  BackgroundLayerState,
+} from "../layers/background_layer";
 
 export class EditorScene extends BaseScene {
   activeLayer?: IEditorLayer;
@@ -51,12 +55,21 @@ export class EditorScene extends BaseScene {
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
+      "add_background_layer",
+      () => {
+        this.addBackgroundLayer();
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
       "loadState",
       (payload: EditorLayerState[]) => {
         console.log("PAYLOAD", payload, payload[0].points);
         for (const state of payload) {
           if (state.name === "mono_pixel_draw_layer") {
             this.addMonoPixelDrawLayer(state as MonoPixelDrawLayerState);
+          } else if (state.name === "background_layer") {
+            this.addBackgroundLayer(state as BackgroundLayerState);
           }
         }
       }
@@ -93,6 +106,11 @@ export class EditorScene extends BaseScene {
 
   async addMonoPixelDrawLayer(state?: MonoPixelDrawLayerState) {
     const layer = new MonoPixelDrawLayer(state);
+    this.addLayer(layer);
+  }
+
+  async addBackgroundLayer(state?: BackgroundLayerState) {
+    const layer = new BackgroundLayer(state);
     this.addLayer(layer);
   }
 }

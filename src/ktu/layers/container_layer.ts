@@ -6,11 +6,13 @@ export abstract class ContainerLayer implements IEditorLayer {
   parent?: Container;
   container: Container;
   abstract state: any;
+  active: boolean;
 
   public constructor() {
     this.container = new Container();
     //TODO: REPLACE THIS FOR A GLOBAL SAFE COUNTER
     this.layerId = Math.floor(Math.random() * 9999999999) + "";
+    this.active = false;
   }
 
   bind(container: Container): void {
