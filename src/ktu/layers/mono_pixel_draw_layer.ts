@@ -22,7 +22,6 @@ export class MonoPixelDrawLayer extends ContainerLayer {
     this.container.addChild(this.graphics);
     this.stroke = {};
 
-    console.log("MONOSTATE", state);
     if (state) {
       this.state = { name: state.name, layerId: state.layerId, points: {} };
       for (var key in state.points) {

@@ -13,3 +13,10 @@ canvas {
   right: 0;
   text-align: right;
 }
+
+.layerItem {
+  background-color: gray;
+}
+.layerItem.active {
+  background-color: white;
+}

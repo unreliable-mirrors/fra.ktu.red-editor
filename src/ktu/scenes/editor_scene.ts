@@ -69,11 +69,25 @@ export class EditorScene extends BaseScene {
         console.log(JSON.stringify(state));
       }
     );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "activateLayer",
+      (payload: IEditorLayer) => {
+        this.activateLayer(payload);
+      }
+    );
+  }
+
+  activateLayer(layer: IEditorLayer) {
+    if (this.activeLayer) this.activeLayer.active = false;
+    this.activeLayer = layer;
+    this.activeLayer.active = true;
+    DataStore.getInstance().setStore("layers", this.layers);
   }
 
   addLayer(layer: ILayer): void {
     super.addLayer(layer);
-    this.activeLayer = layer as IEditorLayer;
+    this.activateLayer(layer as IEditorLayer);
     DataStore.getInstance().setStore("layers", this.layers);
   }
 

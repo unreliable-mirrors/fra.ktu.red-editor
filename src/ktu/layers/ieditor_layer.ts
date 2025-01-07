@@ -8,6 +8,7 @@ export type EditorLayerState = {
 };
 
 export interface IEditorLayer extends ILayer {
+  active: boolean;
   state: EditorLayerState;
   pointerDown(event: FederatedPointerEvent): void;
   pointerUp(event: FederatedPointerEvent): void;
