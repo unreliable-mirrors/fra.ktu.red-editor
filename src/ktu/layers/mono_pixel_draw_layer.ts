@@ -8,10 +8,12 @@ export type MonoPixelDrawLayerState = {
   points: Record<string, boolean>;
   color: string;
   pixelSize: number;
+  panX: number;
+  panY: number;
 };
 
 export type MonoPixelDrawLayerSetting = {
-  field: "color" | "pixelSize";
+  field: "color" | "pixelSize" | "panX" | "panY";
   type: "color" | "integer";
   onchange: (value: string) => void;
 };
@@ -38,6 +40,22 @@ export class MonoPixelDrawLayer extends ContainerLayer {
         this.repaint();
       },
     },
+    {
+      field: "panX",
+      type: "integer",
+      onchange: (value: string) => {
+        this.state.panX = parseInt(value);
+        this.repaint();
+      },
+    },
+    {
+      field: "panY",
+      type: "integer",
+      onchange: (value: string) => {
+        this.state.panY = parseInt(value);
+        this.repaint();
+      },
+    },
   ];
 
   constructor(state?: MonoPixelDrawLayerState) {
@@ -53,6 +71,8 @@ export class MonoPixelDrawLayer extends ContainerLayer {
         points: {},
         color: state.color,
         pixelSize: state.pixelSize,
+        panX: state.panX,
+        panY: state.panY,
       };
       for (var key in state.points) {
         const x = parseInt(key.split("X")[0]);
@@ -66,6 +86,8 @@ export class MonoPixelDrawLayer extends ContainerLayer {
         points: {},
         color: "#FFFFFF",
         pixelSize: 15,
+        panX: 0,
+        panY: 0,
       };
     }
   }
@@ -100,8 +122,8 @@ export class MonoPixelDrawLayer extends ContainerLayer {
       const y = parseInt(key.split("X")[1]);
       this.graphics
         .rect(
-          x * this.state.pixelSize,
-          y * this.state.pixelSize,
+          x * this.state.pixelSize + this.state.panX,
+          y * this.state.pixelSize + this.state.panY,
           this.state.pixelSize,
           this.state.pixelSize
         )
@@ -114,8 +136,8 @@ export class MonoPixelDrawLayer extends ContainerLayer {
     if (!this.state.points[`${x}X${y}`]) {
       this.graphics
         .rect(
-          x * this.state.pixelSize,
-          y * this.state.pixelSize,
+          x * this.state.pixelSize + this.state.panX,
+          y * this.state.pixelSize + this.state.panY,
           this.state.pixelSize,
           this.state.pixelSize
         )
