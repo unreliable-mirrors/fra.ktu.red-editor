@@ -12,6 +12,7 @@ import {
   BackgroundLayer,
   BackgroundLayerState,
 } from "../layers/background_layer";
+import { ImageLayer, ImageLayerState } from "../layers/image_layer";
 
 let index = 0;
 export const getSecureIndex = (): number => {
@@ -69,6 +70,13 @@ export class EditorScene extends BaseScene {
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
+      "add_image_layer",
+      () => {
+        this.addImageLayer();
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
       "loadState",
       (payload: EditorLayerState[]) => {
         for (const state of payload) {
@@ -76,6 +84,8 @@ export class EditorScene extends BaseScene {
             this.addMonoPixelDrawLayer(state as MonoPixelDrawLayerState);
           } else if (state.name === "background_layer") {
             this.addBackgroundLayer(state as BackgroundLayerState);
+          } else if (state.name === "image_layer") {
+            this.addImageLayer(state as ImageLayerState);
           }
         }
       }
@@ -126,6 +136,10 @@ export class EditorScene extends BaseScene {
 
   async addBackgroundLayer(state?: BackgroundLayerState) {
     const layer = new BackgroundLayer(state);
+    this.addLayer(layer);
+  }
+  async addImageLayer(state?: ImageLayerState) {
+    const layer = new ImageLayer(state);
     this.addLayer(layer);
   }
 }

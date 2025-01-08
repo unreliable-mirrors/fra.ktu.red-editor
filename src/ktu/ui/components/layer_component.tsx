@@ -3,6 +3,7 @@ import jsx from "texsaur";
 import EventDispatcher from "../core/event_dispatcher";
 import { KTUComponent } from "../core/ktu_component";
 import { IEditorLayer } from "../../layers/ieditor_layer";
+import { FileLoaderComponent } from "./file_loader";
 
 export class LayerComponent extends KTUComponent {
   layer: IEditorLayer;
@@ -58,6 +59,13 @@ export class LayerComponent extends KTUComponent {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>
+            </div>
+          );
+        } else if (setting.type === "file") {
+          settings.push(
+            <div>
+              <span>{setting.field}: </span>
+              {new FileLoaderComponent({ onchange: setting.onchange })}
             </div>
           );
         }

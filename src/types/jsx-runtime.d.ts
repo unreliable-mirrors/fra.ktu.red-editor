@@ -6,5 +6,6 @@ declare namespace JSX {
     ["export-state-button"]: any;
     ["load-state"]: any;
     ["create-background-layer-button"]: any;
+    ["create-image-layer-button"]: any;
   }
 }
