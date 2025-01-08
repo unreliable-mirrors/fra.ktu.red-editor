@@ -13,6 +13,12 @@ import {
   BackgroundLayerState,
 } from "../layers/background_layer";
 
+let index = 0;
+export const getSecureIndex = (): number => {
+  index++;
+  return index;
+};
+
 export class EditorScene extends BaseScene {
   activeLayer?: IEditorLayer;
   layers: IEditorLayer[];

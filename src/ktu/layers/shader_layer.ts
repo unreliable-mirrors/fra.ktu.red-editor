@@ -8,22 +8,23 @@ import {
 } from "pixi.js";
 
 import { EditorLayerSetting, IEditorLayer } from "./ieditor_layer";
+import { getSecureIndex } from "../scenes/editor_scene";
 
 export abstract class ShaderLayer implements IEditorLayer {
-  layerId: string;
+  layerId: number;
   parent?: Container;
   uniforms: UniformGroup = new UniformGroup({
     u_mouse: { value: new Point(1, 1), type: "vec2<f32>" },
     u_x: { value: 0, type: "f32" },
     u_y: { value: 0, type: "f32" },
   });
-  abstract state: { name: string; layerId: string; [key: string]: any };
+  abstract state: { name: string; layerId: number; [key: string]: any };
   abstract settings: EditorLayerSetting[];
   active: boolean;
 
   public constructor() {
     //TODO: REPLACE THIS FOR A GLOBAL SAFE COUNTER
-    this.layerId = Math.floor(Math.random() * 9999999999) + "";
+    this.layerId = getSecureIndex();
     this.active = false;
   }
 

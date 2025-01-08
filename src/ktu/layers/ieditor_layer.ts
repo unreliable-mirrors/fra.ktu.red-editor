@@ -3,7 +3,7 @@ import { ILayer } from "../../engine/ilayer";
 
 export type EditorLayerState = {
   name: string;
-  layerId: string;
+  layerId: number;
   [key: string]: any;
 };
 

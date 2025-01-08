@@ -3,7 +3,7 @@ import { ContainerLayer } from "./container_layer";
 
 export type BackgroundLayerState = {
   name: string;
-  layerId: string;
+  layerId: number;
   color: string;
   alpha: number;
 };

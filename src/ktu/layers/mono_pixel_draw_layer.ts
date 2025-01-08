@@ -4,7 +4,7 @@ import { ContainerLayer } from "./container_layer";
 
 export type MonoPixelDrawLayerState = {
   name: string;
-  layerId: string;
+  layerId: number;
   points: Record<string, boolean>;
   color: string;
   alpha: number;

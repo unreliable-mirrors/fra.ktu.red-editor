@@ -1,8 +1,9 @@
 import { Container, FederatedPointerEvent, Ticker } from "pixi.js";
 import { EditorLayerSetting, IEditorLayer } from "./ieditor_layer";
+import { getSecureIndex } from "../scenes/editor_scene";
 
 export abstract class ContainerLayer implements IEditorLayer {
-  layerId: string;
+  layerId: number;
   parent?: Container;
   container: Container;
   abstract state: any;
@@ -12,7 +13,7 @@ export abstract class ContainerLayer implements IEditorLayer {
   public constructor() {
     this.container = new Container();
     //TODO: REPLACE THIS FOR A GLOBAL SAFE COUNTER
-    this.layerId = Math.floor(Math.random() * 9999999999) + "";
+    this.layerId = getSecureIndex();
     this.active = false;
   }
 
