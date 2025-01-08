@@ -8,7 +8,7 @@ export class FrakturedEditor {
   uiAnchor: HTMLElement;
   live: boolean = false;
 
-  scene: IScene;
+  scene?: IScene;
 
   public constructor(canvasAnchor: HTMLElement, uiAnchor: HTMLElement) {
     this.canvasAnchor = canvasAnchor;
