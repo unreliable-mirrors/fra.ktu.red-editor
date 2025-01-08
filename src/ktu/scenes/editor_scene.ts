@@ -1,7 +1,6 @@
 import { FederatedPointerEvent, Graphics, Ticker } from "pixi.js";
 import DataStore from "../ui/core/data_store";
 import EventDispatcher from "../ui/core/event_dispatcher";
-import { ILayer } from "../../engine/ilayer";
 import { BaseScene } from "../../engine/scenes/base_scene";
 import { EditorLayerState, IEditorLayer } from "../layers/ieditor_layer";
 import {
@@ -13,6 +12,9 @@ import {
   BackgroundLayerState,
 } from "../layers/background_layer";
 import { ImageLayer, ImageLayerState } from "../layers/image_layer";
+import { ShaderLayer } from "../shaders/shader_layer";
+import { ContainerLayer } from "../layers/container_layer";
+import { BnwShaderLayer, BnwShaderLayerState } from "../shaders/bnw/bnw_shader";
 
 let index = 0;
 export const getSecureIndex = (): number => {
@@ -22,11 +24,13 @@ export const getSecureIndex = (): number => {
 
 export class EditorScene extends BaseScene {
   activeLayer?: IEditorLayer;
-  layers: IEditorLayer[];
+  layers: ContainerLayer[];
+  shaders: ShaderLayer[];
 
   public constructor() {
     super();
     this.layers = [];
+    this.shaders = [];
     this.container.eventMode = "static";
     console.log("SCENE HEIGHT", window.innerHeight);
     const width = window.innerWidth;
@@ -77,6 +81,13 @@ export class EditorScene extends BaseScene {
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
+      "add_bnw_shader",
+      () => {
+        this.addBnwShader();
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
       "loadState",
       (payload: EditorLayerState[]) => {
         for (const state of payload) {
@@ -121,25 +132,36 @@ export class EditorScene extends BaseScene {
     this.activeLayer = layer;
     this.activeLayer.active = true;
     DataStore.getInstance().setStore("layers", this.layers);
+    DataStore.getInstance().setStore("shaders", this.shaders);
   }
 
-  addLayer(layer: ILayer): void {
+  addLayer(layer: ContainerLayer): void {
     super.addLayer(layer);
-    this.activateLayer(layer as IEditorLayer);
+    this.activateLayer(layer);
     DataStore.getInstance().setStore("layers", this.layers);
   }
 
-  async addMonoPixelDrawLayer(state?: MonoPixelDrawLayerState) {
+  addShader(layer: ShaderLayer): void {
+    super.addShader(layer);
+    this.activateLayer(layer);
+    DataStore.getInstance().setStore("shaders", this.shaders);
+  }
+
+  addMonoPixelDrawLayer(state?: MonoPixelDrawLayerState) {
     const layer = new MonoPixelDrawLayer(state);
     this.addLayer(layer);
   }
 
-  async addBackgroundLayer(state?: BackgroundLayerState) {
+  addBackgroundLayer(state?: BackgroundLayerState) {
     const layer = new BackgroundLayer(state);
     this.addLayer(layer);
   }
-  async addImageLayer(state?: ImageLayerState) {
+  addImageLayer(state?: ImageLayerState) {
     const layer = new ImageLayer(state);
     this.addLayer(layer);
+  }
+  addBnwShader(state?: BnwShaderLayerState) {
+    const layer = new BnwShaderLayer(state);
+    this.addShader(layer);
   }
 }

@@ -1,4 +1,4 @@
-import { Assets, Container, Graphics, Sprite } from "pixi.js";
+import { Assets, Container, Sprite, Texture, VideoSource } from "pixi.js";
 import { ContainerLayer } from "./container_layer";
 
 export type ImageLayerState = {
@@ -101,8 +101,12 @@ export class ImageLayer extends ContainerLayer {
     this.container.removeChildren();
     this.sprite.destroy();
     if (this.state.imageUrl) {
-      const texturePromise = Assets.load(this.state.imageUrl);
-      texturePromise.then((resolvedTexture) => {
+      VideoSource.defaultOptions = {
+        ...VideoSource.defaultOptions,
+        loop: true,
+      };
+      const texturePromise = Assets.load<Texture>(this.state.imageUrl);
+      texturePromise.then((resolvedTexture: Texture) => {
         this.sprite = Sprite.from(resolvedTexture);
         this.sprite.scale = this.state.scale / 100;
         this.sprite.x = this.state.panX;

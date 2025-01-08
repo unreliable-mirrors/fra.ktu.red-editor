@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  color: white;
 }
 
 .hidden {
@@ -31,4 +32,13 @@ body {
 }
 .layerItem.active {
   background-color: white;
+  color: black;
+}
+
+.shaderItem {
+  background-color: gray;
+}
+.shaderItem.active {
+  background-color: white;
+  color: black;
 }

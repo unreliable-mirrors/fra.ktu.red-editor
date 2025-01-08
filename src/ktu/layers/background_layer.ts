@@ -66,7 +66,7 @@ export class BackgroundLayer extends ContainerLayer {
   repaint() {
     this.graphics.clear();
     this.graphics
-      .rect(0, 0, this.parent!.width, this.parent!.height)
+      .rect(0, 0, this.container.parent.width, this.container.parent.height)
       .fill({ color: this.state.color, alpha: this.state.alpha });
   }
 }

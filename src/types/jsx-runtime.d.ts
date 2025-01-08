@@ -7,5 +7,7 @@ declare namespace JSX {
     ["load-state"]: any;
     ["create-background-layer-button"]: any;
     ["create-image-layer-button"]: any;
+    ["shaders-list"]: any;
+    ["create-bnw-shader-button"]: any;
   }
 }
