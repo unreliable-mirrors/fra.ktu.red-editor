@@ -39,6 +39,9 @@ export class EditorScene extends BaseScene {
     this.container.on("pointerup", (event: FederatedPointerEvent) => {
       this.activeLayer?.pointerUp(event);
     });
+    this.container.on("pointerupoutside", (event: FederatedPointerEvent) => {
+      this.activeLayer?.pointerUp(event);
+    });
     this.container.on("pointermove", (event: FederatedPointerEvent) => {
       this.activeLayer?.pointerMove(event);
     });

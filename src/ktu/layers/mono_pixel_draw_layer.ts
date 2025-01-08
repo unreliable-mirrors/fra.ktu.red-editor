@@ -22,6 +22,7 @@ export class MonoPixelDrawLayer extends ContainerLayer {
   graphics: Graphics;
   clicking: boolean = false;
   erasing: boolean = false;
+  hardPainting: boolean = false;
   stroke: Record<string, boolean>;
   state: MonoPixelDrawLayerState;
   settings: MonoPixelDrawLayerSetting[] = [
@@ -98,6 +99,8 @@ export class MonoPixelDrawLayer extends ContainerLayer {
     this.clicking = true;
     if (event.button === 2) {
       this.erasing = true;
+    } else if (event.ctrlKey) {
+      this.hardPainting = true;
     }
     this.stroke = {};
     this.metapaint(event);
@@ -105,6 +108,7 @@ export class MonoPixelDrawLayer extends ContainerLayer {
   pointerUp(): void {
     this.clicking = false;
     this.erasing = false;
+    this.hardPainting = false;
   }
   pointerMove(event: FederatedPointerEvent): void {
     this.metapaint(event);
@@ -142,7 +146,6 @@ export class MonoPixelDrawLayer extends ContainerLayer {
   }
 
   paint(x: number, y: number) {
-    //TODO: CHANGE  X and Y to UNSCALED INDEX POSITIONS
     if (!this.state.points[`${x}X${y}`]) {
       this.graphics
         .rect(
@@ -153,7 +156,7 @@ export class MonoPixelDrawLayer extends ContainerLayer {
         )
         .fill(this.state.color);
       this.state.points[`${x}X${y}`] = true;
-    } else {
+    } else if (!this.hardPainting) {
       this.erase(x, y);
     }
   }
