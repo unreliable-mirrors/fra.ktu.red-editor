@@ -52,7 +52,7 @@ export class BackgroundLayer extends ContainerLayer {
       this.state = {
         name: "background_layer",
         layerId: this.layerId,
-        color: "#FF3333",
+        color: "#000000",
         alpha: 1,
       };
     }
