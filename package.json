@@ -6,7 +6,8 @@
   "homepage": "https://unreliable-mirrors.github.io/fra.ktu.red-editor/",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build-gh": "tsc && vite build -c vite.config.gh.js",
+    "build-web": "tsc && vite build -c vite.config.web.js",
     "preview": "vite preview"
   },
   "devDependencies": {
