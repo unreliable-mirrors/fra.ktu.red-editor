@@ -1,11 +1,12 @@
 import { Container, FederatedPointerEvent, Ticker } from "pixi.js";
-import { IEditorLayer } from "./ieditor_layer";
+import { EditorLayerSetting, IEditorLayer } from "./ieditor_layer";
 
 export abstract class ContainerLayer implements IEditorLayer {
   layerId: string;
   parent?: Container;
   container: Container;
   abstract state: any;
+  abstract settings: EditorLayerSetting[];
   active: boolean;
 
   public constructor() {

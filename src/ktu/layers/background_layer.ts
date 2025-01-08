@@ -4,12 +4,28 @@ import { ContainerLayer } from "./container_layer";
 export type BackgroundLayerState = {
   name: string;
   layerId: string;
-  color: number;
+  color: string;
+};
+
+export type BackgroundLayerSetting = {
+  field: "color";
+  type: "color";
+  onchange: (value: string) => void;
 };
 
 export class BackgroundLayer extends ContainerLayer {
   graphics: Graphics;
   state: BackgroundLayerState;
+  settings: BackgroundLayerSetting[] = [
+    {
+      field: "color",
+      type: "color",
+      onchange: (value) => {
+        this.state.color = value;
+        this.repaint();
+      },
+    },
+  ];
 
   constructor(state?: BackgroundLayerState) {
     super();
@@ -26,7 +42,7 @@ export class BackgroundLayer extends ContainerLayer {
       this.state = {
         name: "background_layer",
         layerId: this.layerId,
-        color: 0x333333,
+        color: "#FF3333",
       };
     }
   }
@@ -37,6 +53,7 @@ export class BackgroundLayer extends ContainerLayer {
   }
 
   repaint() {
+    this.graphics.clear();
     this.graphics
       .rect(0, 0, this.parent!.width, this.parent!.height)
       .fill(this.state.color);

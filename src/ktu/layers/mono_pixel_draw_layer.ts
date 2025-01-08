@@ -6,24 +6,54 @@ export type MonoPixelDrawLayerState = {
   name: string;
   layerId: string;
   points: Record<string, boolean>;
+  color: string;
+  pixelSize: number;
+};
+
+export type MonoPixelDrawLayerSetting = {
+  field: "color" | "pixelSize";
+  type: "color" | "integer";
+  onchange: (value: string) => void;
 };
 
 export class MonoPixelDrawLayer extends ContainerLayer {
   graphics: Graphics;
-  pixelSize: number;
   clicking: boolean = false;
   stroke: Record<string, boolean>;
   state: MonoPixelDrawLayerState;
+  settings: MonoPixelDrawLayerSetting[] = [
+    {
+      field: "color",
+      type: "color",
+      onchange: (value: string) => {
+        this.state.color = value;
+        this.repaint();
+      },
+    },
+    {
+      field: "pixelSize",
+      type: "integer",
+      onchange: (value: string) => {
+        this.state.pixelSize = parseInt(value);
+        this.repaint();
+      },
+    },
+  ];
 
   constructor(state?: MonoPixelDrawLayerState) {
     super();
     this.graphics = new Graphics();
-    this.pixelSize = 15;
     this.container.addChild(this.graphics);
     this.stroke = {};
 
     if (state) {
-      this.state = { name: state.name, layerId: state.layerId, points: {} };
+      this.state = {
+        name: state.name,
+        layerId: state.layerId,
+        points: {},
+        color: state.color,
+        pixelSize: state.pixelSize,
+      };
       for (var key in state.points) {
         const x = parseInt(key.split("X")[0]);
         const y = parseInt(key.split("X")[1]);
@@ -34,6 +64,8 @@ export class MonoPixelDrawLayer extends ContainerLayer {
         name: "mono_pixel_draw_layer",
         layerId: this.layerId,
         points: {},
+        color: "#FFFFFF",
+        pixelSize: 15,
       };
     }
   }
@@ -52,8 +84,10 @@ export class MonoPixelDrawLayer extends ContainerLayer {
 
   metapaint(event: FederatedPointerEvent) {
     if (this.clicking) {
-      const x = Math.floor(event.clientX / this.pixelSize) * this.pixelSize;
-      const y = Math.floor(event.clientY / this.pixelSize) * this.pixelSize;
+      const x =
+        Math.floor(event.clientX / this.state.pixelSize) * this.state.pixelSize;
+      const y =
+        Math.floor(event.clientY / this.state.pixelSize) * this.state.pixelSize;
       if (!this.stroke[`${x}X${y}`]) {
         this.stroke[`${x}X${y}`] = true;
         this.paint(x, y);
@@ -66,18 +100,20 @@ export class MonoPixelDrawLayer extends ContainerLayer {
     for (var key in this.state.points) {
       const x = parseInt(key.split("X")[0]);
       const y = parseInt(key.split("X")[1]);
-      this.graphics.rect(x, y, this.pixelSize, this.pixelSize).fill(0xffffff);
+      this.graphics
+        .rect(x, y, this.state.pixelSize, this.state.pixelSize)
+        .fill(this.state.color);
     }
   }
 
   paint(x: number, y: number) {
+    //TODO: CHANGE  X and Y to UNSCALED INDEX POSITIONS
     if (!this.state.points[`${x}X${y}`]) {
-      this.graphics.rect(x, y, this.pixelSize, this.pixelSize).fill(0xffffff);
+      this.graphics
+        .rect(x, y, this.state.pixelSize, this.state.pixelSize)
+        .fill(this.state.color);
       this.state.points[`${x}X${y}`] = true;
     } else {
-      this.graphics
-        .rect(x, y, this.pixelSize, this.pixelSize)
-        .fill({ color: 0x000000, alpha: 0 });
       delete this.state.points[`${x}X${y}`];
       this.repaint();
     }

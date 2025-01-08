@@ -34,15 +34,12 @@ export class EditorScene extends BaseScene {
     });
 
     this.container.on("pointerdown", (event: FederatedPointerEvent) => {
-      console.log("CLICK");
       this.activeLayer?.pointerDown(event);
     });
     this.container.on("pointerup", (event: FederatedPointerEvent) => {
-      console.log("CLICK");
       this.activeLayer?.pointerUp(event);
     });
     this.container.on("pointermove", (event: FederatedPointerEvent) => {
-      console.log("CLICK");
       this.activeLayer?.pointerMove(event);
     });
 
@@ -64,7 +61,6 @@ export class EditorScene extends BaseScene {
       "scene",
       "loadState",
       (payload: EditorLayerState[]) => {
-        console.log("PAYLOAD", payload, payload[0].points);
         for (const state of payload) {
           if (state.name === "mono_pixel_draw_layer") {
             this.addMonoPixelDrawLayer(state as MonoPixelDrawLayerState);

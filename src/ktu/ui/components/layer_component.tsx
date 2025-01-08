@@ -13,6 +13,26 @@ export class LayerComponent extends KTUComponent {
 
   render(): Element {
     const active = this.layer.active ? "active" : "";
+    const settings: Element[] = [];
+    if (this.layer.active) {
+      for (const setting of this.layer.settings) {
+        if (setting.type === "color") {
+          settings.push(
+            <div>
+              <span>{setting.field}: </span>
+              <input
+                type="color"
+                value={this.layer.state[setting.field]}
+                oninput={(e) => {
+                  console.log((e.target as HTMLInputElement).value);
+                  setting.onchange((e.target as HTMLInputElement).value);
+                }}
+              ></input>
+            </div>
+          );
+        }
+      }
+    }
     return (
       <div
         className={`layerItem ${active}`}
@@ -21,16 +41,19 @@ export class LayerComponent extends KTUComponent {
         }}
       >
         {this.layer.state.name} - {this.layer.state.layerId}
+        {settings}
       </div>
     );
   }
 
   handleClick() {
-    EventDispatcher.getInstance().dispatchEvent(
-      "scene",
-      "activateLayer",
-      this.layer
-    );
+    if (!this.layer.active) {
+      EventDispatcher.getInstance().dispatchEvent(
+        "scene",
+        "activateLayer",
+        this.layer
+      );
+    }
   }
 }
 

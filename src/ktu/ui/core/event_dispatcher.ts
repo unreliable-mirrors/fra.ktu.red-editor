@@ -7,11 +7,9 @@ class EventDispatcher {
   }
 
   addEventListener(target: string, event: string, callback: Function) {
-    console.log("AEL", target, event, callback);
     this._listeners[target] ||= {};
     this._listeners[target][event] ||= [];
     this._listeners[target][event].push(callback);
-    console.log("AEL2", this._listeners);
   }
 
   removeEventListener(target: string, event: string, callback: Function) {
@@ -20,9 +18,7 @@ class EventDispatcher {
   }
 
   dispatchEvent(target: string, event: string, payload: any) {
-    console.log("EVENT", target, event, payload);
     if (this._listeners[target] && this._listeners[target][event]) {
-      console.log("FIRE EVENT", target, event, payload);
       this._listeners[target][event].forEach((callback) => callback(payload));
     }
   }
