@@ -84,10 +84,8 @@ export class MonoPixelDrawLayer extends ContainerLayer {
 
   metapaint(event: FederatedPointerEvent) {
     if (this.clicking) {
-      const x =
-        Math.floor(event.clientX / this.state.pixelSize) * this.state.pixelSize;
-      const y =
-        Math.floor(event.clientY / this.state.pixelSize) * this.state.pixelSize;
+      const x = Math.floor(event.clientX / this.state.pixelSize);
+      const y = Math.floor(event.clientY / this.state.pixelSize);
       if (!this.stroke[`${x}X${y}`]) {
         this.stroke[`${x}X${y}`] = true;
         this.paint(x, y);
@@ -101,7 +99,12 @@ export class MonoPixelDrawLayer extends ContainerLayer {
       const x = parseInt(key.split("X")[0]);
       const y = parseInt(key.split("X")[1]);
       this.graphics
-        .rect(x, y, this.state.pixelSize, this.state.pixelSize)
+        .rect(
+          x * this.state.pixelSize,
+          y * this.state.pixelSize,
+          this.state.pixelSize,
+          this.state.pixelSize
+        )
         .fill(this.state.color);
     }
   }
@@ -110,7 +113,12 @@ export class MonoPixelDrawLayer extends ContainerLayer {
     //TODO: CHANGE  X and Y to UNSCALED INDEX POSITIONS
     if (!this.state.points[`${x}X${y}`]) {
       this.graphics
-        .rect(x, y, this.state.pixelSize, this.state.pixelSize)
+        .rect(
+          x * this.state.pixelSize,
+          y * this.state.pixelSize,
+          this.state.pixelSize,
+          this.state.pixelSize
+        )
         .fill(this.state.color);
       this.state.points[`${x}X${y}`] = true;
     } else {
