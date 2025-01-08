@@ -6,29 +6,31 @@ import DataStore from "./ktu/ui/core/data_store";
 export class FrakturedEditor {
   canvasAnchor: HTMLElement;
   uiAnchor: HTMLElement;
+  live: boolean = false;
 
   scene: IScene;
 
   public constructor(canvasAnchor: HTMLElement, uiAnchor: HTMLElement) {
     this.canvasAnchor = canvasAnchor;
     this.uiAnchor = uiAnchor;
-    this.scene = new EditorScene();
   }
-
   public async init() {
     const app = new Application();
-    app.stage.addChild(this.scene.container);
 
     await app.init({
       background: "#000000 ",
-      resizeTo: window,
+      resizeTo: this.canvasAnchor,
       sharedTicker: true,
     });
     this.canvasAnchor.appendChild(app.canvas);
 
     DataStore.getInstance().setStore("app", app);
 
+    this.scene = new EditorScene();
+    app.stage.addChild(this.scene.container);
+
     const ui = new EditorUI(this.uiAnchor);
     ui.init();
+    this.live = true;
   }
 }

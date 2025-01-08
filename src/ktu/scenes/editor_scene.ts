@@ -21,7 +21,7 @@ export class EditorScene extends BaseScene {
     super();
     this.layers = [];
     this.container.eventMode = "static";
-
+    console.log("SCENE HEIGHT", window.innerHeight);
     const width = window.innerWidth;
     const height = window.innerHeight;
     this.container.addChild(
@@ -34,6 +34,7 @@ export class EditorScene extends BaseScene {
     });
 
     this.container.on("pointerdown", (event: FederatedPointerEvent) => {
+      console.log("CLICK HEIGHT", window.innerHeight);
       this.activeLayer?.pointerDown(event);
     });
     this.container.on("pointerup", (event: FederatedPointerEvent) => {
@@ -90,7 +91,7 @@ export class EditorScene extends BaseScene {
     );
     document.addEventListener(
       "contextmenu",
-      function (e) {
+      (e) => {
         if (!e.ctrlKey) {
           e.preventDefault();
         }

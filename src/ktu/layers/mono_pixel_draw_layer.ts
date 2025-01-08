@@ -127,8 +127,8 @@ export class MonoPixelDrawLayer extends ContainerLayer {
 
   metapaint(event: FederatedPointerEvent) {
     if (this.clicking) {
-      const x = Math.floor(event.clientX / this.state.pixelSize);
-      const y = Math.floor(event.clientY / this.state.pixelSize);
+      const x = Math.floor(event.globalX / this.state.pixelSize);
+      const y = Math.floor(event.globalY / this.state.pixelSize);
       if (!this.stroke[`${x}X${y}`]) {
         this.stroke[`${x}X${y}`] = true;
         if (!this.erasing) {

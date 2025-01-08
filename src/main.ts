@@ -18,7 +18,19 @@ const editor = new FrakturedEditor(
   document.getElementById("canvas")!,
   document.getElementById("ui")!
 );
-editor.init();
+document.getElementById("start-app")?.addEventListener("click", (e) => {
+  document.getElementById("start-app")!.className += " hidden";
+  document.documentElement.requestFullscreen();
+  document.addEventListener("fullscreenchange", () => {
+    if (!editor.live) {
+      console.log("FS HEIGHT", window.innerHeight);
+      document.getElementById("app")!.className = document
+        .getElementById("app")!
+        .className.replace("hidden", "");
+      editor.init();
+    }
+  });
+});
 
 export default {
   CreateShaderLayerButtonComponent,
