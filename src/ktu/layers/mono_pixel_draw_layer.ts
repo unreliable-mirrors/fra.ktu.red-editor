@@ -21,6 +21,7 @@ export type MonoPixelDrawLayerSetting = {
 export class MonoPixelDrawLayer extends ContainerLayer {
   graphics: Graphics;
   clicking: boolean = false;
+  erasing: boolean = false;
   stroke: Record<string, boolean>;
   state: MonoPixelDrawLayerState;
   settings: MonoPixelDrawLayerSetting[] = [
@@ -93,12 +94,17 @@ export class MonoPixelDrawLayer extends ContainerLayer {
   }
 
   pointerDown(event: FederatedPointerEvent): void {
+    console.log("NUMBER", event.button);
     this.clicking = true;
+    if (event.button === 2) {
+      this.erasing = true;
+    }
     this.stroke = {};
     this.metapaint(event);
   }
   pointerUp(): void {
     this.clicking = false;
+    this.erasing = false;
   }
   pointerMove(event: FederatedPointerEvent): void {
     this.metapaint(event);
@@ -110,7 +116,11 @@ export class MonoPixelDrawLayer extends ContainerLayer {
       const y = Math.floor(event.clientY / this.state.pixelSize);
       if (!this.stroke[`${x}X${y}`]) {
         this.stroke[`${x}X${y}`] = true;
-        this.paint(x, y);
+        if (!this.erasing) {
+          this.paint(x, y);
+        } else {
+          this.erase(x, y);
+        }
       }
     }
   }
@@ -144,8 +154,11 @@ export class MonoPixelDrawLayer extends ContainerLayer {
         .fill(this.state.color);
       this.state.points[`${x}X${y}`] = true;
     } else {
-      delete this.state.points[`${x}X${y}`];
-      this.repaint();
+      this.erase(x, y);
     }
+  }
+  erase(x: number, y: number) {
+    delete this.state.points[`${x}X${y}`];
+    this.repaint();
   }
 }

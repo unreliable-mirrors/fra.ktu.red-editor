@@ -85,6 +85,13 @@ export class EditorScene extends BaseScene {
         this.activateLayer(payload);
       }
     );
+    document.addEventListener(
+      "contextmenu",
+      function (e) {
+        e.preventDefault();
+      },
+      false
+    );
   }
 
   activateLayer(layer: IEditorLayer) {
