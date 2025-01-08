@@ -7,7 +7,7 @@ import {
   UniformGroup,
 } from "pixi.js";
 
-import { IEditorLayer } from "./ieditor_layer";
+import { EditorLayerSetting, IEditorLayer } from "./ieditor_layer";
 
 export abstract class ShaderLayer implements IEditorLayer {
   layerId: string;
@@ -18,10 +18,13 @@ export abstract class ShaderLayer implements IEditorLayer {
     u_y: { value: 0, type: "f32" },
   });
   abstract state: { name: string; layerId: string; [key: string]: any };
+  abstract settings: EditorLayerSetting[];
+  active: boolean;
 
   public constructor() {
     //TODO: REPLACE THIS FOR A GLOBAL SAFE COUNTER
     this.layerId = Math.floor(Math.random() * 9999999999) + "";
+    this.active = false;
   }
 
   abstract getShader(): Filter;
@@ -36,6 +39,7 @@ export abstract class ShaderLayer implements IEditorLayer {
     //TODO: REMOVE PROPERLY
   }
 
+  //@ts-ignore
   tick(time: Ticker): void {
     //this.uniforms.uniforms.u_blue = Math.random();
   }
@@ -45,6 +49,8 @@ export abstract class ShaderLayer implements IEditorLayer {
     this.uniforms.uniforms.u_y = event.clientY / this.parent!.height;
   }
 
+  //@ts-ignore
   pointerUp(event: FederatedPointerEvent): void {}
+  //@ts-ignore
   pointerMove(event: FederatedPointerEvent): void {}
 }

@@ -25,9 +25,13 @@ export abstract class ContainerLayer implements IEditorLayer {
     this.container.parent.removeChild(this.container);
   }
 
+  //@ts-ignore
   tick(time: Ticker): void {}
 
+  //@ts-ignore
   pointerDown(event: FederatedPointerEvent): void {}
+  //@ts-ignore
   pointerUp(event: FederatedPointerEvent): void {}
+  //@ts-ignore
   pointerMove(event: FederatedPointerEvent): void {}
 }
