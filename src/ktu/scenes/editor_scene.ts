@@ -91,7 +91,9 @@ export class EditorScene extends BaseScene {
     document.addEventListener(
       "contextmenu",
       function (e) {
-        e.preventDefault();
+        if (!e.ctrlKey) {
+          e.preventDefault();
+        }
       },
       false
     );

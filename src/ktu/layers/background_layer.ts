@@ -5,11 +5,12 @@ export type BackgroundLayerState = {
   name: string;
   layerId: string;
   color: string;
+  alpha: number;
 };
 
 export type BackgroundLayerSetting = {
-  field: "color";
-  type: "color";
+  field: "color" | "alpha";
+  type: "color" | "float";
   onchange: (value: string) => void;
 };
 
@@ -25,6 +26,14 @@ export class BackgroundLayer extends ContainerLayer {
         this.repaint();
       },
     },
+    {
+      field: "alpha",
+      type: "float",
+      onchange: (value) => {
+        this.state.alpha = parseFloat(value);
+        this.repaint();
+      },
+    },
   ];
 
   constructor(state?: BackgroundLayerState) {
@@ -37,12 +46,14 @@ export class BackgroundLayer extends ContainerLayer {
         name: state.name,
         layerId: state.layerId,
         color: state.color,
+        alpha: state.alpha,
       };
     } else {
       this.state = {
         name: "background_layer",
         layerId: this.layerId,
         color: "#FF3333",
+        alpha: 1,
       };
     }
   }
@@ -56,6 +67,6 @@ export class BackgroundLayer extends ContainerLayer {
     this.graphics.clear();
     this.graphics
       .rect(0, 0, this.parent!.width, this.parent!.height)
-      .fill(this.state.color);
+      .fill({ color: this.state.color, alpha: this.state.alpha });
   }
 }

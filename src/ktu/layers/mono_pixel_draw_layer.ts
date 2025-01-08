@@ -7,14 +7,15 @@ export type MonoPixelDrawLayerState = {
   layerId: string;
   points: Record<string, boolean>;
   color: string;
+  alpha: number;
   pixelSize: number;
   panX: number;
   panY: number;
 };
 
 export type MonoPixelDrawLayerSetting = {
-  field: "color" | "pixelSize" | "panX" | "panY";
-  type: "color" | "integer";
+  field: "color" | "pixelSize" | "panX" | "panY" | "alpha";
+  type: "color" | "integer" | "float";
   onchange: (value: string) => void;
 };
 
@@ -31,6 +32,14 @@ export class MonoPixelDrawLayer extends ContainerLayer {
       type: "color",
       onchange: (value: string) => {
         this.state.color = value;
+        this.repaint();
+      },
+    },
+    {
+      field: "alpha",
+      type: "float",
+      onchange: (value: string) => {
+        this.state.alpha = parseFloat(value);
         this.repaint();
       },
     },
@@ -72,6 +81,7 @@ export class MonoPixelDrawLayer extends ContainerLayer {
         layerId: state.layerId,
         points: {},
         color: state.color,
+        alpha: state.alpha,
         pixelSize: state.pixelSize,
         panX: state.panX,
         panY: state.panY,
@@ -87,6 +97,7 @@ export class MonoPixelDrawLayer extends ContainerLayer {
         layerId: this.layerId,
         points: {},
         color: "#FFFFFF",
+        alpha: 1,
         pixelSize: 15,
         panX: 0,
         panY: 0,
@@ -141,7 +152,7 @@ export class MonoPixelDrawLayer extends ContainerLayer {
           this.state.pixelSize,
           this.state.pixelSize
         )
-        .fill(this.state.color);
+        .fill({ color: this.state.color, alpha: this.state.alpha });
     }
   }
 
@@ -154,7 +165,7 @@ export class MonoPixelDrawLayer extends ContainerLayer {
           this.state.pixelSize,
           this.state.pixelSize
         )
-        .fill(this.state.color);
+        .fill({ color: this.state.color, alpha: this.state.alpha });
       this.state.points[`${x}X${y}`] = true;
     } else if (!this.hardPainting) {
       this.erase(x, y);

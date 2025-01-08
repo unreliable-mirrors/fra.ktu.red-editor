@@ -43,6 +43,23 @@ export class LayerComponent extends KTUComponent {
               ></input>
             </div>
           );
+        } else if (setting.type === "float") {
+          settings.push(
+            <div>
+              <span>{setting.field}: </span>
+              <input
+                type="number"
+                value={this.layer.state[setting.field]}
+                min="0"
+                max="1"
+                step="0.01"
+                oninput={(e) => {
+                  console.log((e.target as HTMLInputElement).value);
+                  setting.onchange((e.target as HTMLInputElement).value);
+                }}
+              ></input>
+            </div>
+          );
         }
       }
     }
