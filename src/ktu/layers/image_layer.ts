@@ -111,6 +111,7 @@ export class ImageLayer extends ContainerLayer {
         this.sprite.scale = this.state.scale / 100;
         this.sprite.x = this.state.panX;
         this.sprite.y = this.state.panY;
+        this.sprite.alpha = this.state.alpha;
         this.container.addChild(this.sprite);
       });
     } else {
