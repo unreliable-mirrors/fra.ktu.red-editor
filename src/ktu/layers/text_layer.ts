@@ -1,5 +1,6 @@
-import { Container, Text } from "pixi.js";
+import { Container, FederatedPointerEvent, Point, Text } from "pixi.js";
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
+import DataStore from "../ui/core/data_store";
 
 export type TextLayerState = ContainerLayerState & {
   text: string;
@@ -19,6 +20,10 @@ export type TextLayerSetting = {
 export class TextLayer extends ContainerLayer {
   declare state: TextLayerState;
   text: Text;
+  clicking: boolean = false;
+  panning: boolean = false;
+  panStart?: Point | null;
+  clickStart?: Point | null;
   settings: TextLayerSetting[] = [
     {
       field: "text",
@@ -105,6 +110,28 @@ export class TextLayer extends ContainerLayer {
       panY: 0,
       alpha: 1,
     };
+  }
+
+  pointerDown(event: FederatedPointerEvent): void {
+    this.clicking = true;
+    if (event.ctrlKey) {
+      this.panning = true;
+      this.panStart = new Point(this.state.panX, this.state.panY);
+      this.clickStart = new Point(event.globalX, event.globalY);
+    }
+  }
+  pointerUp(): void {
+    this.clicking = false;
+    this.panning = false;
+    this.panStart = null;
+  }
+  pointerMove(event: FederatedPointerEvent): void {
+    if (this.panning) {
+      this.state.panX = this.panStart!.x + (event.globalX - this.clickStart!.x);
+      this.state.panY = this.panStart!.y + (event.globalY - this.clickStart!.y);
+      this.repaint();
+      DataStore.getInstance().touch("layers");
+    }
   }
 
   bind(container: Container): void {

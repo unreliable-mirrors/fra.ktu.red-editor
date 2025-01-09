@@ -1,6 +1,7 @@
-import { FederatedPointerEvent, Graphics } from "pixi.js";
+import { FederatedPointerEvent, Graphics, Point } from "pixi.js";
 
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
+import DataStore from "../ui/core/data_store";
 
 export type MonoPixelDrawLayerState = ContainerLayerState & {
   points: Record<string, boolean>;
@@ -22,6 +23,9 @@ export class MonoPixelDrawLayer extends ContainerLayer {
   clicking: boolean = false;
   erasing: boolean = false;
   hardPainting: boolean = false;
+  panning: boolean = false;
+  panStart?: Point | null;
+  clickStart?: Point | null;
   stroke: Record<string, boolean>;
   declare state: MonoPixelDrawLayerState;
   settings: MonoPixelDrawLayerSetting[] = [
@@ -111,23 +115,38 @@ export class MonoPixelDrawLayer extends ContainerLayer {
   }
 
   pointerDown(event: FederatedPointerEvent): void {
-    console.log("NUMBER", event.button, this.state);
+    console.log("NUMBER", event, this.state);
     this.clicking = true;
     if (event.button === 2) {
       this.erasing = true;
-    } else if (event.ctrlKey) {
+    } else if (event.shiftKey) {
       this.hardPainting = true;
+    } else if (event.ctrlKey) {
+      this.panning = true;
+      this.panStart = new Point(this.state.panX, this.state.panY);
+      this.clickStart = new Point(event.globalX, event.globalY);
     }
-    this.stroke = {};
-    this.metapaint(event);
+    if (!this.panning) {
+      this.stroke = {};
+      this.metapaint(event);
+    }
   }
   pointerUp(): void {
     this.clicking = false;
     this.erasing = false;
     this.hardPainting = false;
+    this.panning = false;
+    this.panStart = null;
   }
   pointerMove(event: FederatedPointerEvent): void {
-    this.metapaint(event);
+    if (!this.panning) {
+      this.metapaint(event);
+    } else {
+      this.state.panX = this.panStart!.x + (event.globalX - this.clickStart!.x);
+      this.state.panY = this.panStart!.y + (event.globalY - this.clickStart!.y);
+      this.repaint();
+      DataStore.getInstance().touch("layers");
+    }
   }
 
   metapaint(event: FederatedPointerEvent) {

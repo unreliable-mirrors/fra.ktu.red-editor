@@ -1,5 +1,14 @@
-import { Assets, Container, Sprite, Texture, VideoSource } from "pixi.js";
+import {
+  Assets,
+  Container,
+  FederatedPointerEvent,
+  Point,
+  Sprite,
+  Texture,
+  VideoSource,
+} from "pixi.js";
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
+import DataStore from "../ui/core/data_store";
 
 export type ImageLayerState = ContainerLayerState & {
   alpha: number;
@@ -18,6 +27,10 @@ export type ImageLayerSetting = {
 export class ImageLayer extends ContainerLayer {
   declare state: ImageLayerState;
   sprite: Sprite;
+  clicking: boolean = false;
+  panning: boolean = false;
+  panStart?: Point | null;
+  clickStart?: Point | null;
   settings: ImageLayerSetting[] = [
     {
       field: "imageSource",
@@ -95,6 +108,28 @@ export class ImageLayer extends ContainerLayer {
       scale: 100,
       imageUrl: "",
     };
+  }
+
+  pointerDown(event: FederatedPointerEvent): void {
+    this.clicking = true;
+    if (event.ctrlKey) {
+      this.panning = true;
+      this.panStart = new Point(this.state.panX, this.state.panY);
+      this.clickStart = new Point(event.globalX, event.globalY);
+    }
+  }
+  pointerUp(): void {
+    this.clicking = false;
+    this.panning = false;
+    this.panStart = null;
+  }
+  pointerMove(event: FederatedPointerEvent): void {
+    if (this.panning) {
+      this.state.panX = this.panStart!.x + (event.globalX - this.clickStart!.x);
+      this.state.panY = this.panStart!.y + (event.globalY - this.clickStart!.y);
+      this.repaint();
+      DataStore.getInstance().touch("layers");
+    }
   }
 
   bind(container: Container): void {
