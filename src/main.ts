@@ -10,6 +10,7 @@ import { CreateBackgroundLayerButtonComponent } from "./ktu/ui/components/add_ba
 import { CreateImageLayerButtonComponent } from "./ktu/ui/components/add_image_layer";
 import { ShadersList } from "./ktu/ui/components/shaders_list";
 import { CreateBnwShaderButtonComponent } from "./ktu/ui/components/add_bnw_shader";
+import { CreateVintageShaderButtonComponent } from "./ktu/ui/components/add_vintage_shader";
 
 declare global {
   interface Window {
@@ -45,4 +46,5 @@ export default {
   CreateImageLayerButtonComponent,
   ShadersList,
   CreateBnwShaderButtonComponent,
+  CreateVintageShaderButtonComponent,
 };

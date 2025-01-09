@@ -15,6 +15,10 @@ import { ImageLayer, ImageLayerState } from "../layers/image_layer";
 import { ShaderLayer } from "../shaders/shader_layer";
 import { ContainerLayer } from "../layers/container_layer";
 import { BnwShaderLayer, BnwShaderLayerState } from "../shaders/bnw/bnw_shader";
+import {
+  VintageShader,
+  VintageShaderState,
+} from "../shaders/vintage/vintage_shader";
 
 let index = 0;
 export const getSecureIndex = (): number => {
@@ -93,6 +97,13 @@ export class EditorScene extends BaseScene {
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
+      "add_vintage_shader",
+      () => {
+        this.addVintageShader();
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
       "loadState",
       (payload: EditorSceneState) => {
         for (const state of payload.layers) {
@@ -108,6 +119,8 @@ export class EditorScene extends BaseScene {
         for (const state of payload.shaders) {
           if (state.name === "bnw_shader") {
             this.addBnwShader(state as BnwShaderLayerState);
+          } else if (state.name === "vintage_shader") {
+            this.addVintageShader(state as VintageShaderState);
           }
         }
       }
@@ -176,6 +189,10 @@ export class EditorScene extends BaseScene {
   }
   addBnwShader(state?: BnwShaderLayerState) {
     const layer = new BnwShaderLayer(state);
+    this.addShader(layer);
+  }
+  addVintageShader(state?: VintageShaderState) {
+    const layer = new VintageShader(state);
     this.addShader(layer);
   }
 }

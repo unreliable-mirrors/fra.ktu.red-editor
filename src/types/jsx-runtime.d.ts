@@ -9,5 +9,6 @@ declare namespace JSX {
     ["create-image-layer-button"]: any;
     ["shaders-list"]: any;
     ["create-bnw-shader-button"]: any;
+    ["create-vintage-shader-button"]: any;
   }
 }

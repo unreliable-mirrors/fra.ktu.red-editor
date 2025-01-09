@@ -17,6 +17,7 @@ export class ShadersList extends KTUComponent {
           {items}
         </div>
         <create-bnw-shader-button></create-bnw-shader-button>
+        <create-vintage-shader-button></create-vintage-shader-button>
       </div>
     );
   }
