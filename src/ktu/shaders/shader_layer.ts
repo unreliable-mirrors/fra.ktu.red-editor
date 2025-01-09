@@ -8,14 +8,12 @@ export abstract class ShaderLayer implements IEditorLayer {
   abstract state: { name: string; layerId: number; [key: string]: any };
   abstract settings: EditorLayerSetting[];
   active: boolean;
-  shader: Filter;
+  abstract shader: Filter;
 
   public constructor() {
     //TODO: REPLACE THIS FOR A GLOBAL SAFE COUNTER
     this.layerId = getSecureIndex();
     this.active = false;
-
-    this.shader = this.buildShader();
   }
 
   abstract buildShader(): Filter;
