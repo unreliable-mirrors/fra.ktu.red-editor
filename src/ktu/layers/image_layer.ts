@@ -16,8 +16,8 @@ export type ImageLayerSetting = {
 };
 
 export class ImageLayer extends ContainerLayer {
+  declare state: ImageLayerState;
   sprite: Sprite;
-  state: ImageLayerState;
   settings: ImageLayerSetting[] = [
     {
       field: "imageSource",
@@ -69,9 +69,7 @@ export class ImageLayer extends ContainerLayer {
 
     if (state) {
       this.state = {
-        name: state.name,
-        layerId: state.layerId,
-        shaders: [],
+        ...this.state,
         alpha: state.alpha,
         panX: state.panX,
         panY: state.panY,
@@ -81,18 +79,22 @@ export class ImageLayer extends ContainerLayer {
       for (var shader of state.shaders) {
         this.addShaderFromState(shader.name, shader);
       }
-    } else {
-      this.state = {
-        name: "image_layer",
-        layerId: this.layerId,
-        shaders: [],
-        alpha: 1,
-        panX: 0,
-        panY: 0,
-        scale: 100,
-        imageUrl: "",
-      };
     }
+  }
+
+  layerName(): string {
+    return "image_layer";
+  }
+
+  defaultState(): ImageLayerState {
+    return {
+      ...super.defaultState(),
+      alpha: 1,
+      panX: 0,
+      panY: 0,
+      scale: 100,
+      imageUrl: "",
+    };
   }
 
   bind(container: Container): void {

@@ -1,30 +1,79 @@
-import { Container, FederatedPointerEvent, Filter, Ticker } from "pixi.js";
+import {
+  Container,
+  FederatedPointerEvent,
+  Filter,
+  Ticker,
+  UniformGroup,
+} from "pixi.js";
 
 import {
   EditorLayerSetting,
   EditorLayerState,
   IEditorLayer,
 } from "../layers/ieditor_layer";
-import { getSecureIndex } from "../scenes/editor_scene";
+import { getSecureIndex } from "../../engine/helpers/secure_index_helper";
+
+import vertex from "./defaultFilter.vert?raw";
 
 export type ShaderState = EditorLayerState;
 
 export abstract class ShaderLayer implements IEditorLayer {
   layerId: number;
-  abstract state: ShaderState;
+  state!: ShaderState;
   abstract settings: EditorLayerSetting[];
   active: boolean;
-  abstract shader: Filter;
+  shader!: Filter;
+  abstract fragment: string;
+  abstract uniforms: UniformGroup;
 
-  public constructor() {
+  public constructor(state?: ShaderState) {
     this.layerId = getSecureIndex();
     this.active = false;
+
+    if (state) {
+      this.state = {
+        name: state.name,
+        layerId: state.layerId,
+        visible: state.visible,
+      };
+    } else {
+      this.state = this.defaultState();
+    }
   }
 
-  abstract buildShader(): Filter;
+  abstract shaderName(): string;
+
+  defaultState(): ShaderState {
+    return {
+      name: this.shaderName(),
+      layerId: this.layerId,
+      visible: true,
+    };
+  }
+
+  buildShader() {
+    const uniforms = this.uniforms;
+    this.shader = Filter.from({
+      gl: {
+        vertex: vertex,
+        fragment: this.fragment,
+      },
+      resources: { uniforms },
+    });
+  }
 
   //@ts-ignore
-  bind(container: Container): void {}
+  set visible(value: boolean) {
+    //CANNOT HIDE A SHADER
+  }
+  get visible(): boolean {
+    return true;
+  }
+
+  //@ts-ignore
+  bind(container: Container): void {
+    this.buildShader();
+  }
 
   unbind(): void {
     //TODO: REMOVE PROPERLY

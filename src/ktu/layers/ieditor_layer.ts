@@ -4,6 +4,7 @@ import { ILayer } from "../../engine/ilayer";
 export type EditorLayerState = {
   name: string;
   layerId: number;
+  visible: boolean;
   [key: string]: any;
 };
 

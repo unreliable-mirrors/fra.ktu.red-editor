@@ -13,8 +13,8 @@ export type BackgroundLayerSetting = {
 };
 
 export class BackgroundLayer extends ContainerLayer {
+  declare state: BackgroundLayerState;
   graphics: Graphics;
-  state: BackgroundLayerState;
   settings: BackgroundLayerSetting[] = [
     {
       field: "color",
@@ -40,25 +40,23 @@ export class BackgroundLayer extends ContainerLayer {
     this.container.addChild(this.graphics);
 
     if (state) {
-      this.state = {
-        name: state.name,
-        layerId: state.layerId,
-        shaders: [],
-        color: state.color,
-        alpha: state.alpha,
-      };
+      this.state = { ...this.state, color: state.color, alpha: state.alpha };
       for (var shader of state.shaders) {
         this.addShaderFromState(shader.name, shader);
       }
-    } else {
-      this.state = {
-        name: "background_layer",
-        layerId: this.layerId,
-        shaders: [],
-        color: "#000000",
-        alpha: 1,
-      };
     }
+  }
+
+  layerName(): string {
+    return "background_layer";
+  }
+
+  defaultState(): BackgroundLayerState {
+    return {
+      ...super.defaultState(),
+      color: "#000000",
+      alpha: 1,
+    };
   }
 
   bind(container: Container): void {

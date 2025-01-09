@@ -1,7 +1,6 @@
-import { Container, Filter, UniformGroup } from "pixi.js";
+import { Container, UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
-import vertex from "../defaultFilter.vert?raw";
 import fragment from "./pixelate_shader.frag?raw";
 
 export type PixelateShaderState = ShaderState & {
@@ -17,8 +16,8 @@ export type PixelateShaderSetting = {
 };
 
 export class PixelateShader extends ShaderLayer {
-  shader: Filter;
-  state: PixelateShaderState;
+  declare state: PixelateShaderState;
+  fragment: string = fragment;
   width: number = 1920;
   height: number = 1080;
   settings: PixelateShaderSetting[] = [
@@ -54,19 +53,10 @@ export class PixelateShader extends ShaderLayer {
 
     if (state) {
       this.state = {
-        name: state.name,
-        layerId: state.layerId,
+        ...this.state,
         pixelSize: state.pixelSize,
         missProbability: state.missProbability,
         seed: state.seed,
-      };
-    } else {
-      this.state = {
-        name: "pixelate_shader",
-        layerId: this.layerId,
-        pixelSize: 15,
-        missProbability: 0,
-        seed: 1,
       };
     }
     this.uniforms = new UniformGroup({
@@ -76,24 +66,26 @@ export class PixelateShader extends ShaderLayer {
       uWidth: { value: this.width, type: "f32" },
       uHeight: { value: this.height, type: "f32" },
     });
-
-    this.shader = this.buildShader();
   }
 
-  buildShader(): Filter {
-    const uniforms = this.uniforms;
-    return Filter.from({
-      gl: {
-        vertex: vertex,
-        fragment: fragment,
-      },
-      resources: { uniforms },
-    });
+  shaderName(): string {
+    return "pixelate_shader";
+  }
+
+  defaultState(): PixelateShaderState {
+    return {
+      ...super.defaultState(),
+      pixelSize: 15,
+      missProbability: 0,
+      seed: 1,
+    };
   }
 
   bind(container: Container): void {
     super.bind(container);
     this.width = container.width;
+    this.uniforms.uniforms.uWidth = this.width;
     this.height = container.width;
+    this.uniforms.uniforms.uHeight = this.height;
   }
 }

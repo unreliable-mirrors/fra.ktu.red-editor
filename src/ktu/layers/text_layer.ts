@@ -17,7 +17,7 @@ export type TextLayerSetting = {
 };
 
 export class TextLayer extends ContainerLayer {
-  state: TextLayerState;
+  declare state: TextLayerState;
   text: Text;
   settings: TextLayerSetting[] = [
     {
@@ -77,9 +77,7 @@ export class TextLayer extends ContainerLayer {
 
     if (state) {
       this.state = {
-        name: state.name,
-        layerId: state.layerId,
-        shaders: [],
+        ...this.state,
         text: state.text,
         fontSize: state.fontSize,
         color: state.color,
@@ -90,19 +88,23 @@ export class TextLayer extends ContainerLayer {
       for (var shader of state.shaders) {
         this.addShaderFromState(shader.name, shader);
       }
-    } else {
-      this.state = {
-        name: "text_layer",
-        layerId: this.layerId,
-        shaders: [],
-        text: "TEXT GOES HERE",
-        fontSize: 64,
-        color: "#FFFFFF",
-        panX: 0,
-        panY: 0,
-        alpha: 1,
-      };
     }
+  }
+
+  layerName(): string {
+    return "text_layer";
+  }
+
+  defaultState(): TextLayerState {
+    return {
+      ...super.defaultState(),
+      text: "TEXT GOES HERE",
+      fontSize: 64,
+      color: "#FFFFFF",
+      panX: 0,
+      panY: 0,
+      alpha: 1,
+    };
   }
 
   bind(container: Container): void {

@@ -4,9 +4,9 @@ import {
   EditorLayerState,
   IEditorLayer,
 } from "./ieditor_layer";
-import { getSecureIndex } from "../scenes/editor_scene";
+
 import { ShaderLayer, ShaderState } from "../shaders/shader_layer";
-import { BnwShaderLayer, BnwShaderLayerState } from "../shaders/bnw/bnw_shader";
+import { BnwShaderLayer, BnwShaderState } from "../shaders/bnw/bnw_shader";
 import {
   VintageShader,
   VintageShaderState,
@@ -16,6 +16,7 @@ import {
   PixelateShaderState,
 } from "../shaders/pixelate/pixelate_shader";
 import EventDispatcher from "../ui/core/event_dispatcher";
+import { getSecureIndex } from "../../engine/helpers/secure_index_helper";
 
 export type ContainerLayerState = EditorLayerState & {
   shaders: EditorLayerState[];
@@ -24,22 +25,56 @@ export type ContainerLayerState = EditorLayerState & {
 export abstract class ContainerLayer implements IEditorLayer {
   layerId: number;
   container: Container;
-  abstract state: ContainerLayerState;
+  state: ContainerLayerState;
   abstract settings: EditorLayerSetting[];
   active: boolean;
   shaders: ShaderLayer[];
 
-  public constructor() {
+  public constructor(state?: ContainerLayerState) {
     this.container = new Container();
     this.layerId = getSecureIndex();
     this.active = false;
     this.shaders = [];
+
+    if (state) {
+      this.state = {
+        name: state.name,
+        layerId: state.layerId,
+        visible: state.visible,
+        shaders: [],
+      };
+      for (var shader of state.shaders) {
+        this.addShaderFromState(shader.name, shader);
+      }
+    } else {
+      this.state = this.defaultState();
+    }
+  }
+
+  abstract layerName(): string;
+
+  defaultState(): ContainerLayerState {
+    return {
+      name: this.layerName(),
+      layerId: this.layerId,
+      visible: true,
+      shaders: [],
+    };
+  }
+
+  set visible(value: boolean) {
+    this.container.visible = value;
+    this.state.visible = value;
+  }
+
+  get visible(): boolean {
+    return this.state.visible;
   }
 
   addShaderFromState(stateName: string, state?: ShaderState): void {
     //TODO: DEDUPLICATE THIS
     if (stateName === "bnw_shader") {
-      this.addBnwShader(state as BnwShaderLayerState);
+      this.addBnwShader(state as BnwShaderState);
     } else if (stateName === "vintage_shader") {
       this.addVintageShader(state as VintageShaderState);
     } else if (stateName === "pixelate_shader") {
@@ -47,7 +82,7 @@ export abstract class ContainerLayer implements IEditorLayer {
     }
   }
   //TODO: DEDUPLICATE THIS
-  addBnwShader(state?: BnwShaderLayerState) {
+  addBnwShader(state?: BnwShaderState) {
     const layer = new BnwShaderLayer(state);
     this.addShader(layer);
   }

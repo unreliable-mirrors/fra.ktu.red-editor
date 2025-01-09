@@ -14,7 +14,7 @@ import {
 import { ImageLayer, ImageLayerState } from "../layers/image_layer";
 import { ShaderLayer } from "../shaders/shader_layer";
 import { ContainerLayer } from "../layers/container_layer";
-import { BnwShaderLayer, BnwShaderLayerState } from "../shaders/bnw/bnw_shader";
+import { BnwShaderLayer, BnwShaderState } from "../shaders/bnw/bnw_shader";
 import {
   VintageShader,
   VintageShaderState,
@@ -24,12 +24,6 @@ import {
   PixelateShaderState,
 } from "../shaders/pixelate/pixelate_shader";
 import { TextLayer, TextLayerState } from "../layers/text_layer";
-
-let index = 0;
-export const getSecureIndex = (): number => {
-  index++;
-  return index;
-};
 
 export type EditorSceneState = {
   layers: EditorLayerState[];
@@ -46,7 +40,6 @@ export class EditorScene extends BaseScene {
     this.layers = [];
     this.shaders = [];
     this.container.eventMode = "static";
-    console.log("SCENE HEIGHT", window.innerHeight);
     const width = window.innerWidth;
     const height = window.innerHeight;
     const g = new Graphics().rect(0, 0, width, height).fill(0xff0000);
@@ -139,7 +132,7 @@ export class EditorScene extends BaseScene {
 
         for (const state of payload.shaders) {
           if (state.name === "bnw_shader") {
-            this.addBnwShader(state as BnwShaderLayerState);
+            this.addBnwShader(state as BnwShaderState);
           } else if (state.name === "vintage_shader") {
             this.addVintageShader(state as VintageShaderState);
           } else if (state.name === "pixelate_shader") {
@@ -182,6 +175,14 @@ export class EditorScene extends BaseScene {
       },
       false
     );
+  }
+
+  set visible(value: boolean) {
+    this.container.visible = value;
+  }
+
+  get visible(): boolean {
+    return this.container.visible;
   }
 
   activateLayer(layer: IEditorLayer) {
@@ -227,7 +228,7 @@ export class EditorScene extends BaseScene {
     const layer = new TextLayer(state);
     this.addLayer(layer);
   }
-  addBnwShader(state?: BnwShaderLayerState) {
+  addBnwShader(state?: BnwShaderState) {
     const layer = new BnwShaderLayer(state);
     this.addShader(layer);
   }

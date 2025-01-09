@@ -1,23 +1,23 @@
-import { Container, Filter, UniformGroup } from "pixi.js";
+import { UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
-import vertex from "../defaultFilter.vert?raw";
 import fragment from "./bnw_shader.frag?raw";
 
-export type BnwShaderLayerState = ShaderState & {
+export type BnwShaderState = ShaderState & {
   strength: number;
 };
 
-export type BnwShaderLayerSetting = {
+export type BnwShaderSetting = {
   field: "strength";
   type: "float";
   onchange: (value: string) => void;
 };
 
 export class BnwShaderLayer extends ShaderLayer {
-  shader: Filter;
-  state: BnwShaderLayerState;
-  settings: BnwShaderLayerSetting[] = [
+  declare state: BnwShaderState;
+  fragment: string = fragment;
+
+  settings: BnwShaderSetting[] = [
     {
       field: "strength",
       type: "float",
@@ -29,42 +29,25 @@ export class BnwShaderLayer extends ShaderLayer {
   ];
   uniforms: UniformGroup;
 
-  constructor(state?: BnwShaderLayerState) {
+  constructor(state?: BnwShaderState) {
     super();
 
     if (state) {
       this.state = {
-        name: state.name,
-        layerId: state.layerId,
+        ...this.state,
         strength: state.strength,
-      };
-    } else {
-      this.state = {
-        name: "bnw_shader",
-        layerId: this.layerId,
-        strength: 1,
       };
     }
     this.uniforms = new UniformGroup({
       uStrength: { value: this.state.strength, type: "f32" },
     });
-
-    this.shader = this.buildShader();
   }
 
-  buildShader(): Filter {
-    const uniforms = this.uniforms;
-    console.log("2", this.uniforms);
-    return Filter.from({
-      gl: {
-        vertex: vertex,
-        fragment: fragment,
-      },
-      resources: { uniforms },
-    });
+  shaderName(): string {
+    return "bnw_shader";
   }
 
-  bind(container: Container): void {
-    super.bind(container);
+  defaultState(): BnwShaderState {
+    return { ...super.defaultState(), strength: 1 };
   }
 }

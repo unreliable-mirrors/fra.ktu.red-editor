@@ -3,7 +3,7 @@ import { IScene } from "../iscene";
 import { ContainerLayer } from "../../ktu/layers/container_layer";
 import { ShaderLayer } from "../../ktu/shaders/shader_layer";
 
-export class BaseScene implements IScene {
+export abstract class BaseScene implements IScene {
   layers: ContainerLayer[];
   shaders: ShaderLayer[];
   container: Container;

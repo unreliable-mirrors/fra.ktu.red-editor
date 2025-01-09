@@ -23,7 +23,7 @@ export class MonoPixelDrawLayer extends ContainerLayer {
   erasing: boolean = false;
   hardPainting: boolean = false;
   stroke: Record<string, boolean>;
-  state: MonoPixelDrawLayerState;
+  declare state: MonoPixelDrawLayerState;
   settings: MonoPixelDrawLayerSetting[] = [
     {
       field: "color",
@@ -75,9 +75,7 @@ export class MonoPixelDrawLayer extends ContainerLayer {
 
     if (state) {
       this.state = {
-        name: state.name,
-        layerId: state.layerId,
-        shaders: [],
+        ...this.state,
         points: {},
         color: state.color,
         alpha: state.alpha,
@@ -93,19 +91,23 @@ export class MonoPixelDrawLayer extends ContainerLayer {
         const y = parseInt(key.split("X")[1]);
         this.paint(x, y);
       }
-    } else {
-      this.state = {
-        name: "mono_pixel_draw_layer",
-        layerId: this.layerId,
-        shaders: [],
-        points: {},
-        color: "#FFFFFF",
-        alpha: 1,
-        pixelSize: 15,
-        panX: 0,
-        panY: 0,
-      };
     }
+  }
+
+  layerName(): string {
+    return "mono_pixel_draw_layer";
+  }
+
+  defaultState(): MonoPixelDrawLayerState {
+    return {
+      ...super.defaultState(),
+      points: {},
+      color: "#FFFFFF",
+      alpha: 1,
+      pixelSize: 15,
+      panX: 0,
+      panY: 0,
+    };
   }
 
   pointerDown(event: FederatedPointerEvent): void {
