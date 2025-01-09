@@ -19,5 +19,20 @@ export class EditorUI {
         </div>
       </div>
     );
+    document.addEventListener("keyup", (e) => {
+      if (["h", "H"].includes(e.key)) {
+        this.toggleHide();
+      }
+    });
+  }
+
+  toggleHide() {
+    const ui = document.getElementById("ui");
+    console.log("TOGGLE", ui?.className.includes("hidden"));
+    if (ui?.className.includes("hidden")) {
+      ui.className = ui.className.replace("hidden", "");
+    } else {
+      ui!.className += " hidden";
+    }
   }
 }

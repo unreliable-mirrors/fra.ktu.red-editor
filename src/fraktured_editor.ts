@@ -18,7 +18,7 @@ export class FrakturedEditor {
     const app = new Application();
 
     await app.init({
-      background: "#ffffff",
+      background: "#000000",
       resizeTo: this.canvasAnchor,
       sharedTicker: true,
     });

@@ -34,6 +34,9 @@ button {
   font-style: normal;
   font-size: 96px;
 }
+.splash .logo .fra {
+  color: #110022;
+}
 .splash .logo .red {
   color: #ff1166;
 }
