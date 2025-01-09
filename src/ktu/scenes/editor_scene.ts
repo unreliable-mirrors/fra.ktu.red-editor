@@ -49,9 +49,9 @@ export class EditorScene extends BaseScene {
     console.log("SCENE HEIGHT", window.innerHeight);
     const width = window.innerWidth;
     const height = window.innerHeight;
-    this.container.addChild(
-      new Graphics().rect(0, 0, width, height).fill(0x000000)
-    );
+    const g = new Graphics().rect(0, 0, width, height).fill(0xff0000);
+    g.alpha = 0;
+    this.container.addChild(g);
     Ticker.shared.add((time) => {
       for (var layer of this.layers) {
         layer.tick(time);
