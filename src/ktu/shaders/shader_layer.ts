@@ -33,7 +33,7 @@ export abstract class ShaderLayer implements IEditorLayer {
     if (state) {
       this.state = {
         name: state.name,
-        layerId: state.layerId,
+        layerId: this.layerId,
         visible: state.visible,
       };
     } else {

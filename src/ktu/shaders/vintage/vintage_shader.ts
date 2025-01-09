@@ -14,6 +14,7 @@ export type VintageShaderSetting = {
 };
 
 export class VintageShader extends ShaderLayer {
+  static SHADER_NAME: string = "vintage_shader";
   declare state: VintageShaderState;
   fragment: string = fragment;
   settings: VintageShaderSetting[] = [
@@ -43,7 +44,7 @@ export class VintageShader extends ShaderLayer {
   }
 
   shaderName(): string {
-    return "vintage_shader";
+    return VintageShader.SHADER_NAME;
   }
 
   defaultState(): VintageShaderState {

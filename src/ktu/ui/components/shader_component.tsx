@@ -39,7 +39,6 @@ export class ShaderComponent extends KTUComponent {
                 type="number"
                 value={this.layer.state[setting.field]}
                 oninput={(e) => {
-                  console.log((e.target as HTMLInputElement).value);
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>
@@ -56,7 +55,6 @@ export class ShaderComponent extends KTUComponent {
                 max="1"
                 step="0.01"
                 oninput={(e) => {
-                  console.log((e.target as HTMLInputElement).value);
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>

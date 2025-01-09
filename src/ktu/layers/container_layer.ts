@@ -6,7 +6,7 @@ import {
 } from "./ieditor_layer";
 
 import { ShaderLayer, ShaderState } from "../shaders/shader_layer";
-import { BnwShaderLayer, BnwShaderState } from "../shaders/bnw/bnw_shader";
+import { BnwShader, BnwShaderState } from "../shaders/bnw/bnw_shader";
 import {
   VintageShader,
   VintageShaderState,
@@ -32,14 +32,14 @@ export abstract class ContainerLayer implements IEditorLayer {
 
   public constructor(state?: ContainerLayerState) {
     this.container = new Container();
-    this.layerId = getSecureIndex();
     this.active = false;
     this.shaders = [];
+    this.layerId = getSecureIndex();
 
     if (state) {
       this.state = {
         name: state.name,
-        layerId: state.layerId,
+        layerId: this.layerId,
         visible: state.visible,
         shaders: [],
       };
@@ -83,7 +83,7 @@ export abstract class ContainerLayer implements IEditorLayer {
   }
   //TODO: DEDUPLICATE THIS
   addBnwShader(state?: BnwShaderState) {
-    const layer = new BnwShaderLayer(state);
+    const layer = new BnwShader(state);
     this.addShader(layer);
   }
   //TODO: DEDUPLICATE THIS

@@ -13,7 +13,8 @@ export type BnwShaderSetting = {
   onchange: (value: string) => void;
 };
 
-export class BnwShaderLayer extends ShaderLayer {
+export class BnwShader extends ShaderLayer {
+  static SHADER_NAME: string = "bnw_shader";
   declare state: BnwShaderState;
   fragment: string = fragment;
 
@@ -44,7 +45,7 @@ export class BnwShaderLayer extends ShaderLayer {
   }
 
   shaderName(): string {
-    return "bnw_shader";
+    return BnwShader.SHADER_NAME;
   }
 
   defaultState(): BnwShaderState {

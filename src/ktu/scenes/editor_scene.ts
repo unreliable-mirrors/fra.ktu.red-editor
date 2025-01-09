@@ -14,7 +14,7 @@ import {
 import { ImageLayer, ImageLayerState } from "../layers/image_layer";
 import { ShaderLayer } from "../shaders/shader_layer";
 import { ContainerLayer } from "../layers/container_layer";
-import { BnwShaderLayer, BnwShaderState } from "../shaders/bnw/bnw_shader";
+import { BnwShader, BnwShaderState } from "../shaders/bnw/bnw_shader";
 import {
   VintageShader,
   VintageShaderState,
@@ -143,6 +143,22 @@ export class EditorScene extends BaseScene {
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
+      "duplicateLayer",
+      (payload: ContainerLayer) => {
+        const state = JSON.parse(JSON.stringify(payload.state));
+        if (state.name === "mono_pixel_draw_layer") {
+          this.addMonoPixelDrawLayer(state as MonoPixelDrawLayerState);
+        } else if (state.name === "background_layer") {
+          this.addBackgroundLayer(state as BackgroundLayerState);
+        } else if (state.name === "image_layer") {
+          this.addImageLayer(state as ImageLayerState);
+        } else if (state.name === "text_layer") {
+          this.addTextLayer(state as TextLayerState);
+        }
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
       "exportState",
       () => {
         const state = {
@@ -229,7 +245,7 @@ export class EditorScene extends BaseScene {
     this.addLayer(layer);
   }
   addBnwShader(state?: BnwShaderState) {
-    const layer = new BnwShaderLayer(state);
+    const layer = new BnwShader(state);
     this.addShader(layer);
   }
   addVintageShader(state?: VintageShaderState) {

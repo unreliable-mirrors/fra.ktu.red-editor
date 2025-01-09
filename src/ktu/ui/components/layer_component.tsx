@@ -5,10 +5,9 @@ import { KTUComponent } from "../core/ktu_component";
 import { FileLoaderComponent } from "./file_loader";
 import { ContainerLayer } from "../../layers/container_layer";
 import { ShaderComponent } from "./shader_component";
-import { CreateBnwShaderButtonComponent } from "./add_bnw_shader";
-import { CreateVintageShaderButtonComponent } from "./add_vintage_shader";
-import { CreatePixelateShaderButtonComponent } from "./add_pixelate_shader";
 import DataStore from "../core/data_store";
+import { AddShaderButtonComponent } from "./add_shader_button";
+import { AVAILABLE_SHADERS_NAMES } from "../../helpers/shaders";
 
 const closeIcon = () => {
   return (
@@ -80,6 +79,26 @@ const hiddenIcon = () => {
   );
 };
 
+const duplicateIcon = () => {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M19 5H7V3H21V17H19V5Z" fill="currentColor" />
+      <path d="M9 13V11H11V13H13V15H11V17H9V15H7V13H9Z" fill="currentColor" />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M3 7H17V21H3V7ZM5 9H15V19H5V9Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
 export class LayerComponent extends KTUComponent {
   layer: ContainerLayer;
   constructor(layer: ContainerLayer) {
@@ -158,9 +177,11 @@ export class LayerComponent extends KTUComponent {
           );
         }
       }
-      shaderButtons.push(new CreateBnwShaderButtonComponent(this.layer));
-      shaderButtons.push(new CreateVintageShaderButtonComponent(this.layer));
-      shaderButtons.push(new CreatePixelateShaderButtonComponent(this.layer));
+      for (const shaderName of AVAILABLE_SHADERS_NAMES) {
+        shaderButtons.push(
+          new AddShaderButtonComponent(shaderName, this.layer)
+        );
+      }
     }
     for (const shader of [...this.layer.shaders].reverse()) {
       shaders.push(new ShaderComponent(shader));
@@ -179,6 +200,9 @@ export class LayerComponent extends KTUComponent {
           <div className="icons">
             <span onclick={() => this.handleVisibleClick()}>
               {this.layer.visible ? visibleIcon() : hiddenIcon()}
+            </span>
+            <span onclick={() => this.handleDuplicateClick()}>
+              {duplicateIcon()}
             </span>
             <span onclick={() => this.handleCloseClick()}>{closeIcon()}</span>
           </div>
@@ -209,6 +233,13 @@ export class LayerComponent extends KTUComponent {
   handleVisibleClick() {
     this.layer.visible = !this.layer.visible;
     DataStore.getInstance().touch("layers");
+  }
+  handleDuplicateClick() {
+    EventDispatcher.getInstance().dispatchEvent(
+      "scene",
+      "duplicateLayer",
+      this.layer
+    );
   }
 }
 

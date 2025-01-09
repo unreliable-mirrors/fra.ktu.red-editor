@@ -1,6 +1,5 @@
 import { FrakturedEditor } from "./fraktured_editor";
 import "./style.css";
-import { CreateShaderLayerButtonComponent } from "./ktu/ui/components/add_shader_layer";
 import { CreateSpriteLayerButtonComponent } from "./ktu/ui/components/add_sprite_layer";
 import EventDispatcher from "./ktu/ui/core/event_dispatcher";
 import { LayersList } from "./ktu/ui/components/layers_list";
@@ -9,9 +8,6 @@ import { LoadStateComponent } from "./ktu/ui/components/load_state";
 import { CreateBackgroundLayerButtonComponent } from "./ktu/ui/components/add_background_layer";
 import { CreateImageLayerButtonComponent } from "./ktu/ui/components/add_image_layer";
 import { ShadersList } from "./ktu/ui/components/shaders_list";
-import { CreateBnwShaderButtonComponent } from "./ktu/ui/components/add_bnw_shader";
-import { CreateVintageShaderButtonComponent } from "./ktu/ui/components/add_vintage_shader";
-import { CreatePixelateShaderButtonComponent } from "./ktu/ui/components/add_pixelate_shader";
 import { CreateTextLayerButtonComponent } from "./ktu/ui/components/add_text_layer";
 
 declare global {
@@ -39,7 +35,6 @@ document.getElementById("start-app")?.addEventListener("click", () => {
 });
 
 export default {
-  CreateShaderLayerButtonComponent,
   CreateSpriteLayerButtonComponent,
   CreateBackgroundLayerButtonComponent,
   LayersList,
@@ -47,8 +42,5 @@ export default {
   LoadStateComponent,
   CreateImageLayerButtonComponent,
   ShadersList,
-  CreateBnwShaderButtonComponent,
-  CreateVintageShaderButtonComponent,
-  CreatePixelateShaderButtonComponent,
   CreateTextLayerButtonComponent,
 };

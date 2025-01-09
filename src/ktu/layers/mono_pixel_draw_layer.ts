@@ -111,7 +111,7 @@ export class MonoPixelDrawLayer extends ContainerLayer {
   }
 
   pointerDown(event: FederatedPointerEvent): void {
-    console.log("NUMBER", event.button);
+    console.log("NUMBER", event.button, this.state);
     this.clicking = true;
     if (event.button === 2) {
       this.erasing = true;

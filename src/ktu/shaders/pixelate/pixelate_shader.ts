@@ -16,10 +16,12 @@ export type PixelateShaderSetting = {
 };
 
 export class PixelateShader extends ShaderLayer {
+  static SHADER_NAME: string = "pixelate_shader";
   declare state: PixelateShaderState;
   fragment: string = fragment;
   width: number = 1920;
   height: number = 1080;
+  container!: Container;
   settings: PixelateShaderSetting[] = [
     {
       field: "pixelSize",
@@ -27,6 +29,7 @@ export class PixelateShader extends ShaderLayer {
       onchange: (value) => {
         this.state.pixelSize = parseInt(value);
         this.uniforms.uniforms.uPixelSize = this.state.pixelSize;
+        this.refreshSize();
       },
     },
     {
@@ -35,6 +38,7 @@ export class PixelateShader extends ShaderLayer {
       onchange: (value) => {
         this.state.missProbability = parseFloat(value);
         this.uniforms.uniforms.uMissProbability = this.state.missProbability;
+        this.refreshSize();
       },
     },
     {
@@ -43,6 +47,7 @@ export class PixelateShader extends ShaderLayer {
       onchange: (value) => {
         this.state.seed = parseInt(value);
         this.uniforms.uniforms.uSeed = this.state.seed;
+        this.refreshSize();
       },
     },
   ];
@@ -50,7 +55,7 @@ export class PixelateShader extends ShaderLayer {
 
   constructor(state?: PixelateShaderState) {
     super();
-
+    console.log("CONSTRUCTOR", state, this.state);
     if (state) {
       this.state = {
         ...this.state,
@@ -69,7 +74,7 @@ export class PixelateShader extends ShaderLayer {
   }
 
   shaderName(): string {
-    return "pixelate_shader";
+    return PixelateShader.SHADER_NAME;
   }
 
   defaultState(): PixelateShaderState {
@@ -83,9 +88,16 @@ export class PixelateShader extends ShaderLayer {
 
   bind(container: Container): void {
     super.bind(container);
-    this.width = container.width;
-    this.uniforms.uniforms.uWidth = this.width;
-    this.height = container.width;
-    this.uniforms.uniforms.uHeight = this.height;
+    this.container = container;
+    this.refreshSize();
+  }
+
+  refreshSize() {
+    if (this.container.width > 0) {
+      this.width = this.container.width;
+      this.uniforms.uniforms.uWidth = this.width;
+      this.height = this.container.height;
+      this.uniforms.uniforms.uHeight = this.height;
+    }
   }
 }

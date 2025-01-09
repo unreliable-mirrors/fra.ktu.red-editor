@@ -3,41 +3,39 @@ import jsx from "texsaur";
 import EventDispatcher from "../core/event_dispatcher";
 import { KTUComponent } from "../core/ktu_component";
 import { ContainerLayer } from "../../layers/container_layer";
+import { getText } from "../../helpers/localization_helper";
 
-export class CreateBnwShaderButtonComponent extends KTUComponent {
+export class AddShaderButtonComponent extends KTUComponent {
   containerLayer?: ContainerLayer;
+  shaderName: string;
 
-  constructor(containerLayer?: ContainerLayer) {
+  constructor(shaderName: string, containerLayer?: ContainerLayer) {
     super();
-    console.log("CONTAINER LAYER CONSTRUCTOR", containerLayer);
     this.containerLayer = containerLayer;
+    this.shaderName = shaderName;
   }
 
   render(): Element {
     return (
       <div>
         <button onclick={() => this.handleClick()}>
-          Add Black&White Shader
+          {getText(`add_${this.shaderName}_button`)}
         </button>
       </div>
     );
   }
 
   handleClick() {
-    console.log("CONTAINER LAYER CLICK", this.containerLayer);
     if (this.containerLayer) {
-      this.containerLayer.addShaderFromState("bnw_shader");
+      this.containerLayer.addShaderFromState(this.shaderName);
     } else {
       EventDispatcher.getInstance().dispatchEvent(
         "scene",
-        "add_bnw_shader",
+        `add_${this.shaderName}`,
         {}
       );
     }
   }
 }
 
-customElements.define(
-  "create-bnw-shader-button",
-  CreateBnwShaderButtonComponent
-);
+customElements.define("add-shader-button", AddShaderButtonComponent);
