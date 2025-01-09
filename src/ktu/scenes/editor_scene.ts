@@ -19,6 +19,10 @@ import {
   VintageShader,
   VintageShaderState,
 } from "../shaders/vintage/vintage_shader";
+import {
+  PixelateShader,
+  PixelateShaderState,
+} from "../shaders/pixelate/pixelate_shader";
 
 let index = 0;
 export const getSecureIndex = (): number => {
@@ -104,6 +108,13 @@ export class EditorScene extends BaseScene {
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
+      "add_pixelate_shader",
+      () => {
+        this.addPixelateShader();
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
       "loadState",
       (payload: EditorSceneState) => {
         for (const state of payload.layers) {
@@ -121,6 +132,8 @@ export class EditorScene extends BaseScene {
             this.addBnwShader(state as BnwShaderLayerState);
           } else if (state.name === "vintage_shader") {
             this.addVintageShader(state as VintageShaderState);
+          } else if (state.name === "pixelate_shader") {
+            this.addPixelateShader(state as PixelateShaderState);
           }
         }
       }
@@ -193,6 +206,10 @@ export class EditorScene extends BaseScene {
   }
   addVintageShader(state?: VintageShaderState) {
     const layer = new VintageShader(state);
+    this.addShader(layer);
+  }
+  addPixelateShader(state?: PixelateShaderState) {
+    const layer = new PixelateShader(state);
     this.addShader(layer);
   }
 }

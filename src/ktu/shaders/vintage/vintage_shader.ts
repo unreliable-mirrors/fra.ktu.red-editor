@@ -48,7 +48,7 @@ export class VintageShader extends ShaderLayer {
       };
     }
     this.uniforms = new UniformGroup({
-      uStrength: { value: 1, type: "f32" },
+      uStrength: { value: this.state.strength, type: "f32" },
     });
 
     this.shader = this.buildShader();
