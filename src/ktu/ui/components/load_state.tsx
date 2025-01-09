@@ -21,7 +21,6 @@ export class LoadStateComponent extends KTUComponent {
     const payload: any = JSON.parse(
       (document.getElementById("stateInput")! as HTMLInputElement).value
     );
-    console.log("HANDLE LOAD", payload, payload[0].points);
     EventDispatcher.getInstance().dispatchEvent("scene", "loadState", payload);
   }
 }

@@ -42,7 +42,7 @@ export class BnwShaderLayer extends ShaderLayer {
       };
     } else {
       this.state = {
-        name: "bnw_shader_layer",
+        name: "bnw_shader",
         layerId: this.layerId,
         strength: 1,
       };

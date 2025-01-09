@@ -22,6 +22,11 @@ export const getSecureIndex = (): number => {
   return index;
 };
 
+export type EditorSceneState = {
+  layers: EditorLayerState[];
+  shaders: EditorLayerState[];
+};
+
 export class EditorScene extends BaseScene {
   activeLayer?: IEditorLayer;
   layers: ContainerLayer[];
@@ -89,8 +94,8 @@ export class EditorScene extends BaseScene {
     EventDispatcher.getInstance().addEventListener(
       "scene",
       "loadState",
-      (payload: EditorLayerState[]) => {
-        for (const state of payload) {
+      (payload: EditorSceneState) => {
+        for (const state of payload.layers) {
           if (state.name === "mono_pixel_draw_layer") {
             this.addMonoPixelDrawLayer(state as MonoPixelDrawLayerState);
           } else if (state.name === "background_layer") {
@@ -99,13 +104,22 @@ export class EditorScene extends BaseScene {
             this.addImageLayer(state as ImageLayerState);
           }
         }
+
+        for (const state of payload.shaders) {
+          if (state.name === "bnw_shader") {
+            this.addBnwShader(state as BnwShaderLayerState);
+          }
+        }
       }
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
       "exportState",
       () => {
-        const state = this.layers.map((e) => e.state);
+        const state = {
+          layers: this.layers.map((e) => e.state),
+          shaders: this.shaders.map((e) => e.state),
+        };
         console.log(JSON.stringify(state));
       }
     );
