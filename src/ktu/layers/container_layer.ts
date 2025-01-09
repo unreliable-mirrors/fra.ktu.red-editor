@@ -15,7 +15,6 @@ import {
   PixelateShader,
   PixelateShaderState,
 } from "../shaders/pixelate/pixelate_shader";
-import DataStore from "../ui/core/data_store";
 import EventDispatcher from "../ui/core/event_dispatcher";
 
 export type ContainerLayerState = EditorLayerState & {
