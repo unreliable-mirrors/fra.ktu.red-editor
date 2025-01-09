@@ -19,5 +19,5 @@ void main(){
         tex = vec4(0.0,0.0,0.0,0.0);
     }   
     
-    gl_FragColor = vec4(tex.r, tex.g, tex.b, 1.0);
+    gl_FragColor = vec4(tex.r, tex.g, tex.b, tex.a);
 }
