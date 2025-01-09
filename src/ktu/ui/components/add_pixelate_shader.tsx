@@ -22,7 +22,7 @@ export class CreatePixelateShaderButtonComponent extends KTUComponent {
 
   handleClick() {
     if (this.containerLayer) {
-      this.containerLayer.addShaderFromState("bnw_shader");
+      this.containerLayer.addShaderFromState("pixelate_shader");
     } else {
       EventDispatcher.getInstance().dispatchEvent(
         "scene",

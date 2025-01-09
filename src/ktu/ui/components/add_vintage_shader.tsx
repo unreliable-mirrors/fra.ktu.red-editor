@@ -22,7 +22,7 @@ export class CreateVintageShaderButtonComponent extends KTUComponent {
 
   handleClick() {
     if (this.containerLayer) {
-      this.containerLayer.addShaderFromState("bnw_shader");
+      this.containerLayer.addShaderFromState("vintage_shader");
     } else {
       EventDispatcher.getInstance().dispatchEvent(
         "scene",
