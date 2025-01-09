@@ -68,15 +68,23 @@ button {
 }
 
 #ui {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+.left-ui {
+  position: fixed;
+  top: 0;
+  left: 0;
+  text-align: left;
+  z-index: 2;
+}
+.right-ui {
   position: fixed;
   top: 0;
   right: 0;
   text-align: right;
   z-index: 2;
-
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
 }
 
 .layerItem {
@@ -107,4 +115,24 @@ button {
 .shaderItem.active {
   background-color: white;
   color: black;
+}
+
+#fileLoadInput {
+  display: none;
+}
+.button,
+button {
+  color: #66ff66;
+  background-color: #112211;
+  font-size: 14px;
+  font-weight: 100;
+  padding-block-end: 1px;
+  padding-block-start: 1px;
+  padding-inline-end: 6px;
+  padding-inline-start: 6px;
+  border-style: solid;
+  border-color: #66ff66;
+  border-radius: 5px;
+  display: inline-block;
+  margin-bottom: 2px;
 }

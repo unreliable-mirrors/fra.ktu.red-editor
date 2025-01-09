@@ -8,11 +8,15 @@ export class EditorUI {
   public init() {
     this.anchor.appendChild(
       <div>
-        <layers-list binding="layers"></layers-list>
-        <shaders-list binding="shaders"></shaders-list>
-        <h3>Save/Load</h3>
-        <export-state-button></export-state-button>
-        <load-state></load-state>
+        <div className="left-ui">
+          <h3>Open/Save</h3>
+          <load-state></load-state>
+          <export-state-button></export-state-button>
+        </div>
+        <div className="right-ui">
+          <layers-list binding="layers"></layers-list>
+          <shaders-list binding="shaders"></shaders-list>
+        </div>
       </div>
     );
   }

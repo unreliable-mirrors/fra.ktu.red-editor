@@ -3,10 +3,7 @@ import DataStore from "../ui/core/data_store";
 import EventDispatcher from "../ui/core/event_dispatcher";
 import { BaseScene } from "../../engine/scenes/base_scene";
 import { EditorLayerState, IEditorLayer } from "../layers/ieditor_layer";
-import {
-  MonoPixelDrawLayer,
-  MonoPixelDrawLayerState,
-} from "../layers/mono_pixel_draw_layer";
+
 import {
   BackgroundLayer,
   BackgroundLayerState,
@@ -24,6 +21,7 @@ import {
   PixelateShaderState,
 } from "../shaders/pixelate/pixelate_shader";
 import { TextLayer, TextLayerState } from "../layers/text_layer";
+import { DrawLayer, DrawLayerState } from "../layers/draw_layer";
 
 export type EditorSceneState = {
   layers: EditorLayerState[];
@@ -67,7 +65,7 @@ export class EditorScene extends BaseScene {
 
     EventDispatcher.getInstance().addEventListener(
       "scene",
-      "add_mono_pixel_draw_layer",
+      "add_draw_layer",
       () => {
         this.addMonoPixelDrawLayer();
       }
@@ -119,8 +117,8 @@ export class EditorScene extends BaseScene {
       "loadState",
       (payload: EditorSceneState) => {
         for (const state of payload.layers) {
-          if (state.name === "mono_pixel_draw_layer") {
-            this.addMonoPixelDrawLayer(state as MonoPixelDrawLayerState);
+          if (state.name === "draw_layer") {
+            this.addMonoPixelDrawLayer(state as DrawLayerState);
           } else if (state.name === "background_layer") {
             this.addBackgroundLayer(state as BackgroundLayerState);
           } else if (state.name === "image_layer") {
@@ -146,8 +144,8 @@ export class EditorScene extends BaseScene {
       "duplicateLayer",
       (payload: ContainerLayer) => {
         const state = JSON.parse(JSON.stringify(payload.state));
-        if (state.name === "mono_pixel_draw_layer") {
-          this.addMonoPixelDrawLayer(state as MonoPixelDrawLayerState);
+        if (state.name === "draw_layer") {
+          this.addMonoPixelDrawLayer(state as DrawLayerState);
         } else if (state.name === "background_layer") {
           this.addBackgroundLayer(state as BackgroundLayerState);
         } else if (state.name === "image_layer") {
@@ -165,7 +163,22 @@ export class EditorScene extends BaseScene {
           layers: this.layers.map((e) => e.state),
           shaders: this.shaders.map((e) => e.state),
         };
-        console.log(JSON.stringify(state));
+        const filename = "image.red";
+        const jsonStr = JSON.stringify(state);
+
+        let element = document.createElement("a");
+        element.setAttribute(
+          "href",
+          "data:text/plain;charset=utf-8," + encodeURIComponent(jsonStr)
+        );
+        element.setAttribute("download", filename);
+
+        element.style.display = "none";
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
       }
     );
     EventDispatcher.getInstance().addEventListener(
@@ -242,8 +255,8 @@ export class EditorScene extends BaseScene {
     }
   }
 
-  addMonoPixelDrawLayer(state?: MonoPixelDrawLayerState) {
-    const layer = new MonoPixelDrawLayer(state);
+  addMonoPixelDrawLayer(state?: DrawLayerState) {
+    const layer = new DrawLayer(state);
     this.addLayer(layer);
   }
 

@@ -18,6 +18,7 @@ export type TextLayerSetting = {
 };
 
 export class TextLayer extends ContainerLayer {
+  static LAYER_NAME: string = "text_layer";
   declare state: TextLayerState;
   text: Text;
   clicking: boolean = false;
@@ -97,7 +98,7 @@ export class TextLayer extends ContainerLayer {
   }
 
   layerName(): string {
-    return "text_layer";
+    return TextLayer.LAYER_NAME;
   }
 
   defaultState(): TextLayerState {

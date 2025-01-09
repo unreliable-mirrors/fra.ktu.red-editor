@@ -13,6 +13,7 @@ export type BackgroundLayerSetting = {
 };
 
 export class BackgroundLayer extends ContainerLayer {
+  static LAYER_NAME: string = "background_layer";
   declare state: BackgroundLayerState;
   graphics: Graphics;
   settings: BackgroundLayerSetting[] = [
@@ -48,7 +49,7 @@ export class BackgroundLayer extends ContainerLayer {
   }
 
   layerName(): string {
-    return "background_layer";
+    return BackgroundLayer.LAYER_NAME;
   }
 
   defaultState(): BackgroundLayerState {

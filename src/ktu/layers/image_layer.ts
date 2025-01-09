@@ -25,6 +25,7 @@ export type ImageLayerSetting = {
 };
 
 export class ImageLayer extends ContainerLayer {
+  static LAYER_NAME: string = "image_layer";
   declare state: ImageLayerState;
   sprite: Sprite;
   clicking: boolean = false;
@@ -96,7 +97,7 @@ export class ImageLayer extends ContainerLayer {
   }
 
   layerName(): string {
-    return "image_layer";
+    return ImageLayer.LAYER_NAME;
   }
 
   defaultState(): ImageLayerState {

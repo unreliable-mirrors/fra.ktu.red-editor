@@ -21,6 +21,12 @@ const editor = new FrakturedEditor(
   document.getElementById("ui")!
 );
 document.getElementById("start-app")?.addEventListener("click", () => {
+  //@ts-ignore
+  window.KTUFullscreen();
+});
+
+//@ts-ignore
+window.KTUFullscreen = () => {
   document.querySelector(".splash")!.className += " hidden";
   document.documentElement.requestFullscreen();
   document.addEventListener("fullscreenchange", () => {
@@ -32,7 +38,7 @@ document.getElementById("start-app")?.addEventListener("click", () => {
       editor.init();
     }
   });
-});
+};
 
 export default {
   CreateSpriteLayerButtonComponent,

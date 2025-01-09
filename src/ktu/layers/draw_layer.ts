@@ -3,7 +3,7 @@ import { FederatedPointerEvent, Graphics, Point } from "pixi.js";
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import DataStore from "../ui/core/data_store";
 
-export type MonoPixelDrawLayerState = ContainerLayerState & {
+export type DrawLayerState = ContainerLayerState & {
   points: Record<string, boolean>;
   color: string;
   alpha: number;
@@ -12,13 +12,14 @@ export type MonoPixelDrawLayerState = ContainerLayerState & {
   panY: number;
 };
 
-export type MonoPixelDrawLayerSetting = {
+export type DrawLayerSetting = {
   field: "color" | "pixelSize" | "panX" | "panY" | "alpha";
   type: "color" | "integer" | "float";
   onchange: (value: string) => void;
 };
 
-export class MonoPixelDrawLayer extends ContainerLayer {
+export class DrawLayer extends ContainerLayer {
+  static LAYER_NAME: string = "draw_layer";
   graphics: Graphics;
   clicking: boolean = false;
   erasing: boolean = false;
@@ -27,8 +28,8 @@ export class MonoPixelDrawLayer extends ContainerLayer {
   panStart?: Point | null;
   clickStart?: Point | null;
   stroke: Record<string, boolean>;
-  declare state: MonoPixelDrawLayerState;
-  settings: MonoPixelDrawLayerSetting[] = [
+  declare state: DrawLayerState;
+  settings: DrawLayerSetting[] = [
     {
       field: "color",
       type: "color",
@@ -71,7 +72,7 @@ export class MonoPixelDrawLayer extends ContainerLayer {
     },
   ];
 
-  constructor(state?: MonoPixelDrawLayerState) {
+  constructor(state?: DrawLayerState) {
     super();
     this.graphics = new Graphics();
     this.container.addChild(this.graphics);
@@ -99,10 +100,10 @@ export class MonoPixelDrawLayer extends ContainerLayer {
   }
 
   layerName(): string {
-    return "mono_pixel_draw_layer";
+    return DrawLayer.LAYER_NAME;
   }
 
-  defaultState(): MonoPixelDrawLayerState {
+  defaultState(): DrawLayerState {
     return {
       ...super.defaultState(),
       points: {},

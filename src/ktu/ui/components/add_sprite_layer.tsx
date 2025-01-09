@@ -17,11 +17,7 @@ export class CreateSpriteLayerButtonComponent extends KTUComponent {
   }
 
   handleClick() {
-    EventDispatcher.getInstance().dispatchEvent(
-      "scene",
-      "add_mono_pixel_draw_layer",
-      {}
-    );
+    EventDispatcher.getInstance().dispatchEvent("scene", "add_draw_layer", {});
   }
 }
 
