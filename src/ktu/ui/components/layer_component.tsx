@@ -44,7 +44,6 @@ export class LayerComponent extends KTUComponent {
                 type="number"
                 value={this.layer.state[setting.field]}
                 oninput={(e) => {
-                  console.log((e.target as HTMLInputElement).value);
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>
@@ -61,7 +60,19 @@ export class LayerComponent extends KTUComponent {
                 max="1"
                 step="0.01"
                 oninput={(e) => {
-                  console.log((e.target as HTMLInputElement).value);
+                  setting.onchange((e.target as HTMLInputElement).value);
+                }}
+              ></input>
+            </div>
+          );
+        } else if (setting.type === "text") {
+          settings.push(
+            <div>
+              <span>{setting.field}: </span>
+              <input
+                type="text"
+                value={this.layer.state[setting.field]}
+                oninput={(e) => {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>

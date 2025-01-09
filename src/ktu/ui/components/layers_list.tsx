@@ -20,6 +20,7 @@ export class LayersList extends KTUComponent {
         <create-background-layer-button></create-background-layer-button>
         <create-sprite-layer-button></create-sprite-layer-button>
         <create-image-layer-button></create-image-layer-button>
+        <create-text-layer-button></create-text-layer-button>
       </div>
     );
   }

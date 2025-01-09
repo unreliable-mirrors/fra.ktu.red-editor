@@ -12,6 +12,7 @@ import { ShadersList } from "./ktu/ui/components/shaders_list";
 import { CreateBnwShaderButtonComponent } from "./ktu/ui/components/add_bnw_shader";
 import { CreateVintageShaderButtonComponent } from "./ktu/ui/components/add_vintage_shader";
 import { CreatePixelateShaderButtonComponent } from "./ktu/ui/components/add_pixelate_shader";
+import { CreateTextLayerButtonComponent } from "./ktu/ui/components/add_text_layer";
 
 declare global {
   interface Window {
@@ -49,4 +50,5 @@ export default {
   CreateBnwShaderButtonComponent,
   CreateVintageShaderButtonComponent,
   CreatePixelateShaderButtonComponent,
+  CreateTextLayerButtonComponent,
 };

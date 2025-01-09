@@ -11,5 +11,6 @@ declare namespace JSX {
     ["create-bnw-shader-button"]: any;
     ["create-vintage-shader-button"]: any;
     ["create-pixelate-shader-button"]: any;
+    ["create-text-layer-button"]: any;
   }
 }

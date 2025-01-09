@@ -23,6 +23,7 @@ import {
   PixelateShader,
   PixelateShaderState,
 } from "../shaders/pixelate/pixelate_shader";
+import { TextLayer, TextLayerState } from "../layers/text_layer";
 
 let index = 0;
 export const getSecureIndex = (): number => {
@@ -94,6 +95,13 @@ export class EditorScene extends BaseScene {
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
+      "add_text_layer",
+      () => {
+        this.addTextLayer();
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
       "add_bnw_shader",
       () => {
         this.addBnwShader();
@@ -124,6 +132,8 @@ export class EditorScene extends BaseScene {
             this.addBackgroundLayer(state as BackgroundLayerState);
           } else if (state.name === "image_layer") {
             this.addImageLayer(state as ImageLayerState);
+          } else if (state.name === "text_layer") {
+            this.addTextLayer(state as TextLayerState);
           }
         }
 
@@ -198,6 +208,10 @@ export class EditorScene extends BaseScene {
   }
   addImageLayer(state?: ImageLayerState) {
     const layer = new ImageLayer(state);
+    this.addLayer(layer);
+  }
+  addTextLayer(state?: TextLayerState) {
+    const layer = new TextLayer(state);
     this.addLayer(layer);
   }
   addBnwShader(state?: BnwShaderLayerState) {
