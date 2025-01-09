@@ -21,6 +21,15 @@ export class BaseScene implements IScene {
     layer.bind(this.container);
   }
 
+  removeLayer(layer: ContainerLayer): void {
+    const index = this.layers.indexOf(layer);
+    if (index > -1) {
+      this.layers.splice(index, 1);
+    }
+    this.container.removeChild(layer.container);
+    layer.unbind();
+  }
+
   addShader(shader: ShaderLayer): void {
     this.shaders.push(shader);
     shader.bind(this.container);

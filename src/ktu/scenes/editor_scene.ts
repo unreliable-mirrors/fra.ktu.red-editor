@@ -166,6 +166,13 @@ export class EditorScene extends BaseScene {
         this.activateLayer(payload);
       }
     );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "removeLayer",
+      (payload: ContainerLayer) => {
+        this.removeLayer(payload);
+      }
+    );
     document.addEventListener(
       "contextmenu",
       (e) => {
@@ -183,6 +190,12 @@ export class EditorScene extends BaseScene {
     this.activeLayer.active = true;
     DataStore.getInstance().setStore("layers", this.layers);
     DataStore.getInstance().setStore("shaders", this.shaders);
+  }
+  removeLayer(layer: ContainerLayer) {
+    super.removeLayer(layer);
+    DataStore.getInstance().setStore("layers", this.layers);
+    if (layer.active && this.layers.length > 0)
+      this.activateLayer(this.layers[0]);
   }
 
   addLayer(layer: ContainerLayer): void {

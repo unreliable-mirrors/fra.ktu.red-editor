@@ -30,6 +30,13 @@ body {
 .layerItem {
   background-color: gray;
 }
+.layerItem .title {
+  display: inline-block;
+}
+.layerItem .icons {
+  display: inline-block;
+  margin-left: 5px;
+}
 .layerItem.active {
   background-color: white;
   color: black;
