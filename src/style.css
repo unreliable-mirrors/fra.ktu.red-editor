@@ -1,8 +1,60 @@
 body {
   margin: 0;
   color: white;
+  background-color: black;
+
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
 
+h3 {
+  font-family: "Orbitron", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+button {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.splash {
+  width: 100%;
+  text-align: center;
+  padding-top: 20vh;
+  color: #66ff66;
+}
+.splash .logo {
+  font-family: "Orbitron", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 96px;
+}
+.splash .logo .red {
+  color: #ff1166;
+}
+.splash .slogan {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+.splash #start-app {
+  color: #66ff66;
+  background-color: #111111;
+  font-size: 24px;
+  font-weight: 100;
+  padding: 15px;
+  border-style: solid;
+  border-color: #66ff66;
+  border-radius: 5px;
+}
 .hidden {
   display: none;
 }

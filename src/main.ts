@@ -25,7 +25,7 @@ const editor = new FrakturedEditor(
   document.getElementById("ui")!
 );
 document.getElementById("start-app")?.addEventListener("click", () => {
-  document.getElementById("start-app")!.className += " hidden";
+  document.querySelector(".splash")!.className += " hidden";
   document.documentElement.requestFullscreen();
   document.addEventListener("fullscreenchange", () => {
     if (!editor.live) {
