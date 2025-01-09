@@ -97,6 +97,13 @@ button {
 .shaderItem {
   background-color: gray;
 }
+.shaderItem .title {
+  display: inline-block;
+}
+.shaderItem .icons {
+  display: inline-block;
+  margin-left: 5px;
+}
 .shaderItem.active {
   background-color: white;
   color: black;

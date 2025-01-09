@@ -182,6 +182,13 @@ export class EditorScene extends BaseScene {
         this.removeLayer(payload);
       }
     );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "removeShader",
+      (payload: ShaderLayer) => {
+        this.removeShader(payload);
+      }
+    );
     document.addEventListener(
       "contextmenu",
       (e) => {
@@ -211,8 +218,9 @@ export class EditorScene extends BaseScene {
   removeLayer(layer: ContainerLayer) {
     super.removeLayer(layer);
     DataStore.getInstance().setStore("layers", this.layers);
-    if (layer.active && this.layers.length > 0)
+    if (layer.active && this.layers.length > 0) {
       this.activateLayer(this.layers[0]);
+    }
   }
 
   addLayer(layer: ContainerLayer): void {
@@ -225,6 +233,13 @@ export class EditorScene extends BaseScene {
     super.addShader(layer);
     this.activateLayer(layer);
     DataStore.getInstance().setStore("shaders", this.shaders);
+  }
+  removeShader(shader: ShaderLayer) {
+    super.removeShader(shader);
+    DataStore.getInstance().setStore("shaders", this.shaders);
+    if (shader.active && this.shaders.length > 0) {
+      this.activateLayer(this.shaders[0]);
+    }
   }
 
   addMonoPixelDrawLayer(state?: MonoPixelDrawLayerState) {

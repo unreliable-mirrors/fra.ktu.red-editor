@@ -17,6 +17,7 @@ import {
 } from "../shaders/pixelate/pixelate_shader";
 import EventDispatcher from "../ui/core/event_dispatcher";
 import { getSecureIndex } from "../../engine/helpers/secure_index_helper";
+import DataStore from "../ui/core/data_store";
 
 export type ContainerLayerState = EditorLayerState & {
   shaders: EditorLayerState[];
@@ -117,6 +118,31 @@ export abstract class ContainerLayer implements IEditorLayer {
       "activateLayer",
       shader
     );
+  }
+
+  removeShader(shader: ShaderLayer) {
+    const index = this.shaders.indexOf(shader);
+    if (index > -1) {
+      this.shaders.splice(index, 1);
+      if (this.container.filters) {
+        if (this.container.filters instanceof Array) {
+          const filters = [...this.container.filters];
+          filters.splice(index, 1);
+          this.container.filters = filters;
+        } else {
+          this.container.filters = [];
+        }
+      }
+      shader.unbind();
+      DataStore.getInstance().touch("layers");
+      if (shader.active && this.shaders.length > 0) {
+        EventDispatcher.getInstance().dispatchEvent(
+          "scene",
+          "activateLayer",
+          this.shaders[0]
+        );
+      }
+    }
   }
 
   //@ts-ignore

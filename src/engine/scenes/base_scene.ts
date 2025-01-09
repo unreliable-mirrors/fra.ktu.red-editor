@@ -45,4 +45,21 @@ export abstract class BaseScene implements IScene {
     filters.push(shader.shader);
     this.container.filters = filters;
   }
+
+  removeShader(shader: ShaderLayer): void {
+    const index = this.shaders.indexOf(shader);
+    if (index > -1) {
+      this.shaders.splice(index, 1);
+      if (this.container.filters) {
+        if (this.container.filters instanceof Array) {
+          const filters = [...this.container.filters];
+          filters.splice(index, 1);
+          this.container.filters = filters;
+        } else {
+          this.container.filters = [];
+        }
+      }
+    }
+    shader.unbind();
+  }
 }

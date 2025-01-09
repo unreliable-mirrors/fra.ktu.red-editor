@@ -4,27 +4,31 @@ import EventDispatcher from "../core/event_dispatcher";
 import { KTUComponent } from "../core/ktu_component";
 import { FileLoaderComponent } from "./file_loader";
 import { ShaderLayer } from "../../shaders/shader_layer";
+import { IconClose } from "../../helpers/icons";
+import { ContainerLayer } from "../../layers/container_layer";
 
 export class ShaderComponent extends KTUComponent {
-  layer: ShaderLayer;
-  constructor(layer: ShaderLayer) {
+  shader: ShaderLayer;
+  containerLayer?: ContainerLayer;
+  constructor(shader: ShaderLayer, containerLayer?: ContainerLayer) {
     super();
-    this.layer = layer;
+    this.shader = shader;
+    this.containerLayer = containerLayer;
   }
 
   //TODO: DEDUPLICATE THIS CODE
   render(): Element {
-    const active = this.layer.active ? "active" : "";
+    const active = this.shader.active ? "active" : "";
     const settings: Element[] = [];
-    if (this.layer.active) {
-      for (const setting of this.layer.settings) {
+    if (this.shader.active) {
+      for (const setting of this.shader.settings) {
         if (setting.type === "color") {
           settings.push(
             <div>
               <span>{setting.field}: </span>
               <input
                 type="color"
-                value={this.layer.state[setting.field]}
+                value={this.shader.state[setting.field]}
                 oninput={(e) => {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
@@ -37,7 +41,7 @@ export class ShaderComponent extends KTUComponent {
               <span>{setting.field}: </span>
               <input
                 type="number"
-                value={this.layer.state[setting.field]}
+                value={this.shader.state[setting.field]}
                 oninput={(e) => {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
@@ -50,7 +54,7 @@ export class ShaderComponent extends KTUComponent {
               <span>{setting.field}: </span>
               <input
                 type="number"
-                value={this.layer.state[setting.field]}
+                value={this.shader.state[setting.field]}
                 min="0"
                 max="1"
                 step="0.01"
@@ -71,13 +75,19 @@ export class ShaderComponent extends KTUComponent {
       }
     }
     return (
-      <div className={`layerItem ${active}`}>
-        <div
-          onclick={() => {
-            this.handleClick();
-          }}
-        >
-          {this.layer.state.name} - {this.layer.state.layerId}
+      <div className={`shaderItem ${active}`}>
+        <div className="header">
+          <div
+            className="title"
+            onclick={() => {
+              this.handleClick();
+            }}
+          >
+            {this.shader.state.name} - {this.shader.state.layerId}
+          </div>
+          <div className="icons">
+            <span onclick={() => this.handleCloseClick()}>{IconClose()}</span>
+          </div>
         </div>
         {settings}
       </div>
@@ -85,11 +95,23 @@ export class ShaderComponent extends KTUComponent {
   }
 
   handleClick() {
-    if (!this.layer.active) {
+    if (!this.shader.active) {
       EventDispatcher.getInstance().dispatchEvent(
         "scene",
         "activateLayer",
-        this.layer
+        this.shader
+      );
+    }
+  }
+
+  handleCloseClick() {
+    if (this.containerLayer) {
+      this.containerLayer.removeShader(this.shader);
+    } else {
+      EventDispatcher.getInstance().dispatchEvent(
+        "scene",
+        "removeShader",
+        this.shader
       );
     }
   }
