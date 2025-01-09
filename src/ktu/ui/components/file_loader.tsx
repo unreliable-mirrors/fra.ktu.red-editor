@@ -22,7 +22,6 @@ export class FileLoaderComponent extends KTUComponent {
         <button onclick={() => this.handleUrlClick()}>LOAD</button>
       </div>
     );
-    console.log("urlElement", this.urlElement);
     return (
       <div>
         <button onclick={() => this.handleFileClick()}>Load from File</button>

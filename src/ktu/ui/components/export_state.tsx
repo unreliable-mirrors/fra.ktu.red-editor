@@ -11,7 +11,7 @@ export class ExportStateButtonComponent extends KTUComponent {
   render(): Element {
     return (
       <div>
-        <button onclick={this.handleClick}>Export State</button>
+        <button onclick={() => this.handleClick()}>Export State</button>
       </div>
     );
   }

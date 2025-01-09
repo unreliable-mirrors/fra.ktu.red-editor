@@ -11,7 +11,7 @@ export class CreateBackgroundLayerButtonComponent extends KTUComponent {
   render(): Element {
     return (
       <div>
-        <button onclick={this.handleClick}>Add Background Layer</button>
+        <button onclick={() => this.handleClick()}>Add Background Layer</button>
       </div>
     );
   }

@@ -1,9 +1,7 @@
 import { Assets, Container, Sprite, Texture, VideoSource } from "pixi.js";
-import { ContainerLayer } from "./container_layer";
+import { ContainerLayer, ContainerLayerState } from "./container_layer";
 
-export type ImageLayerState = {
-  name: string;
-  layerId: number;
+export type ImageLayerState = ContainerLayerState & {
   alpha: number;
   panX: number;
   panY: number;
@@ -73,16 +71,21 @@ export class ImageLayer extends ContainerLayer {
       this.state = {
         name: state.name,
         layerId: state.layerId,
+        shaders: [],
         alpha: state.alpha,
         panX: state.panX,
         panY: state.panY,
         scale: state.scale,
         imageUrl: state.imageUrl,
       };
+      for (var shader of state.shaders) {
+        this.addShaderFromState(shader.name, shader);
+      }
     } else {
       this.state = {
         name: "image_layer",
         layerId: this.layerId,
+        shaders: [],
         alpha: 1,
         panX: 0,
         panY: 0,

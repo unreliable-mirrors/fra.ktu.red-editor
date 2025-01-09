@@ -1,10 +1,8 @@
 import { FederatedPointerEvent, Graphics } from "pixi.js";
 
-import { ContainerLayer } from "./container_layer";
+import { ContainerLayer, ContainerLayerState } from "./container_layer";
 
-export type MonoPixelDrawLayerState = {
-  name: string;
-  layerId: number;
+export type MonoPixelDrawLayerState = ContainerLayerState & {
   points: Record<string, boolean>;
   color: string;
   alpha: number;
@@ -79,6 +77,7 @@ export class MonoPixelDrawLayer extends ContainerLayer {
       this.state = {
         name: state.name,
         layerId: state.layerId,
+        shaders: [],
         points: {},
         color: state.color,
         alpha: state.alpha,
@@ -86,6 +85,9 @@ export class MonoPixelDrawLayer extends ContainerLayer {
         panX: state.panX,
         panY: state.panY,
       };
+      for (var shader of state.shaders) {
+        this.addShaderFromState(shader.name, shader);
+      }
       for (var key in state.points) {
         const x = parseInt(key.split("X")[0]);
         const y = parseInt(key.split("X")[1]);
@@ -95,6 +97,7 @@ export class MonoPixelDrawLayer extends ContainerLayer {
       this.state = {
         name: "mono_pixel_draw_layer",
         layerId: this.layerId,
+        shaders: [],
         points: {},
         color: "#FFFFFF",
         alpha: 1,

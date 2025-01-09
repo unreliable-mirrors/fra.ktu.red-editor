@@ -1,9 +1,7 @@
 import { Container, Graphics } from "pixi.js";
-import { ContainerLayer } from "./container_layer";
+import { ContainerLayer, ContainerLayerState } from "./container_layer";
 
-export type BackgroundLayerState = {
-  name: string;
-  layerId: number;
+export type BackgroundLayerState = ContainerLayerState & {
   color: string;
   alpha: number;
 };
@@ -45,13 +43,18 @@ export class BackgroundLayer extends ContainerLayer {
       this.state = {
         name: state.name,
         layerId: state.layerId,
+        shaders: [],
         color: state.color,
         alpha: state.alpha,
       };
+      for (var shader of state.shaders) {
+        this.addShaderFromState(shader.name, shader);
+      }
     } else {
       this.state = {
         name: "background_layer",
         layerId: this.layerId,
+        shaders: [],
         color: "#000000",
         alpha: 1,
       };

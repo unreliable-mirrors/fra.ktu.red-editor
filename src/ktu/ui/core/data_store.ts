@@ -10,11 +10,15 @@ class DataStore {
 
   setStore(key: string, value: any) {
     this._data[key] = value;
-    EventDispatcher.getInstance().dispatchEvent(key, "update", value);
+    this.touch(key);
   }
 
   getStore(key: string): any {
     return this._data[key];
+  }
+
+  touch(key: string): any {
+    EventDispatcher.getInstance().dispatchEvent(key, "update", this._data[key]);
   }
 
   static getInstance() {

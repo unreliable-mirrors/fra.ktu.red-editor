@@ -11,7 +11,7 @@ export class CreateShaderLayerButtonComponent extends KTUComponent {
   render(): Element {
     return (
       <div>
-        <button onclick={this.handleClick}>Add Shader Layer</button>
+        <button onclick={() => this.handleClick()}>Add Shader Layer</button>
       </div>
     );
   }

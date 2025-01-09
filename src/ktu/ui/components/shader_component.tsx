@@ -73,13 +73,14 @@ export class ShaderComponent extends KTUComponent {
       }
     }
     return (
-      <div
-        className={`layerItem ${active}`}
-        onclick={() => {
-          this.handleClick();
-        }}
-      >
-        {this.layer.state.name} - {this.layer.state.layerId}
+      <div className={`layerItem ${active}`}>
+        <div
+          onclick={() => {
+            this.handleClick();
+          }}
+        >
+          {this.layer.state.name} - {this.layer.state.layerId}
+        </div>
         {settings}
       </div>
     );

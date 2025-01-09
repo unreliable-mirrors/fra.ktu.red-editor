@@ -2,12 +2,16 @@ import jsx from "texsaur";
 
 import EventDispatcher from "../core/event_dispatcher";
 import { KTUComponent } from "../core/ktu_component";
-import { IEditorLayer } from "../../layers/ieditor_layer";
 import { FileLoaderComponent } from "./file_loader";
+import { ContainerLayer } from "../../layers/container_layer";
+import { ShaderComponent } from "./shader_component";
+import { CreateBnwShaderButtonComponent } from "./add_bnw_shader";
+import { CreateVintageShaderButtonComponent } from "./add_vintage_shader";
+import { CreatePixelateShaderButtonComponent } from "./add_pixelate_shader";
 
 export class LayerComponent extends KTUComponent {
-  layer: IEditorLayer;
-  constructor(layer: IEditorLayer) {
+  layer: ContainerLayer;
+  constructor(layer: ContainerLayer) {
     super();
     this.layer = layer;
   }
@@ -15,6 +19,8 @@ export class LayerComponent extends KTUComponent {
   render(): Element {
     const active = this.layer.active ? "active" : "";
     const settings: Element[] = [];
+    const shaders: Element[] = [];
+    const shaderButtons: Element[] = [];
     if (this.layer.active) {
       for (const setting of this.layer.settings) {
         if (setting.type === "color") {
@@ -70,16 +76,25 @@ export class LayerComponent extends KTUComponent {
           );
         }
       }
+      shaderButtons.push(new CreateBnwShaderButtonComponent(this.layer));
+      shaderButtons.push(new CreateVintageShaderButtonComponent(this.layer));
+      shaderButtons.push(new CreatePixelateShaderButtonComponent(this.layer));
+    }
+    for (const shader of [...this.layer.shaders].reverse()) {
+      shaders.push(new ShaderComponent(shader));
     }
     return (
-      <div
-        className={`layerItem ${active}`}
-        onclick={() => {
-          this.handleClick();
-        }}
-      >
-        {this.layer.state.name} - {this.layer.state.layerId}
+      <div className={`layerItem ${active}`}>
+        <div
+          onclick={() => {
+            this.handleClick();
+          }}
+        >
+          {this.layer.state.name} - {this.layer.state.layerId}
+        </div>
         {settings}
+        {shaders}
+        {shaderButtons}
       </div>
     );
   }

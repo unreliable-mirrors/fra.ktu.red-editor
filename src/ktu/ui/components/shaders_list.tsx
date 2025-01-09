@@ -1,14 +1,14 @@
 import jsx from "texsaur";
 
 import { KTUComponent } from "../core/ktu_component";
-import { LayerComponent } from "./layer_component";
-import { IEditorLayer } from "../../layers/ieditor_layer";
+import { ShaderComponent } from "./shader_component";
+import { ShaderLayer } from "../../shaders/shader_layer";
 
 export class ShadersList extends KTUComponent {
   render(): Element {
     const items: Element[] = [];
-    for (const layer of [...(this.bindingData as IEditorLayer[])].reverse()) {
-      items.push(new LayerComponent(layer));
+    for (const layer of [...(this.bindingData as ShaderLayer[])].reverse()) {
+      items.push(new ShaderComponent(layer));
     }
     return (
       <div>

@@ -1,12 +1,10 @@
 import { Container, Filter, UniformGroup } from "pixi.js";
-import { ShaderLayer } from "../shader_layer";
+import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import vertex from "../defaultFilter.vert?raw";
 import fragment from "./pixelate_shader.frag?raw";
 
-export type PixelateShaderState = {
-  name: string;
-  layerId: number;
+export type PixelateShaderState = ShaderState & {
   pixelSize: number;
   missProbability: number;
   seed: number;

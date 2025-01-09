@@ -1,12 +1,10 @@
 import { Container, Filter, UniformGroup } from "pixi.js";
-import { ShaderLayer } from "../shader_layer";
+import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import vertex from "../defaultFilter.vert?raw";
 import fragment from "./vintage_shader.frag?raw";
 
-export type VintageShaderState = {
-  name: string;
-  layerId: number;
+export type VintageShaderState = ShaderState & {
   strength: number;
 };
 

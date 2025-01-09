@@ -1,17 +1,22 @@
 import { Container, FederatedPointerEvent, Filter, Ticker } from "pixi.js";
 
-import { EditorLayerSetting, IEditorLayer } from "../layers/ieditor_layer";
+import {
+  EditorLayerSetting,
+  EditorLayerState,
+  IEditorLayer,
+} from "../layers/ieditor_layer";
 import { getSecureIndex } from "../scenes/editor_scene";
+
+export type ShaderState = EditorLayerState;
 
 export abstract class ShaderLayer implements IEditorLayer {
   layerId: number;
-  abstract state: { name: string; layerId: number; [key: string]: any };
+  abstract state: ShaderState;
   abstract settings: EditorLayerSetting[];
   active: boolean;
   abstract shader: Filter;
 
   public constructor() {
-    //TODO: REPLACE THIS FOR A GLOBAL SAFE COUNTER
     this.layerId = getSecureIndex();
     this.active = false;
   }

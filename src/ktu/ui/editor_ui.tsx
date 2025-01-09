@@ -10,6 +10,7 @@ export class EditorUI {
       <div>
         <layers-list binding="layers"></layers-list>
         <shaders-list binding="shaders"></shaders-list>
+        <h3>Save/Load</h3>
         <export-state-button></export-state-button>
         <load-state></load-state>
       </div>

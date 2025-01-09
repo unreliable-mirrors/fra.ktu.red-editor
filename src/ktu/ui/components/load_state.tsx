@@ -12,7 +12,7 @@ export class LoadStateComponent extends KTUComponent {
     return (
       <div>
         <input type="text" id="stateInput"></input>
-        <button onclick={this.handleClick}>LoadState</button>
+        <button onclick={() => this.handleClick()}>LoadState</button>
       </div>
     );
   }

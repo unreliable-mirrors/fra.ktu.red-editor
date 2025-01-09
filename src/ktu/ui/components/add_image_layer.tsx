@@ -11,7 +11,7 @@ export class CreateImageLayerButtonComponent extends KTUComponent {
   render(): Element {
     return (
       <div>
-        <button onclick={this.handleClick}>Add Image Layer</button>
+        <button onclick={() => this.handleClick()}>Add Image Layer</button>
       </div>
     );
   }

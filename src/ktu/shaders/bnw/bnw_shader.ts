@@ -1,12 +1,10 @@
 import { Container, Filter, UniformGroup } from "pixi.js";
-import { ShaderLayer } from "../shader_layer";
+import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import vertex from "../defaultFilter.vert?raw";
 import fragment from "./bnw_shader.frag?raw";
 
-export type BnwShaderLayerState = {
-  name: string;
-  layerId: number;
+export type BnwShaderLayerState = ShaderState & {
   strength: number;
 };
 
