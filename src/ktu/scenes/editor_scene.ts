@@ -281,7 +281,7 @@ export class EditorScene extends BaseScene {
   }
   newState() {
     this.activeLayer = undefined;
-    DataStore.getInstance().setStore("activeLayer", this.activateLayer);
+    DataStore.getInstance().setStore("activeLayer", this.activeLayer);
 
     for (const shader of this.shaders) {
       shader.unbind();
@@ -332,7 +332,7 @@ export class EditorScene extends BaseScene {
   activateLayer(layer: IEditorLayer) {
     if (this.activeLayer) this.activeLayer.active = false;
     this.activeLayer = layer;
-    DataStore.getInstance().setStore("activeLayer", this.activateLayer);
+    DataStore.getInstance().setStore("activeLayer", this.activeLayer);
     this.activeLayer.active = true;
     DataStore.getInstance().setStore("layers", this.layers);
     DataStore.getInstance().setStore("shaders", this.shaders);
