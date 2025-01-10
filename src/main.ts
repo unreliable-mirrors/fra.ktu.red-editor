@@ -2,9 +2,10 @@ import { FrakturedEditor } from "./fraktured_editor";
 import "./style.css";
 import EventDispatcher from "./ktu/ui/core/event_dispatcher";
 import { LayersList } from "./ktu/ui/components/layers_list";
-import { ExportStateButtonComponent } from "./ktu/ui/components/export_state";
-import { LoadStateComponent } from "./ktu/ui/components/load_state";
+import { ExportStateButtonComponent } from "./ktu/ui/components/file/export_state";
+import { LoadStateComponent } from "./ktu/ui/components/file/load_state";
 import { ShadersList } from "./ktu/ui/components/shaders_list";
+import { NewStateButtonComponent } from "./ktu/ui/components/file/new_state_button";
 
 declare global {
   interface Window {
@@ -41,4 +42,5 @@ export default {
   ExportStateButtonComponent,
   LoadStateComponent,
   ShadersList,
+  NewStateButtonComponent,
 };

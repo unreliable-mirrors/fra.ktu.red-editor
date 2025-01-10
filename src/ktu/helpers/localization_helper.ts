@@ -6,6 +6,7 @@ const texts: Record<string, string> = {
 
   export_state: "Save File",
   load_state: "Open File",
+  new_state: "New File",
 };
 
 export const getText = (key: string): string => {

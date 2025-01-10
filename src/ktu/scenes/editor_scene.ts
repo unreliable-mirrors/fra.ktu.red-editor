@@ -38,11 +38,8 @@ export class EditorScene extends BaseScene {
     this.layers = [];
     this.shaders = [];
     this.container.eventMode = "static";
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    const g = new Graphics().rect(0, 0, width, height).fill(0xff0000);
-    g.alpha = 0;
-    this.container.addChild(g);
+    this.setupContainer();
+
     Ticker.shared.add((time) => {
       for (var layer of this.layers) {
         layer.tick(time);
@@ -112,6 +109,25 @@ export class EditorScene extends BaseScene {
         this.addPixelateShader();
       }
     );
+    EventDispatcher.getInstance().addEventListener("scene", "newState", () => {
+      this.activeLayer = undefined;
+
+      for (const shader of this.shaders) {
+        shader.unbind();
+      }
+      this.container.filters = [];
+      this.shaders = [];
+      DataStore.getInstance().setStore("shaders", this.shaders);
+
+      for (const layer of this.layers) {
+        layer.unbind();
+      }
+      this.container.removeChildren();
+      this.layers = [];
+      DataStore.getInstance().setStore("layers", this.layers);
+
+      this.setupContainer();
+    });
     EventDispatcher.getInstance().addEventListener(
       "scene",
       "loadState",
@@ -227,6 +243,13 @@ export class EditorScene extends BaseScene {
     );
   }
 
+  setupContainer() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const g = new Graphics().rect(0, 0, width, height).fill(0xff0000);
+    g.alpha = 0;
+    this.container.addChild(g);
+  }
   set visible(value: boolean) {
     this.container.visible = value;
   }

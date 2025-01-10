@@ -1,8 +1,8 @@
 import jsx from "texsaur";
 
-import EventDispatcher from "../core/event_dispatcher";
-import { KTUComponent } from "../core/ktu_component";
-import { getText } from "../../helpers/localization_helper";
+import EventDispatcher from "../../core/event_dispatcher";
+import { KTUComponent } from "../../core/ktu_component";
+import { getText } from "../../../helpers/localization_helper";
 
 export class LoadStateComponent extends KTUComponent {
   constructor() {

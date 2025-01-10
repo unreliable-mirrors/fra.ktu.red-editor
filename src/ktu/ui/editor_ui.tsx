@@ -11,6 +11,7 @@ export class EditorUI {
         <div className="left-ui">
           <div className="panel left">
             <h3>Open/Save</h3>
+            <new-state-button></new-state-button>
             <load-state></load-state>
             <export-state-button></export-state-button>
           </div>
@@ -26,7 +27,7 @@ export class EditorUI {
       </div>
     );
     document.addEventListener("keyup", (e) => {
-      if (["h", "H"].includes(e.key)) {
+      if (["h", "H"].includes(e.key) && e.ctrlKey) {
         this.toggleHide();
       }
     });
