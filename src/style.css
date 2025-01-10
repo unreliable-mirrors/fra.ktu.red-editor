@@ -1,12 +1,14 @@
+/*---GLOBAL---*/
 body {
   margin: 0;
-  color: white;
+  color: #66ff66;
   background-color: black;
 
   font-family: "Montserrat", serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+  font-size: 14px;
 }
 
 h3 {
@@ -14,6 +16,16 @@ h3 {
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+  margin-top: 0px;
+}
+h4 {
+  font-family: "Orbitron", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  margin-top: 10px;
+  margin-bottom: 0;
+  font-size: 14px;
 }
 button {
   font-family: "Montserrat", serif;
@@ -21,6 +33,11 @@ button {
   font-weight: 400;
   font-style: normal;
 }
+.hidden {
+  display: none;
+}
+
+/*---SPLASH---*/
 .splash {
   width: 100%;
   text-align: center;
@@ -58,9 +75,7 @@ button {
   border-color: #66ff66;
   border-radius: 5px;
 }
-.hidden {
-  display: none;
-}
+/*---APP---*/
 #canvas {
   position: fixed;
   top: 0;
@@ -69,7 +84,7 @@ button {
   width: 100vw;
   height: 100vh;
 }
-
+/*---UI---*/
 #ui {
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
@@ -89,35 +104,43 @@ button {
   text-align: right;
   z-index: 2;
 }
-
-.layerItem {
-  background-color: gray;
+.panel {
+  background-color: #111111cc;
+  margin-top: 10px;
+  padding: 10px;
 }
-.layerItem .title {
-  display: inline-block;
+.panel.left {
+  border-radius: 0 10px 10px 0;
 }
-.layerItem .icons {
-  display: inline-block;
-  margin-left: 5px;
+.panel.right {
+  border-radius: 10px 0 0 10px;
 }
-.layerItem.active {
-  background-color: white;
-  color: black;
-}
-
+.layerItem,
 .shaderItem {
-  background-color: gray;
+  background-color: #11111122;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #66ff6666;
+  padding: 5px;
 }
+.layerItem.active,
+.shaderItem.active {
+  background-color: #ffffff22;
+  color: #66ff66;
+  border-color: #66ff66;
+}
+
+.layerItem .title,
 .shaderItem .title {
+  font-family: "Orbitron", serif;
   display: inline-block;
+  line-height: 24px;
+  float: left;
 }
+.layerItem .icons,
 .shaderItem .icons {
   display: inline-block;
   margin-left: 5px;
-}
-.shaderItem.active {
-  background-color: white;
-  color: black;
 }
 
 #fileLoadInput {

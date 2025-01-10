@@ -9,13 +9,19 @@ export class EditorUI {
     this.anchor.appendChild(
       <div>
         <div className="left-ui">
-          <h3>Open/Save</h3>
-          <load-state></load-state>
-          <export-state-button></export-state-button>
+          <div className="panel left">
+            <h3>Open/Save</h3>
+            <load-state></load-state>
+            <export-state-button></export-state-button>
+          </div>
         </div>
         <div className="right-ui">
-          <layers-list binding="layers"></layers-list>
-          <shaders-list binding="shaders"></shaders-list>
+          <div className="panel right">
+            <layers-list binding="layers"></layers-list>
+          </div>
+          <div className="panel right">
+            <shaders-list binding="shaders"></shaders-list>
+          </div>
         </div>
       </div>
     );

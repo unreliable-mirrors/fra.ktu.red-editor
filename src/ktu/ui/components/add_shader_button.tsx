@@ -17,11 +17,9 @@ export class AddShaderButtonComponent extends KTUComponent {
 
   render(): Element {
     return (
-      <div>
-        <button onclick={() => this.handleClick()}>
-          {getText(`add_${this.shaderName}_button`)}
-        </button>
-      </div>
+      <button onclick={() => this.handleClick()}>
+        {getText(`add_${this.shaderName}_button`)}
+      </button>
     );
   }
 

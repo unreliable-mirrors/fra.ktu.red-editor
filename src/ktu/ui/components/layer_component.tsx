@@ -93,6 +93,12 @@ export class LayerComponent extends KTUComponent {
           );
         }
       }
+    }
+    let anyActive = false;
+    for (const shader of this.layer.shaders) {
+      anyActive = anyActive || shader.active;
+    }
+    if (this.layer.active || anyActive) {
       for (const shaderName of AVAILABLE_SHADERS_NAMES) {
         shaderButtons.push(
           new AddShaderButtonComponent(shaderName, this.layer)
@@ -124,8 +130,9 @@ export class LayerComponent extends KTUComponent {
           </div>
         </div>
         {settings}
-        {shaders}
+        {shaderButtons.length > 0 ? <h4>Shaders</h4> : <></>}
         {shaderButtons}
+        {shaders}
       </div>
     );
   }

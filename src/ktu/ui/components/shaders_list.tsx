@@ -18,11 +18,9 @@ export class ShadersList extends KTUComponent {
     }
     return (
       <div>
-        <div className="shadersList">
-          <h3>Global Shaders</h3>
-          {items}
-        </div>
+        <h3>Global Shaders</h3>
         {shaderButtons}
+        <div className="shadersList">{items}</div>
       </div>
     );
   }
