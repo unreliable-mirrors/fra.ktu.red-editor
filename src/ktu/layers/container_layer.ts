@@ -6,18 +6,10 @@ import {
 } from "./ieditor_layer";
 
 import { ShaderLayer, ShaderState } from "../shaders/shader_layer";
-import { BnwShader, BnwShaderState } from "../shaders/bnw/bnw_shader";
-import {
-  VintageShader,
-  VintageShaderState,
-} from "../shaders/vintage/vintage_shader";
-import {
-  PixelateShader,
-  PixelateShaderState,
-} from "../shaders/pixelate/pixelate_shader";
 import EventDispatcher from "../ui/core/event_dispatcher";
 import { getSecureIndex } from "../../engine/helpers/secure_index_helper";
 import DataStore from "../ui/core/data_store";
+import { getShaderByName } from "../helpers/shaders";
 
 export type ContainerLayerState = EditorLayerState & {
   shaders: EditorLayerState[];
@@ -84,30 +76,12 @@ export abstract class ContainerLayer implements IEditorLayer {
     return this.state.visible;
   }
 
-  addShaderFromState(stateName: string, state?: ShaderState): void {
-    //TODO: DEDUPLICATE THIS
-    if (stateName === "bnw_shader") {
-      this.addBnwShader(state as BnwShaderState);
-    } else if (stateName === "vintage_shader") {
-      this.addVintageShader(state as VintageShaderState);
-    } else if (stateName === "pixelate_shader") {
-      this.addPixelateShader(state as PixelateShaderState);
-    }
+  addShaderFromState(shaderName: string, state?: ShaderState): void {
+    this.addGenericShader(shaderName, state);
   }
-  //TODO: DEDUPLICATE THIS
-  addBnwShader(state?: BnwShaderState) {
-    const layer = new BnwShader(state);
-    this.addShader(layer);
-  }
-  //TODO: DEDUPLICATE THIS
-  addVintageShader(state?: VintageShaderState) {
-    const layer = new VintageShader(state);
-    this.addShader(layer);
-  }
-  //TODO: DEDUPLICATE THIS
-  addPixelateShader(state?: PixelateShaderState) {
-    const layer = new PixelateShader(state);
-    this.addShader(layer);
+  addGenericShader(shaderName: string, state?: ShaderState) {
+    const layer = getShaderByName(shaderName, state);
+    this.addShader(layer!);
   }
   //TODO: DEDUPLICATE THIS
   addShader(shader: ShaderLayer): void {
@@ -163,7 +137,11 @@ export abstract class ContainerLayer implements IEditorLayer {
   unbind(): void {}
 
   //@ts-ignore
-  tick(time: Ticker): void {}
+  tick(time: Ticker): void {
+    for (const shader of this.shaders) {
+      shader.tick(time);
+    }
+  }
 
   //@ts-ignore
   pointerDown(event: FederatedPointerEvent): void {}

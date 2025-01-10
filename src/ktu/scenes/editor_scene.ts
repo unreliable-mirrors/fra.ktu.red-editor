@@ -9,21 +9,13 @@ import {
   BackgroundLayerState,
 } from "../layers/background_layer";
 import { ImageLayer, ImageLayerState } from "../layers/image_layer";
-import { ShaderLayer } from "../shaders/shader_layer";
+import { ShaderLayer, ShaderState } from "../shaders/shader_layer";
 import { ContainerLayer } from "../layers/container_layer";
-import { BnwShader, BnwShaderState } from "../shaders/bnw/bnw_shader";
-import {
-  VintageShader,
-  VintageShaderState,
-} from "../shaders/vintage/vintage_shader";
-import {
-  PixelateShader,
-  PixelateShaderState,
-} from "../shaders/pixelate/pixelate_shader";
 import { TextLayer, TextLayerState } from "../layers/text_layer";
 import { DrawLayer, DrawLayerState } from "../layers/draw_layer";
 import { downloadContent } from "../helpers/file";
 import { getStartingName } from "../helpers/sparkle";
+import { getShaderByName } from "../helpers/shaders";
 
 export type EditorSceneState = {
   layers: EditorLayerState[];
@@ -50,8 +42,11 @@ export class EditorScene extends BaseScene {
     DataStore.getInstance().setStore("metadata", this.metadata);
 
     Ticker.shared.add((time) => {
-      for (var layer of this.layers) {
+      for (const layer of this.layers) {
         layer.tick(time);
+      }
+      for (const shader of this.shaders) {
+        shader.tick(time);
       }
     });
 
@@ -99,23 +94,9 @@ export class EditorScene extends BaseScene {
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
-      "add_bnw_shader",
-      () => {
-        this.addBnwShader();
-      }
-    );
-    EventDispatcher.getInstance().addEventListener(
-      "scene",
-      "add_vintage_shader",
-      () => {
-        this.addVintageShader();
-      }
-    );
-    EventDispatcher.getInstance().addEventListener(
-      "scene",
-      "add_pixelate_shader",
-      () => {
-        this.addPixelateShader();
+      "add_shader",
+      (shaderName: string) => {
+        this.addGenericShader(shaderName);
       }
     );
     EventDispatcher.getInstance().addEventListener("scene", "newState", () => {
@@ -280,6 +261,9 @@ export class EditorScene extends BaseScene {
     return this.container.visible;
   }
   newState() {
+    this.metadata = { name: getStartingName() };
+    DataStore.getInstance().setStore("metadata", this.metadata);
+
     this.activeLayer = undefined;
     DataStore.getInstance().setStore("activeLayer", this.activeLayer);
 
@@ -314,13 +298,7 @@ export class EditorScene extends BaseScene {
     }
 
     for (const state of payload.shaders) {
-      if (state.name === "bnw_shader") {
-        this.addBnwShader(state as BnwShaderState);
-      } else if (state.name === "vintage_shader") {
-        this.addVintageShader(state as VintageShaderState);
-      } else if (state.name === "pixelate_shader") {
-        this.addPixelateShader(state as PixelateShaderState);
-      }
+      this.addGenericShader(state.name, state);
     }
 
     if (!importing) {
@@ -408,16 +386,8 @@ export class EditorScene extends BaseScene {
     const layer = new TextLayer(state);
     this.addLayer(layer);
   }
-  addBnwShader(state?: BnwShaderState) {
-    const layer = new BnwShader(state);
-    this.addShader(layer);
-  }
-  addVintageShader(state?: VintageShaderState) {
-    const layer = new VintageShader(state);
-    this.addShader(layer);
-  }
-  addPixelateShader(state?: PixelateShaderState) {
-    const layer = new PixelateShader(state);
-    this.addShader(layer);
+  addGenericShader(shaderName: string, state?: ShaderState) {
+    const layer = getShaderByName(shaderName, state);
+    this.addShader(layer!);
   }
 }

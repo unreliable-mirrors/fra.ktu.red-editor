@@ -36,8 +36,8 @@ export class HintPanel extends KTUComponent {
         </>
       );
     } else if (
-      (this.bindingData as ContainerLayer).layerName() ==
-      BackgroundLayer.LAYER_NAME
+      this.bindingData instanceof ContainerLayer &&
+      this.bindingData.layerName() == BackgroundLayer.LAYER_NAME
     ) {
       content = (
         <>

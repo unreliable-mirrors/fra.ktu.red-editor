@@ -3,6 +3,7 @@ const texts: Record<string, string> = {
   add_bnw_shader_button: "B&W",
   add_pixelate_shader_button: "Pixelate",
   add_vintage_shader_button: "Vintage",
+  add_montecarlo_sample_shader_button: "Montecarlo",
 
   export_state: "Save File",
   import_state: "Import File",
