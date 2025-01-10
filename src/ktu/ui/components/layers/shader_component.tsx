@@ -1,10 +1,10 @@
 import jsx from "texsaur";
 
-import EventDispatcher from "../core/event_dispatcher";
-import { KTUComponent } from "../core/ktu_component";
-import { ShaderLayer } from "../../shaders/shader_layer";
-import { IconClose } from "../../helpers/icons";
-import { ContainerLayer } from "../../layers/container_layer";
+import EventDispatcher from "../../core/event_dispatcher";
+import { KTUComponent } from "../../core/ktu_component";
+import { ShaderLayer } from "../../../shaders/shader_layer";
+import { IconClose } from "../../../helpers/icons";
+import { ContainerLayer } from "../../../layers/container_layer";
 
 export class ShaderComponent extends KTUComponent {
   shader: ShaderLayer;

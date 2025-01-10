@@ -1,12 +1,13 @@
 import { FrakturedEditor } from "./fraktured_editor";
 import "./style.css";
 import EventDispatcher from "./ktu/ui/core/event_dispatcher";
-import { LayersList } from "./ktu/ui/components/layers_list";
+import { LayersList } from "./ktu/ui/components/layers/layers_list";
 import { ExportStateButtonComponent } from "./ktu/ui/components/file/export_state";
 import { ImportStateButtonComponent } from "./ktu/ui/components/file/import_state";
-import { ShadersList } from "./ktu/ui/components/shaders_list";
+import { ShadersList } from "./ktu/ui/components/layers/shaders_list";
 import { NewStateButtonComponent } from "./ktu/ui/components/file/new_state_button";
 import { OpenStateButtonComponent } from "./ktu/ui/components/file/open_state";
+import { HintPanel } from "./ktu/ui/components/hint_panel";
 
 declare global {
   interface Window {
@@ -45,4 +46,5 @@ export default {
   ShadersList,
   NewStateButtonComponent,
   OpenStateButtonComponent,
+  HintPanel,
 };

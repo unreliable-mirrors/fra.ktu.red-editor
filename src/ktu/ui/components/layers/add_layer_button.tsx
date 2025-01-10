@@ -1,9 +1,8 @@
 import jsx from "texsaur";
-
-import EventDispatcher from "../core/event_dispatcher";
-import { KTUComponent } from "../core/ktu_component";
-import { ContainerLayer } from "../../layers/container_layer";
-import { getIcon, IconPlus } from "../../helpers/icons";
+import { KTUComponent } from "../../core/ktu_component";
+import { ContainerLayer } from "../../../layers/container_layer";
+import { getIcon, IconPlus } from "../../../helpers/icons";
+import EventDispatcher from "../../core/event_dispatcher";
 
 export class AddLayerButtonComponent extends KTUComponent {
   containerLayer?: ContainerLayer;

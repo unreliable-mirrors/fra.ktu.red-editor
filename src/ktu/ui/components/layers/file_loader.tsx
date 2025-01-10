@@ -1,9 +1,9 @@
 import jsx from "texsaur";
 
-import { KTUComponent } from "../core/ktu_component";
-import { ImageLayer } from "../../layers/image_layer";
-import { getText } from "../../helpers/localization_helper";
-import { IconLeft } from "../../helpers/icons";
+import { KTUComponent } from "../../core/ktu_component";
+import { ImageLayer } from "../../../layers/image_layer";
+import { getText } from "../../../helpers/localization_helper";
+import { IconLeft } from "../../../helpers/icons";
 
 export type FileLoaderOptions = {
   onchange: (event: string) => void;

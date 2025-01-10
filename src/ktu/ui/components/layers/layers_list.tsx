@@ -1,9 +1,9 @@
 import jsx from "texsaur";
 
-import { KTUComponent } from "../core/ktu_component";
+import { KTUComponent } from "../../core/ktu_component";
 import { LayerComponent } from "./layer_component";
-import { ContainerLayer } from "../../layers/container_layer";
-import { AVAILABLE_LAYER_NAMES } from "../../helpers/layers";
+import { ContainerLayer } from "../../../layers/container_layer";
+import { AVAILABLE_LAYER_NAMES } from "../../../helpers/layers";
 import { AddLayerButtonComponent } from "./add_layer_button";
 
 export class LayersList extends KTUComponent {

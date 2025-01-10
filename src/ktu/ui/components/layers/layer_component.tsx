@@ -1,13 +1,13 @@
 import jsx from "texsaur";
 
-import EventDispatcher from "../core/event_dispatcher";
-import { KTUComponent } from "../core/ktu_component";
+import EventDispatcher from "../../core/event_dispatcher";
+import { KTUComponent } from "../../core/ktu_component";
 import { FileLoaderComponent } from "./file_loader";
-import { ContainerLayer } from "../../layers/container_layer";
+import { ContainerLayer } from "../../../layers/container_layer";
 import { ShaderComponent } from "./shader_component";
-import DataStore from "../core/data_store";
+import DataStore from "../../core/data_store";
 import { AddShaderButtonComponent } from "./add_shader_button";
-import { AVAILABLE_SHADERS_NAMES } from "../../helpers/shaders";
+import { AVAILABLE_SHADERS_NAMES } from "../../../helpers/shaders";
 import {
   IconClose,
   IconDown,
@@ -15,8 +15,8 @@ import {
   IconHidden,
   IconUp,
   IconVisible,
-} from "../../helpers/icons";
-import { ImageLayer } from "../../layers/image_layer";
+} from "../../../helpers/icons";
+import { ImageLayer } from "../../../layers/image_layer";
 
 export class LayerComponent extends KTUComponent {
   layer: ContainerLayer;

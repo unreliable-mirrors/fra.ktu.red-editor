@@ -40,6 +40,23 @@ button {
   padding-bottom: 10px;
   display: block;
 }
+.button,
+button {
+  color: #66ff66;
+  background-color: #112211;
+  border-style: solid;
+  border-color: #66ff66;
+  border-radius: 5px;
+  border-width: 2px;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 400;
+  padding-block-end: 1px;
+  padding-block-start: 1px;
+  padding-inline-end: 6px;
+  padding-inline-start: 6px;
+  margin-bottom: 2px;
+}
 
 /*---SPLASH---*/
 .splash {
@@ -108,6 +125,13 @@ button {
   text-align: right;
   z-index: 2;
 }
+.right-bottom-ui {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  text-align: right;
+  z-index: 2;
+}
 .panel {
   background-color: #111111cc;
   margin-top: 10px;
@@ -118,6 +142,9 @@ button {
 }
 .panel.right {
   border-radius: 10px 0 0 10px;
+}
+.panel.right-bottom {
+  border-radius: 10px 0 0 0;
 }
 .layerItem,
 .shaderItem {
@@ -161,20 +188,15 @@ button {
 #fileLoadInput {
   display: none;
 }
-.button,
-button {
-  color: #66ff66;
-  background-color: #112211;
-  border-style: solid;
-  border-color: #66ff66;
-  border-radius: 5px;
-  border-width: 2px;
-  display: inline-block;
-  font-size: 14px;
-  font-weight: 400;
-  padding-block-end: 1px;
-  padding-block-start: 1px;
-  padding-inline-end: 6px;
-  padding-inline-start: 6px;
-  margin-bottom: 2px;
+
+.hintPanel {
+  max-width: 256px;
+  font-family: "Orbitron", serif;
+}
+
+.hintPanel svg {
+  margin-right: 10px;
+}
+.hintPanel .spacer {
+  height: 10px;
 }

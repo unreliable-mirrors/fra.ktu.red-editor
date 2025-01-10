@@ -26,17 +26,25 @@ export class EditorUI {
             <shaders-list binding="shaders"></shaders-list>
           </div>
         </div>
+        <div className="right-bottom-ui">
+          <div className="panel right-bottom">
+            <hint-panel></hint-panel>
+          </div>
+        </div>
       </div>
     );
     document.addEventListener("keyup", (e) => {
+      if (["j", "J"].includes(e.key) && e.ctrlKey && e.altKey) {
+        this.toggle("ui");
+      }
       if (["h", "H"].includes(e.key) && e.ctrlKey && e.altKey) {
-        this.toggleHide();
+        this.toggle("hintsPanel");
       }
     });
   }
 
-  toggleHide() {
-    const ui = document.getElementById("ui");
+  toggle(id: string) {
+    const ui = document.getElementById(id);
     console.log("TOGGLE", ui?.className.includes("hidden"));
     if (ui?.className.includes("hidden")) {
       ui.className = ui.className.replace("hidden", "");

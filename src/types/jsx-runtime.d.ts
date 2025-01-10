@@ -6,5 +6,6 @@ declare namespace JSX {
     ["import-state-button"]: any;
     ["export-state-button"]: any;
     ["shaders-list"]: any;
+    ["hint-panel"]: any;
   }
 }
