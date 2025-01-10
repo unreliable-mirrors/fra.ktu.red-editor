@@ -79,9 +79,10 @@ export class ImageLayer extends ContainerLayer {
 
   constructor(state?: ImageLayerState) {
     super();
+    console.log("LAYER_ID", this.layerId);
     this.sprite = new Sprite();
     this.container.addChild(this.sprite);
-
+    console.log("STATE LAYER_ID", this.state.layerId);
     if (state) {
       this.state = {
         ...this.state,
@@ -95,6 +96,7 @@ export class ImageLayer extends ContainerLayer {
         this.addShaderFromState(shader.name, shader);
       }
     }
+    console.log("STATE LAYER_ID", this.state.layerId);
   }
 
   layerName(): string {
@@ -103,14 +105,20 @@ export class ImageLayer extends ContainerLayer {
 
   defaultState(): ImageLayerState {
     return {
+      ...ImageLayer.DEFAULT_STATE,
       ...super.defaultState(),
-      alpha: 1,
-      panX: 0,
-      panY: 0,
-      scale: 100,
-      imageUrl: "",
     };
   }
+
+  static DEFAULT_STATE: ImageLayerState = {
+    ...ContainerLayer.DEFAULT_STATE,
+    name: ImageLayer.LAYER_NAME,
+    alpha: 1,
+    panX: 0,
+    panY: 0,
+    scale: 100,
+    imageUrl: "",
+  };
 
   pointerDown(event: FederatedPointerEvent): void {
     this.clicking = true;

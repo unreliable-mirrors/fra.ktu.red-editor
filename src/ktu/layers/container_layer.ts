@@ -49,19 +49,31 @@ export abstract class ContainerLayer implements IEditorLayer {
       }
     } else {
       this.state = this.defaultState();
+      console.log("CONST STATE", this.state);
     }
   }
 
   abstract layerName(): string;
 
   defaultState(): ContainerLayerState {
-    return {
+    console.log("SUPER DEFAULT", {
+      ...ContainerLayer.DEFAULT_STATE,
       name: this.layerName(),
       layerId: this.layerId,
-      visible: true,
-      shaders: [],
+    });
+    return {
+      ...ContainerLayer.DEFAULT_STATE,
+      name: this.layerName(),
+      layerId: this.layerId,
     };
   }
+
+  static DEFAULT_STATE: ContainerLayerState = {
+    name: "",
+    layerId: 0,
+    visible: true,
+    shaders: [],
+  };
 
   set visible(value: boolean) {
     this.container.visible = value;

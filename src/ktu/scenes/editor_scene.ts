@@ -213,6 +213,33 @@ export class EditorScene extends BaseScene {
       },
       false
     );
+    document.addEventListener("paste", async (e: ClipboardEvent) => {
+      console.log("PASTE", e.clipboardData?.files);
+      if (e.clipboardData) {
+        for (const file of e.clipboardData.files) {
+          console.log("FILE", file.type);
+          if (file.type.indexOf("image/") === 0) {
+            console.log("IMAGE");
+            const fr: FileReader = new FileReader();
+            fr.onload = (e) => {
+              const payload: string = e.target!.result as string;
+              console.log("URL", payload);
+              this.addImageLayer({
+                ...ImageLayer.DEFAULT_STATE,
+                imageUrl: payload,
+              });
+            };
+            if (file.size < 104857600) {
+              console.log("READ");
+              fr.readAsDataURL(file);
+            } else {
+              //TODO: Implement an alert system for this
+              console.log("ERROR - No files larger than 100mb");
+            }
+          }
+        }
+      }
+    });
   }
 
   setupContainer() {
@@ -343,6 +370,7 @@ export class EditorScene extends BaseScene {
     this.addLayer(layer);
   }
   addImageLayer(state?: ImageLayerState) {
+    console.log("STATE", state);
     const layer = new ImageLayer(state);
     this.addLayer(layer);
   }
