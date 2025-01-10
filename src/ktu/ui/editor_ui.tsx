@@ -16,6 +16,7 @@ export class EditorUI {
             <export-state-button></export-state-button>
             <span className="separator"></span>
             <import-state-button></import-state-button>
+            <export-canvas-button></export-canvas-button>
           </div>
         </div>
         <div className="right-ui">

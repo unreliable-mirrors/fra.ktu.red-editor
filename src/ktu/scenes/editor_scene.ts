@@ -22,6 +22,7 @@ import {
 } from "../shaders/pixelate/pixelate_shader";
 import { TextLayer, TextLayerState } from "../layers/text_layer";
 import { DrawLayer, DrawLayerState } from "../layers/draw_layer";
+import { downloadContent } from "../helpers/file";
 
 export type EditorSceneState = {
   layers: EditorLayerState[];
@@ -151,22 +152,24 @@ export class EditorScene extends BaseScene {
           layers: this.layers.map((e) => e.state),
           shaders: this.shaders.map((e) => e.state),
         };
+        //TODO - GET THIS NAME FROM THE STATE
         const filename = "image.red";
         const jsonStr = JSON.stringify(state);
-
-        let element = document.createElement("a");
-        element.setAttribute(
-          "href",
-          "data:text/plain;charset=utf-8," + encodeURIComponent(jsonStr)
-        );
-        element.setAttribute("download", filename);
-
-        element.style.display = "none";
-        document.body.appendChild(element);
-
-        element.click();
-
-        document.body.removeChild(element);
+        const content =
+          "data:text/plain;charset=utf-8," + encodeURIComponent(jsonStr);
+        downloadContent(filename, content);
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "exportCanvas",
+      async () => {
+        //TODO - GET THIS NAME FROM THE STATE
+        const filename = "image.png";
+        const content = await DataStore.getInstance()
+          .getStore("app")
+          .renderer.extract.base64(this.container);
+        downloadContent(filename, content);
       }
     );
     EventDispatcher.getInstance().addEventListener(

@@ -8,6 +8,7 @@ import { ShadersList } from "./ktu/ui/components/layers/shaders_list";
 import { NewStateButtonComponent } from "./ktu/ui/components/file/new_state_button";
 import { OpenStateButtonComponent } from "./ktu/ui/components/file/open_state";
 import { HintPanel } from "./ktu/ui/components/hint_panel";
+import { ExportCanvasButtonComponent } from "./ktu/ui/components/file/export_canvas";
 
 declare global {
   interface Window {
@@ -47,4 +48,5 @@ export default {
   NewStateButtonComponent,
   OpenStateButtonComponent,
   HintPanel,
+  ExportCanvasButtonComponent,
 };
