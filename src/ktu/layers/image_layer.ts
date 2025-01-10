@@ -37,7 +37,6 @@ export class ImageLayer extends ContainerLayer {
       field: "imageSource",
       type: "file",
       onchange: (value) => {
-        console.log("Image Layer FILE", value);
         this.state.imageUrl = value;
         this.repaint();
       },
@@ -146,8 +145,10 @@ export class ImageLayer extends ContainerLayer {
         ...VideoSource.defaultOptions,
         loop: true,
       };
+
       const texturePromise = Assets.load<Texture>(this.state.imageUrl);
       texturePromise.then((resolvedTexture: Texture) => {
+        console.log("THEN ASSETS LOAD");
         this.sprite = Sprite.from(resolvedTexture);
         this.sprite.scale = this.state.scale / 100;
         this.sprite.x = this.state.panX;

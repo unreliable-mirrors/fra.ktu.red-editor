@@ -52,7 +52,7 @@ button {
   font-size: 96px;
 }
 .splash .logo .fra {
-  color: #110022;
+  color: #66ff66;
 }
 .splash .logo .red {
   color: #ff1166;
@@ -150,15 +150,16 @@ button {
 button {
   color: #66ff66;
   background-color: #112211;
+  border-style: solid;
+  border-color: #66ff66;
+  border-radius: 5px;
+  border-width: 2px;
+  display: inline-block;
   font-size: 14px;
-  font-weight: 100;
+  font-weight: 400;
   padding-block-end: 1px;
   padding-block-start: 1px;
   padding-inline-end: 6px;
   padding-inline-start: 6px;
-  border-style: solid;
-  border-color: #66ff66;
-  border-radius: 5px;
-  display: inline-block;
   margin-bottom: 2px;
 }

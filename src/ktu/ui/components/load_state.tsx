@@ -65,12 +65,6 @@ export class LoadStateComponent extends KTUComponent {
 
   handleClick() {
     document.getElementById("btnLoad")?.click();
-    /*
-    const payload: any = JSON.parse(
-      (document.getElementById("stateInput")! as HTMLInputElement).value
-    );
-    EventDispatcher.getInstance().dispatchEvent("scene", "loadState", payload);
-    */
   }
 }
 
