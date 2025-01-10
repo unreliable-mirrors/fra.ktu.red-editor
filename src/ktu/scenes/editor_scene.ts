@@ -218,7 +218,10 @@ export class EditorScene extends BaseScene {
       if (e.clipboardData) {
         for (const file of e.clipboardData.files) {
           console.log("FILE", file.type);
-          if (file.type.indexOf("image/") === 0) {
+          if (
+            file.type.indexOf("image/") === 0 ||
+            file.type.indexOf("video/") === 0
+          ) {
             console.log("IMAGE");
             const fr: FileReader = new FileReader();
             fr.onload = (e) => {
