@@ -167,6 +167,7 @@ export class ImageLayer extends ContainerLayer {
             this.sprite = image;
             this.container.addChild(image);
             this.reposition();
+            DataStore.getInstance().touch("layers");
           });
       } else {
         const texturePromise = Assets.load<Texture>(this.state.imageUrl);
@@ -174,6 +175,7 @@ export class ImageLayer extends ContainerLayer {
           this.sprite = Sprite.from(resolvedTexture);
           this.container.addChild(this.sprite);
           this.reposition();
+          DataStore.getInstance().touch("layers");
         });
       }
     } else {

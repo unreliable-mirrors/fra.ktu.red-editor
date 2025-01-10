@@ -8,6 +8,7 @@ const texts: Record<string, string> = {
   import_state: "Import File",
   open_state: "Open File",
   new_state: "New File",
+  change: "Change",
 };
 
 export const getText = (key: string): string => {

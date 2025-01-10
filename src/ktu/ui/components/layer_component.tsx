@@ -16,6 +16,7 @@ import {
   IconUp,
   IconVisible,
 } from "../../helpers/icons";
+import { ImageLayer } from "../../layers/image_layer";
 
 export class LayerComponent extends KTUComponent {
   layer: ContainerLayer;
@@ -90,7 +91,12 @@ export class LayerComponent extends KTUComponent {
           settings.push(
             <div>
               <span>{setting.field}: </span>
-              {new FileLoaderComponent({ onchange: setting.onchange })}
+              {
+                new FileLoaderComponent({
+                  onchange: setting.onchange,
+                  layer: this.layer as ImageLayer,
+                })
+              }
             </div>
           );
         }

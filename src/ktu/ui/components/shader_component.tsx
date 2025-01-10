@@ -2,7 +2,6 @@ import jsx from "texsaur";
 
 import EventDispatcher from "../core/event_dispatcher";
 import { KTUComponent } from "../core/ktu_component";
-import { FileLoaderComponent } from "./file_loader";
 import { ShaderLayer } from "../../shaders/shader_layer";
 import { IconClose } from "../../helpers/icons";
 import { ContainerLayer } from "../../layers/container_layer";
@@ -62,13 +61,6 @@ export class ShaderComponent extends KTUComponent {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>
-            </div>
-          );
-        } else if (setting.type === "file") {
-          settings.push(
-            <div>
-              <span>{setting.field}: </span>
-              {new FileLoaderComponent({ onchange: setting.onchange })}
             </div>
           );
         }

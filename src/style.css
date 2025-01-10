@@ -147,6 +147,17 @@ button {
   margin-left: 5px;
 }
 
+.fileLoader {
+  display: inline-block;
+}
+.fileLoader svg {
+  height: 14px;
+  width: 14px;
+}
+.fileLoader .iconButton {
+  padding-inline-end: 2px;
+  padding-inline-start: 2px;
+}
 #fileLoadInput {
   display: none;
 }

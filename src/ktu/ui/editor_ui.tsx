@@ -29,7 +29,7 @@ export class EditorUI {
       </div>
     );
     document.addEventListener("keyup", (e) => {
-      if (["h", "H"].includes(e.key) && e.ctrlKey) {
+      if (["h", "H"].includes(e.key) && e.ctrlKey && e.altKey) {
         this.toggleHide();
       }
     });
