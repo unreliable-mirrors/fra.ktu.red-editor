@@ -23,16 +23,21 @@ import {
 import { TextLayer, TextLayerState } from "../layers/text_layer";
 import { DrawLayer, DrawLayerState } from "../layers/draw_layer";
 import { downloadContent } from "../helpers/file";
+import { getStartingName } from "../helpers/sparkle";
 
 export type EditorSceneState = {
   layers: EditorLayerState[];
   shaders: EditorLayerState[];
+  metadata: EditorSceneMetadata;
 };
+
+export type EditorSceneMetadata = { name: string };
 
 export class EditorScene extends BaseScene {
   activeLayer?: IEditorLayer;
   layers: ContainerLayer[];
   shaders: ShaderLayer[];
+  metadata: EditorSceneMetadata;
 
   public constructor() {
     super();
@@ -40,6 +45,9 @@ export class EditorScene extends BaseScene {
     this.shaders = [];
     this.container.eventMode = "static";
     this.setupContainer();
+
+    this.metadata = { name: getStartingName() };
+    DataStore.getInstance().setStore("metadata", this.metadata);
 
     Ticker.shared.add((time) => {
       for (var layer of this.layers) {
@@ -125,7 +133,7 @@ export class EditorScene extends BaseScene {
       "scene",
       "importState",
       (payload: EditorSceneState) => {
-        this.importState(payload);
+        this.importState(payload, true);
       }
     );
     EventDispatcher.getInstance().addEventListener(
@@ -151,9 +159,10 @@ export class EditorScene extends BaseScene {
         const state = {
           layers: this.layers.map((e) => e.state),
           shaders: this.shaders.map((e) => e.state),
+          metadata: this.metadata,
         };
         //TODO - GET THIS NAME FROM THE STATE
-        const filename = "image.red";
+        const filename = this.metadata.name + ".red";
         const jsonStr = JSON.stringify(state);
         const content =
           "data:text/plain;charset=utf-8," + encodeURIComponent(jsonStr);
@@ -165,7 +174,7 @@ export class EditorScene extends BaseScene {
       "exportCanvas",
       async () => {
         //TODO - GET THIS NAME FROM THE STATE
-        const filename = "image.png";
+        const filename = this.metadata.name + ".png";
         const content = await DataStore.getInstance()
           .getStore("app")
           .renderer.extract.base64(this.container);
@@ -205,6 +214,14 @@ export class EditorScene extends BaseScene {
       "removeShader",
       (payload: ShaderLayer) => {
         this.removeShader(payload);
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "setName",
+      (name: string) => {
+        this.metadata.name = name;
+        //DataStore.getInstance().touch("metadata");
       }
     );
     document.addEventListener(
@@ -264,6 +281,7 @@ export class EditorScene extends BaseScene {
   }
   newState() {
     this.activeLayer = undefined;
+    DataStore.getInstance().setStore("activeLayer", this.activateLayer);
 
     for (const shader of this.shaders) {
       shader.unbind();
@@ -282,7 +300,7 @@ export class EditorScene extends BaseScene {
     this.setupContainer();
   }
 
-  importState(payload: EditorSceneState) {
+  importState(payload: EditorSceneState, importing: boolean = false) {
     for (const state of payload.layers) {
       if (state.name === "draw_layer") {
         this.addMonoPixelDrawLayer(state as DrawLayerState);
@@ -304,11 +322,17 @@ export class EditorScene extends BaseScene {
         this.addPixelateShader(state as PixelateShaderState);
       }
     }
+
+    if (!importing) {
+      this.metadata = payload.metadata;
+      DataStore.getInstance().setStore("metadata", this.metadata);
+    }
   }
 
   activateLayer(layer: IEditorLayer) {
     if (this.activeLayer) this.activeLayer.active = false;
     this.activeLayer = layer;
+    DataStore.getInstance().setStore("activeLayer", this.activateLayer);
     this.activeLayer.active = true;
     DataStore.getInstance().setStore("layers", this.layers);
     DataStore.getInstance().setStore("shaders", this.shaders);

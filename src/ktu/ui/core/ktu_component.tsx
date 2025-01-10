@@ -4,6 +4,7 @@ import DataStore from "./data_store";
 import EventDispatcher from "./event_dispatcher";
 
 export class KTUComponent extends HTMLElement {
+  //TODO: CHANGE THIS TO GENERICS
   bindingData: any;
 
   constructor() {

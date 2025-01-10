@@ -18,6 +18,9 @@ export class EditorUI {
             <import-state-button></import-state-button>
             <export-canvas-button></export-canvas-button>
           </div>
+          <div className="panel left">
+            <file-info-panel binding="metadata"></file-info-panel>
+          </div>
         </div>
         <div className="right-ui">
           <div className="panel right">

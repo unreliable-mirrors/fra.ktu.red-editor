@@ -8,5 +8,6 @@ declare namespace JSX {
     ["shaders-list"]: any;
     ["hint-panel"]: any;
     ["export-canvas-button"]: any;
+    ["file-info-panel"]: any;
   }
 }

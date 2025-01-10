@@ -9,6 +9,7 @@ import { NewStateButtonComponent } from "./ktu/ui/components/file/new_state_butt
 import { OpenStateButtonComponent } from "./ktu/ui/components/file/open_state";
 import { HintPanel } from "./ktu/ui/components/hint_panel";
 import { ExportCanvasButtonComponent } from "./ktu/ui/components/file/export_canvas";
+import { FileInfoPanel } from "./ktu/ui/components/file_info_panel";
 
 declare global {
   interface Window {
@@ -49,4 +50,5 @@ export default {
   OpenStateButtonComponent,
   HintPanel,
   ExportCanvasButtonComponent,
+  FileInfoPanel,
 };
