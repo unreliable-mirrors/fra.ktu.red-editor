@@ -134,14 +134,14 @@ export abstract class ContainerLayer implements IEditorLayer {
         }
       }
       shader.unbind();
-      DataStore.getInstance().touch("layers");
-      if (shader.active && this.shaders.length > 0) {
+      if (shader.active) {
         EventDispatcher.getInstance().dispatchEvent(
           "scene",
           "activateLayer",
-          this.shaders[0]
+          this
         );
       }
+      DataStore.getInstance().touch("layers");
     }
   }
 
