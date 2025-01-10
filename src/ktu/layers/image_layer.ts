@@ -1,3 +1,4 @@
+import "@pixi/gif";
 import {
   Assets,
   Container,
@@ -9,6 +10,7 @@ import {
 } from "pixi.js";
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import DataStore from "../ui/core/data_store";
+import { AnimatedGIF } from "@pixi/gif";
 
 export type ImageLayerState = ContainerLayerState & {
   alpha: number;
@@ -46,7 +48,7 @@ export class ImageLayer extends ContainerLayer {
       type: "integer",
       onchange: (value) => {
         this.state.scale = parseInt(value);
-        this.repaint();
+        this.reposition();
       },
     },
     {
@@ -54,7 +56,7 @@ export class ImageLayer extends ContainerLayer {
       type: "integer",
       onchange: (value) => {
         this.state.panX = parseInt(value);
-        this.repaint();
+        this.reposition();
       },
     },
     {
@@ -62,7 +64,7 @@ export class ImageLayer extends ContainerLayer {
       type: "integer",
       onchange: (value) => {
         this.state.panY = parseInt(value);
-        this.repaint();
+        this.reposition();
       },
     },
     {
@@ -70,7 +72,7 @@ export class ImageLayer extends ContainerLayer {
       type: "float",
       onchange: (value) => {
         this.state.alpha = parseFloat(value);
-        this.repaint();
+        this.reposition();
       },
     },
   ];
@@ -127,7 +129,7 @@ export class ImageLayer extends ContainerLayer {
     if (this.panning) {
       this.state.panX = this.panStart!.x + (event.globalX - this.clickStart!.x);
       this.state.panY = this.panStart!.y + (event.globalY - this.clickStart!.y);
-      this.repaint();
+      this.reposition();
       DataStore.getInstance().touch("layers");
     }
   }
@@ -146,19 +148,36 @@ export class ImageLayer extends ContainerLayer {
         loop: true,
       };
 
-      const texturePromise = Assets.load<Texture>(this.state.imageUrl);
-      texturePromise.then((resolvedTexture: Texture) => {
-        console.log("THEN ASSETS LOAD");
-        this.sprite = Sprite.from(resolvedTexture);
-        this.sprite.scale = this.state.scale / 100;
-        this.sprite.x = this.state.panX;
-        this.sprite.y = this.state.panY;
-        this.sprite.alpha = this.state.alpha;
-        this.container.addChild(this.sprite);
-      });
+      if (
+        this.state.imageUrl.indexOf("data:image/gif;") >= 0 ||
+        this.state.imageUrl.indexOf(".gif") >= 0
+      ) {
+        fetch(this.state.imageUrl)
+          .then((res) => res.arrayBuffer())
+          .then(AnimatedGIF.fromBuffer)
+          .then((image) => {
+            this.sprite = image;
+            this.container.addChild(image);
+            this.reposition();
+          });
+      } else {
+        const texturePromise = Assets.load<Texture>(this.state.imageUrl);
+        texturePromise.then((resolvedTexture: Texture) => {
+          this.sprite = Sprite.from(resolvedTexture);
+          this.container.addChild(this.sprite);
+          this.reposition();
+        });
+      }
     } else {
       this.sprite = new Sprite();
       this.container.addChild(this.sprite);
     }
+  }
+
+  reposition() {
+    this.sprite.scale = this.state.scale / 100;
+    this.sprite.x = this.state.panX;
+    this.sprite.y = this.state.panY;
+    this.sprite.alpha = this.state.alpha;
   }
 }
