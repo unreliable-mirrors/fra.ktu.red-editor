@@ -190,6 +190,20 @@ export class EditorScene extends BaseScene {
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
+      "moveUpLayer",
+      (payload: ContainerLayer) => {
+        this.moveUpLayer(payload);
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "moveDownLayer",
+      (payload: ContainerLayer) => {
+        this.moveDownLayer(payload);
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
       "removeLayer",
       (payload: ContainerLayer) => {
         this.removeLayer(payload);
@@ -233,6 +247,32 @@ export class EditorScene extends BaseScene {
     DataStore.getInstance().setStore("layers", this.layers);
     if (layer.active && this.layers.length > 0) {
       this.activateLayer(this.layers[0]);
+    }
+  }
+  moveUpLayer(layer: ContainerLayer) {
+    const index = this.layers.indexOf(layer);
+    if (index > -1) {
+      const newIndex = index + 1;
+      const otherLayer = this.layers[newIndex];
+      this.layers.splice(newIndex, 0, this.layers.splice(index, 1)[0]);
+      this.container.swapChildren(layer.container, otherLayer.container);
+    }
+    DataStore.getInstance().setStore("layers", this.layers);
+    if (!layer.active) {
+      this.activateLayer(layer);
+    }
+  }
+  moveDownLayer(layer: ContainerLayer) {
+    const index = this.layers.indexOf(layer);
+    if (index > 0) {
+      const newIndex = index - 1;
+      const otherLayer = this.layers[newIndex];
+      this.layers.splice(newIndex, 0, this.layers.splice(index, 1)[0]);
+      this.container.swapChildren(layer.container, otherLayer.container);
+    }
+    DataStore.getInstance().setStore("layers", this.layers);
+    if (!layer.active) {
+      this.activateLayer(layer);
     }
   }
 

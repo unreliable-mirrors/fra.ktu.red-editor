@@ -10,8 +10,10 @@ import { AddShaderButtonComponent } from "./add_shader_button";
 import { AVAILABLE_SHADERS_NAMES } from "../../helpers/shaders";
 import {
   IconClose,
+  IconDown,
   IconDuplicate,
   IconHidden,
+  IconUp,
   IconVisible,
 } from "../../helpers/icons";
 
@@ -120,6 +122,23 @@ export class LayerComponent extends KTUComponent {
             {this.layer.state.name} - {this.layer.state.layerId}
           </div>
           <div className="icons">
+            <span onclick={() => this.handleUpClick()}>
+              {DataStore.getInstance().getStore("layers").indexOf(this.layer) +
+                1 !=
+              DataStore.getInstance().getStore("layers").length ? (
+                IconUp()
+              ) : (
+                <></>
+              )}
+            </span>
+            <span onclick={() => this.handleDownClick()}>
+              {DataStore.getInstance().getStore("layers").indexOf(this.layer) !=
+              0 ? (
+                IconDown()
+              ) : (
+                <></>
+              )}
+            </span>
             <span onclick={() => this.handleVisibleClick()}>
               {this.layer.visible ? IconVisible() : IconHidden()}
             </span>
@@ -156,6 +175,20 @@ export class LayerComponent extends KTUComponent {
   handleVisibleClick() {
     this.layer.visible = !this.layer.visible;
     DataStore.getInstance().touch("layers");
+  }
+  handleUpClick() {
+    EventDispatcher.getInstance().dispatchEvent(
+      "scene",
+      "moveUpLayer",
+      this.layer
+    );
+  }
+  handleDownClick() {
+    EventDispatcher.getInstance().dispatchEvent(
+      "scene",
+      "moveDownLayer",
+      this.layer
+    );
   }
   handleDuplicateClick() {
     EventDispatcher.getInstance().dispatchEvent(
