@@ -3,9 +3,10 @@ import "./style.css";
 import EventDispatcher from "./ktu/ui/core/event_dispatcher";
 import { LayersList } from "./ktu/ui/components/layers_list";
 import { ExportStateButtonComponent } from "./ktu/ui/components/file/export_state";
-import { LoadStateComponent } from "./ktu/ui/components/file/load_state";
+import { ImportStateButtonComponent } from "./ktu/ui/components/file/import_state";
 import { ShadersList } from "./ktu/ui/components/shaders_list";
 import { NewStateButtonComponent } from "./ktu/ui/components/file/new_state_button";
+import { OpenStateButtonComponent } from "./ktu/ui/components/file/open_state";
 
 declare global {
   interface Window {
@@ -40,7 +41,8 @@ window.KTUFullscreen = () => {
 export default {
   LayersList,
   ExportStateButtonComponent,
-  LoadStateComponent,
+  ImportStateButtonComponent,
   ShadersList,
   NewStateButtonComponent,
+  OpenStateButtonComponent,
 };

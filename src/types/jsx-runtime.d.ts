@@ -1,9 +1,10 @@
 declare namespace JSX {
   interface IntrinsicElements {
     ["layers-list"]: any;
-    ["export-state-button"]: any;
-    ["load-state"]: any;
     ["new-state-button"]: any;
+    ["open-state-button"]: any;
+    ["import-state-button"]: any;
+    ["export-state-button"]: any;
     ["shaders-list"]: any;
   }
 }

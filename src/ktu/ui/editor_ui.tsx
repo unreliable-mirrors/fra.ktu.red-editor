@@ -12,8 +12,10 @@ export class EditorUI {
           <div className="panel left">
             <h3>Open/Save</h3>
             <new-state-button></new-state-button>
-            <load-state></load-state>
+            <open-state-button></open-state-button>
             <export-state-button></export-state-button>
+            <span className="separator"></span>
+            <import-state-button></import-state-button>
           </div>
         </div>
         <div className="right-ui">

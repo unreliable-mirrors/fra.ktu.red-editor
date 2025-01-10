@@ -4,7 +4,7 @@ import EventDispatcher from "../../core/event_dispatcher";
 import { KTUComponent } from "../../core/ktu_component";
 import { getText } from "../../../helpers/localization_helper";
 
-export class LoadStateComponent extends KTUComponent {
+export class ImportStateButtonComponent extends KTUComponent {
   constructor() {
     super();
   }
@@ -15,15 +15,15 @@ export class LoadStateComponent extends KTUComponent {
         <div>
           <form
             className="hidden"
-            id="jsonFile"
-            name="jsonFile"
+            id="importFile"
+            name="importFile"
             enctype="multipart/form-data"
             method="post"
           >
             <fieldset>
               <input
                 type="file"
-                id="fileLoadInput"
+                id="fileImportInput"
                 accept=".red"
                 onchange={() => {
                   console.log("change");
@@ -32,8 +32,8 @@ export class LoadStateComponent extends KTUComponent {
               />
             </fieldset>
           </form>
-          <label for="fileLoadInput" className="button">
-            {getText("load_state")}
+          <label for="fileImportInput" className="button">
+            {getText("import_state")}
           </label>
         </div>
       </div>
@@ -44,7 +44,7 @@ export class LoadStateComponent extends KTUComponent {
     let input: HTMLInputElement;
     let file, fr;
 
-    input = document.getElementById("fileLoadInput") as HTMLInputElement;
+    input = document.getElementById("fileImportInput") as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       file = input.files[0];
       fr = new FileReader();
@@ -52,6 +52,7 @@ export class LoadStateComponent extends KTUComponent {
         this.receivedText(e);
       };
       fr.readAsText(file);
+      input.value = "";
     }
   }
 
@@ -60,7 +61,11 @@ export class LoadStateComponent extends KTUComponent {
     const payload = JSON.parse(lines);
     //@ts-ignore
     window.KTUFullscreen();
-    EventDispatcher.getInstance().dispatchEvent("scene", "loadState", payload);
+    EventDispatcher.getInstance().dispatchEvent(
+      "scene",
+      "importState",
+      payload
+    );
   }
 
   handleClick() {
@@ -68,4 +73,4 @@ export class LoadStateComponent extends KTUComponent {
   }
 }
 
-customElements.define("load-state", LoadStateComponent);
+customElements.define("import-state-button", ImportStateButtonComponent);

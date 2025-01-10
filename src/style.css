@@ -36,6 +36,10 @@ button {
 .hidden {
   display: none;
 }
+.separator {
+  padding-bottom: 10px;
+  display: block;
+}
 
 /*---SPLASH---*/
 .splash {

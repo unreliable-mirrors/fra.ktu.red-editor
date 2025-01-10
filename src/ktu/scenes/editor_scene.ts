@@ -110,49 +110,21 @@ export class EditorScene extends BaseScene {
       }
     );
     EventDispatcher.getInstance().addEventListener("scene", "newState", () => {
-      this.activeLayer = undefined;
-
-      for (const shader of this.shaders) {
-        shader.unbind();
-      }
-      this.container.filters = [];
-      this.shaders = [];
-      DataStore.getInstance().setStore("shaders", this.shaders);
-
-      for (const layer of this.layers) {
-        layer.unbind();
-      }
-      this.container.removeChildren();
-      this.layers = [];
-      DataStore.getInstance().setStore("layers", this.layers);
-
-      this.setupContainer();
+      this.newState();
     });
     EventDispatcher.getInstance().addEventListener(
       "scene",
-      "loadState",
+      "openState",
       (payload: EditorSceneState) => {
-        for (const state of payload.layers) {
-          if (state.name === "draw_layer") {
-            this.addMonoPixelDrawLayer(state as DrawLayerState);
-          } else if (state.name === "background_layer") {
-            this.addBackgroundLayer(state as BackgroundLayerState);
-          } else if (state.name === "image_layer") {
-            this.addImageLayer(state as ImageLayerState);
-          } else if (state.name === "text_layer") {
-            this.addTextLayer(state as TextLayerState);
-          }
-        }
-
-        for (const state of payload.shaders) {
-          if (state.name === "bnw_shader") {
-            this.addBnwShader(state as BnwShaderState);
-          } else if (state.name === "vintage_shader") {
-            this.addVintageShader(state as VintageShaderState);
-          } else if (state.name === "pixelate_shader") {
-            this.addPixelateShader(state as PixelateShaderState);
-          }
-        }
+        this.newState();
+        this.importState(payload);
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "importState",
+      (payload: EditorSceneState) => {
+        this.importState(payload);
       }
     );
     EventDispatcher.getInstance().addEventListener(
@@ -256,6 +228,49 @@ export class EditorScene extends BaseScene {
 
   get visible(): boolean {
     return this.container.visible;
+  }
+  newState() {
+    this.activeLayer = undefined;
+
+    for (const shader of this.shaders) {
+      shader.unbind();
+    }
+    this.container.filters = [];
+    this.shaders = [];
+    DataStore.getInstance().setStore("shaders", this.shaders);
+
+    for (const layer of this.layers) {
+      layer.unbind();
+    }
+    this.container.removeChildren();
+    this.layers = [];
+    DataStore.getInstance().setStore("layers", this.layers);
+
+    this.setupContainer();
+  }
+
+  importState(payload: EditorSceneState) {
+    for (const state of payload.layers) {
+      if (state.name === "draw_layer") {
+        this.addMonoPixelDrawLayer(state as DrawLayerState);
+      } else if (state.name === "background_layer") {
+        this.addBackgroundLayer(state as BackgroundLayerState);
+      } else if (state.name === "image_layer") {
+        this.addImageLayer(state as ImageLayerState);
+      } else if (state.name === "text_layer") {
+        this.addTextLayer(state as TextLayerState);
+      }
+    }
+
+    for (const state of payload.shaders) {
+      if (state.name === "bnw_shader") {
+        this.addBnwShader(state as BnwShaderState);
+      } else if (state.name === "vintage_shader") {
+        this.addVintageShader(state as VintageShaderState);
+      } else if (state.name === "pixelate_shader") {
+        this.addPixelateShader(state as PixelateShaderState);
+      }
+    }
   }
 
   activateLayer(layer: IEditorLayer) {

@@ -5,7 +5,8 @@ const texts: Record<string, string> = {
   add_vintage_shader_button: "Vintage",
 
   export_state: "Save File",
-  load_state: "Open File",
+  import_state: "Import File",
+  open_state: "Open File",
   new_state: "New File",
 };
 

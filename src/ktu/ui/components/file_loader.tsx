@@ -72,6 +72,7 @@ export class FileLoaderComponent extends KTUComponent {
         //TODO: Implement an alert system for this
         console.log("ERROR - No files larger than 100mb");
       }
+      input.value = "";
     }
   }
 
