@@ -5,10 +5,11 @@ import fragment from "./montecarlo_sample.frag?raw";
 
 export type MontecarloSampleShaderState = ShaderState & {
   strength: number;
+  refreshChance: number;
 };
 
 export type MontecarloSampleShaderSetting = {
-  field: "strength";
+  field: "strength" | "refreshChance";
   type: "float";
   onchange: (value: string) => void;
 };
@@ -27,6 +28,13 @@ export class MontecarloSampleShader extends ShaderLayer {
         this.uniforms.uniforms.uStrength = this.state.strength;
       },
     },
+    {
+      field: "refreshChance",
+      type: "float",
+      onchange: (value) => {
+        this.state.refreshChance = parseFloat(value);
+      },
+    },
   ];
   uniforms: UniformGroup;
 
@@ -37,6 +45,7 @@ export class MontecarloSampleShader extends ShaderLayer {
       this.state = {
         ...this.state,
         strength: state.strength,
+        refreshChance: state.refreshChance,
       };
     }
     this.uniforms = new UniformGroup({
@@ -50,8 +59,13 @@ export class MontecarloSampleShader extends ShaderLayer {
   }
 
   tick(time: Ticker): void {
-    this.uniforms.uniforms.uTime =
-      (this.uniforms.uniforms.uTime as number) + time.elapsedMS / 1000;
+    if (
+      this.state.refreshChance === 1 ||
+      Math.random() < this.state.refreshChance
+    ) {
+      this.uniforms.uniforms.uTime =
+        (this.uniforms.uniforms.uTime as number) + time.elapsedMS / 1000;
+    }
   }
 
   shaderName(): string {
@@ -59,6 +73,6 @@ export class MontecarloSampleShader extends ShaderLayer {
   }
 
   defaultState(): MontecarloSampleShaderState {
-    return { ...super.defaultState(), strength: 1 };
+    return { ...super.defaultState(), strength: 0.1, refreshChance: 1 };
   }
 }
