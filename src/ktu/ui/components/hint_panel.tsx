@@ -11,6 +11,8 @@ import { ContainerLayer } from "../../layers/container_layer";
 import { DrawLayer } from "../../layers/draw_layer";
 import { ImageLayer } from "../../layers/image_layer";
 import { TextLayer } from "../../layers/text_layer";
+import { ShaderLayer } from "../../shaders/shader_layer";
+import { BnwShader } from "../../shaders/bnw/bnw_shader";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -161,6 +163,28 @@ export class HintPanel extends KTUComponent {
             <div className="tip">
               <div>
                 <strong>CTRL + CLICK</strong>: Drag/Pan Layer
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == BnwShader.SHADER_NAME
+    ) {
+      content = (
+        <>
+          <div className="block">
+            <h3>Black & White Shader</h3>
+            <div className="tip">See things how your grandparents did</div>
+          </div>
+          <div className="block">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Strength</strong>: Regulates how much gray it is. Lower
+                levels allow some color to pass.
               </div>
             </div>
           </div>
