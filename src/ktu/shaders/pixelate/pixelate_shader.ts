@@ -1,12 +1,10 @@
-import { Container, UniformGroup } from "pixi.js";
+import { Container, Point, UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import fragment from "./pixelate_shader.frag?raw";
 
 export type PixelateShaderState = ShaderState & {
   pixelSize: number;
-  missProbability: number;
-  seed: number;
 };
 
 export type PixelateShaderSetting = {
@@ -19,8 +17,6 @@ export class PixelateShader extends ShaderLayer {
   static SHADER_NAME: string = "pixelate_shader";
   declare state: PixelateShaderState;
   fragment: string = fragment;
-  width: number = 1920;
-  height: number = 1080;
   container!: Container;
   settings: PixelateShaderSetting[] = [
     {
@@ -66,10 +62,10 @@ export class PixelateShader extends ShaderLayer {
     }
     this.uniforms = new UniformGroup({
       uPixelSize: { value: this.state.pixelSize, type: "f32" },
-      uMissProbability: { value: this.state.missProbability, type: "f32" },
-      uSeed: { value: this.state.seed, type: "f32" },
-      uWidth: { value: this.width, type: "f32" },
-      uHeight: { value: this.height, type: "f32" },
+      uSize: {
+        value: new Point(window.innerWidth, window.innerHeight),
+        type: "vec2<f32>",
+      },
     });
   }
 
@@ -81,8 +77,6 @@ export class PixelateShader extends ShaderLayer {
     return {
       ...super.defaultState(),
       pixelSize: 15,
-      missProbability: 0,
-      seed: 1,
     };
   }
 
@@ -94,10 +88,10 @@ export class PixelateShader extends ShaderLayer {
 
   refreshSize() {
     if (this.container.width > 0) {
-      this.width = this.container.width;
-      this.uniforms.uniforms.uWidth = this.width;
-      this.height = this.container.height;
-      this.uniforms.uniforms.uHeight = this.height;
+      this.uniforms.uniforms.uSize = new Point(
+        this.container.width,
+        this.container.width
+      );
     }
   }
 }
