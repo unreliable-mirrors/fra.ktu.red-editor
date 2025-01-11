@@ -16,20 +16,28 @@ import { DrawLayer, DrawLayerState } from "../layers/draw_layer";
 import { downloadContent } from "../helpers/file";
 import { getStartingName } from "../helpers/sparkle";
 import { getShaderByName } from "../helpers/shaders";
+import { ASSETS_MAP, rebuildAssets } from "../helpers/assets";
 
 export type EditorSceneState = {
   layers: EditorLayerState[];
   shaders: EditorLayerState[];
   metadata: EditorSceneMetadata;
+  assets: Record<string, string>;
 };
 
-export type EditorSceneMetadata = { name: string };
+export type EditorSceneMetadata = { name: string; timestamp: number };
+export type EditorSceneHistoryEntry = {
+  timestamp: number;
+  raw: string;
+  image: HTMLImageElement;
+};
 
 export class EditorScene extends BaseScene {
   activeLayer?: IEditorLayer;
   layers: ContainerLayer[];
   shaders: ShaderLayer[];
   metadata: EditorSceneMetadata;
+  history: EditorSceneHistoryEntry[];
 
   public constructor() {
     super();
@@ -38,8 +46,37 @@ export class EditorScene extends BaseScene {
     this.container.eventMode = "static";
     this.setupContainer();
 
-    this.metadata = { name: getStartingName() };
+    this.metadata = { name: getStartingName(), timestamp: Date.now() };
     DataStore.getInstance().setStore("metadata", this.metadata);
+
+    this.history = [];
+    DataStore.getInstance().setStore("history", this.history);
+
+    setInterval(async () => {
+      let jsonState = JSON.stringify(this.getStateObject());
+      console.log("PREHISTORY", this.metadata.timestamp, this.history);
+      if (this.history.length === 0 || this.history[0].raw != jsonState) {
+        this.metadata.timestamp = Date.now();
+        jsonState = JSON.stringify(this.getStateObject());
+        this.history.unshift({
+          timestamp: this.metadata.timestamp,
+          raw: jsonState,
+          image: await DataStore.getInstance()
+            .getStore("app")
+            .renderer.extract.image({
+              target: this.container,
+              resolution: 0.1,
+              antialias: true,
+            }),
+        });
+        this.history = this.history.slice(0, 5);
+
+        DataStore.getInstance().setStore("history", this.history);
+        console.log("POSTHISTORY", this.metadata.timestamp, this.history);
+      } else {
+        console.log("NOTHING CHANGED");
+      }
+    }, 60000);
 
     Ticker.shared.add((time) => {
       for (const layer of this.layers) {
@@ -106,7 +143,7 @@ export class EditorScene extends BaseScene {
       "scene",
       "openState",
       (payload: EditorSceneState) => {
-        this.newState();
+        this.newState(payload.metadata.timestamp);
         this.importState(payload);
       }
     );
@@ -137,14 +174,10 @@ export class EditorScene extends BaseScene {
       "scene",
       "exportState",
       () => {
-        const state = {
-          layers: this.layers.map((e) => e.state),
-          shaders: this.shaders.map((e) => e.state),
-          metadata: this.metadata,
-        };
-        //TODO - GET THIS NAME FROM THE STATE
-        const filename = this.metadata.name + ".red";
+        const state = this.getStateObject();
         const jsonStr = JSON.stringify(state);
+        const filename = this.metadata.name + ".red";
+
         const content =
           "data:text/plain;charset=utf-8," + encodeURIComponent(jsonStr);
         downloadContent(filename, content);
@@ -154,7 +187,6 @@ export class EditorScene extends BaseScene {
       "scene",
       "exportCanvas",
       async () => {
-        //TODO - GET THIS NAME FROM THE STATE
         const filename = this.metadata.name + ".png";
         const content = await DataStore.getInstance()
           .getStore("app")
@@ -260,8 +292,21 @@ export class EditorScene extends BaseScene {
   get visible(): boolean {
     return this.container.visible;
   }
-  newState() {
-    this.metadata = { name: getStartingName() };
+
+  getStateObject(): EditorSceneState {
+    const state = {
+      layers: this.layers.map((e) => e.state),
+      shaders: this.shaders.map((e) => e.state),
+      metadata: this.metadata,
+      assets: ASSETS_MAP,
+    };
+    return state;
+  }
+  newState(timestamp?: number) {
+    if (!timestamp) {
+      timestamp = Date.now();
+    }
+    this.metadata = { name: getStartingName(), timestamp: timestamp };
     DataStore.getInstance().setStore("metadata", this.metadata);
 
     this.activeLayer = undefined;
@@ -285,6 +330,8 @@ export class EditorScene extends BaseScene {
   }
 
   importState(payload: EditorSceneState, importing: boolean = false) {
+    rebuildAssets(payload.assets);
+
     for (const state of payload.layers) {
       if (state.name === "draw_layer") {
         this.addMonoPixelDrawLayer(state as DrawLayerState);

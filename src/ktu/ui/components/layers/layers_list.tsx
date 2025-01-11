@@ -8,13 +8,15 @@ import { AddLayerButtonComponent } from "./add_layer_button";
 
 export class LayersList extends KTUComponent {
   render(): Element {
-    console.log("LAYERS LIST RENDER", this.bindingData.length);
+    console.log("LAYERS LIST RENDER", this.bindingData["layers"].length);
     const items: Element[] = [];
     const layerButtons: Element[] = [];
     for (const layerName of AVAILABLE_LAYER_NAMES) {
       layerButtons.push(new AddLayerButtonComponent(layerName));
     }
-    for (const layer of [...(this.bindingData as ContainerLayer[])].reverse()) {
+    for (const layer of [
+      ...(this.bindingData["layers"] as ContainerLayer[]),
+    ].reverse()) {
       items.push(new LayerComponent(layer));
     }
     return (
@@ -27,7 +29,7 @@ export class LayersList extends KTUComponent {
   }
 
   defaultBinding() {
-    return [];
+    return { layers: [] };
   }
 }
 

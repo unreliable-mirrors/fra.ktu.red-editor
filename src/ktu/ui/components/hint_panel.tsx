@@ -12,8 +12,8 @@ import { ContainerLayer } from "../../layers/container_layer";
 export class HintPanel extends KTUComponent {
   render(): Element {
     let content = <></>;
-    console.log("BD", this.bindingData);
-    if (!this.bindingData) {
+    console.log("BD", this.bindingData["activeLayer"]);
+    if (!this.bindingData["activeLayer"]) {
       content = (
         <>
           <h3>Layer Types</h3>
@@ -36,8 +36,8 @@ export class HintPanel extends KTUComponent {
         </>
       );
     } else if (
-      this.bindingData instanceof ContainerLayer &&
-      this.bindingData.layerName() == BackgroundLayer.LAYER_NAME
+      this.bindingData["activeLayer"] instanceof ContainerLayer &&
+      this.bindingData["activeLayer"].layerName() == BackgroundLayer.LAYER_NAME
     ) {
       content = (
         <>
@@ -56,7 +56,7 @@ export class HintPanel extends KTUComponent {
   }
 
   defaultBinding() {
-    return null;
+    return {};
   }
 }
 

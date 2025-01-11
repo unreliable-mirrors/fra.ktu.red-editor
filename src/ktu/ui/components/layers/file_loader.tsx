@@ -46,7 +46,7 @@ export class FileLoaderComponent extends KTUComponent {
       </span>
     );
     this.uploadElement = (
-      <div className={this.options.layer.state.imageUrl == "" ? "" : "hidden"}>
+      <div className={this.options.layer.state.imageHash == "" ? "" : "hidden"}>
         <form
           className="hidden"
           id="imageFile"
@@ -71,7 +71,7 @@ export class FileLoaderComponent extends KTUComponent {
     );
     this.changeButton = (
       <button
-        className={this.options.layer.state.imageUrl != "" ? "" : "hidden"}
+        className={this.options.layer.state.imageHash != "" ? "" : "hidden"}
         onclick={() => this.handleChangeClick()}
       >
         {getText("change")}

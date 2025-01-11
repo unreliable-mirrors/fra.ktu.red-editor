@@ -13,7 +13,9 @@ export class ShadersList extends KTUComponent {
     for (const shaderName of AVAILABLE_SHADERS_NAMES) {
       shaderButtons.push(new AddShaderButtonComponent(shaderName));
     }
-    for (const layer of [...(this.bindingData as ShaderLayer[])].reverse()) {
+    for (const layer of [
+      ...(this.bindingData["shaders"] as ShaderLayer[]),
+    ].reverse()) {
       items.push(new ShaderComponent(layer));
     }
     return (
@@ -26,7 +28,7 @@ export class ShadersList extends KTUComponent {
   }
 
   defaultBinding() {
-    return [];
+    return { shaders: [] };
   }
 }
 

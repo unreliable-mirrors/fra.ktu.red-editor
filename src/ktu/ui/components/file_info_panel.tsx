@@ -1,10 +1,15 @@
 import jsx from "texsaur";
 import { KTUComponent } from "../core/ktu_component";
-import { EditorSceneMetadata } from "../../scenes/editor_scene";
+import {
+  EditorSceneHistoryEntry,
+  EditorSceneMetadata,
+} from "../../scenes/editor_scene";
 import EventDispatcher from "../core/event_dispatcher";
+import { FileHistoryRow } from "./file_history_row";
 
 export class FileInfoPanel extends KTUComponent {
   render(): Element {
+    console.log("FIP RENDER", this.bindingData);
     return (
       <div id="hintsPanel" className="hintPanel">
         <h3>File Info</h3>
@@ -12,11 +17,18 @@ export class FileInfoPanel extends KTUComponent {
           <span>Name: </span>
           <input
             type="text"
-            value={(this.bindingData as EditorSceneMetadata).name}
+            value={(this.bindingData["metadata"] as EditorSceneMetadata).name}
             oninput={(e) => {
               this.onNameChange((e.target as HTMLInputElement).value);
             }}
           ></input>
+        </div>
+        <span className="separator"></span>
+        <h3>History</h3>
+        <div>
+          {this.bindingData["history"].map(
+            (history: EditorSceneHistoryEntry) => new FileHistoryRow(history)
+          )}
         </div>
       </div>
     );
@@ -24,6 +36,10 @@ export class FileInfoPanel extends KTUComponent {
 
   onNameChange(value: string) {
     EventDispatcher.getInstance().dispatchEvent("scene", "setName", value);
+  }
+
+  defaultBinding(): Record<string, any> {
+    return { metadata: [], history: [] };
   }
 }
 

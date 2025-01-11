@@ -5,14 +5,22 @@ import EventDispatcher from "./event_dispatcher";
 
 export class KTUComponent extends HTMLElement {
   //TODO: CHANGE THIS TO GENERICS
+  bindingKeys!: string[];
   bindingData: any;
 
   constructor() {
     super();
+    this.bindingKeys = this.getAttribute("binding")
+      ? this.getAttribute("binding")!.split(",")
+      : [];
     this.updateState();
   }
 
   connectedCallback() {
+    this.bindingKeys = this.getAttribute("binding")
+      ? this.getAttribute("binding")!.split(",")
+      : [];
+    this.bindingData = this.defaultBinding();
     this.updateState();
     this.reRender();
     this.bindEvents();
@@ -25,19 +33,20 @@ export class KTUComponent extends HTMLElement {
   }
 
   updateState() {
-    this.bindingData =
-      this.getAttribute("binding") &&
-      DataStore.getInstance().getStore(this.getAttribute("binding")!)
-        ? DataStore.getInstance().getStore(this.getAttribute("binding")!)
-        : this.defaultBinding();
+    for (const bindingKey of this.bindingKeys) {
+      if (DataStore.getInstance().getStore(bindingKey)) {
+        this.bindingData[bindingKey] =
+          DataStore.getInstance().getStore(bindingKey);
+      }
+    }
   }
-  defaultBinding(): any {
-    return null;
+  defaultBinding(): Record<string, any> {
+    return {};
   }
   bindEvents() {
-    if (this.getAttribute("binding")) {
+    for (const bindingKey of this.bindingKeys) {
       EventDispatcher.getInstance().addEventListener(
-        this.getAttribute("binding")!,
+        bindingKey,
         "update",
         () => {
           this.updateStateWrapper();

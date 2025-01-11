@@ -200,3 +200,20 @@ button {
 .hintPanel .spacer {
   height: 10px;
 }
+
+.historyRow {
+  position: relative;
+}
+.historyRow img {
+  width: 100px;
+  border-style: solid;
+  border-weight: 1px;
+}
+.historyRow div {
+  display: inline-block;
+  position: absolute;
+  padding-left: 10px;
+}
+.historyRow span {
+  display: block;
+}

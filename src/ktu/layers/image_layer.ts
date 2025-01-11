@@ -11,13 +11,14 @@ import {
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import DataStore from "../ui/core/data_store";
 import { AnimatedGIF } from "@pixi/gif";
+import { cacheAsset, getAsset } from "../helpers/assets";
 
 export type ImageLayerState = ContainerLayerState & {
   alpha: number;
   panX: number;
   panY: number;
   scale: number;
-  imageUrl: string;
+  imageHash: string;
 };
 
 export type ImageLayerSetting = {
@@ -39,8 +40,18 @@ export class ImageLayer extends ContainerLayer {
       field: "imageSource",
       type: "file",
       onchange: (value) => {
-        this.state.imageUrl = value;
-        this.repaint();
+        if (value.startsWith("data:")) {
+          console.log("STARTS WITH DATA");
+          const hash = cacheAsset(value);
+          this.state.imageHash = hash;
+          this.repaint();
+        } else {
+          this.urlContentToDataUri(value).then((url: string) => {
+            const hash = cacheAsset(url);
+            this.state.imageHash = hash;
+            this.repaint();
+          });
+        }
       },
     },
     {
@@ -90,7 +101,7 @@ export class ImageLayer extends ContainerLayer {
         panX: state.panX,
         panY: state.panY,
         scale: state.scale,
-        imageUrl: state.imageUrl,
+        imageHash: state.imageHash,
       };
       for (var shader of state.shaders) {
         this.addShaderFromState(shader.name, shader);
@@ -117,7 +128,7 @@ export class ImageLayer extends ContainerLayer {
     panX: 0,
     panY: 0,
     scale: 100,
-    imageUrl: "",
+    imageHash: "",
   };
 
   pointerDown(event: FederatedPointerEvent): void {
@@ -150,17 +161,20 @@ export class ImageLayer extends ContainerLayer {
   repaint() {
     this.container.removeChildren();
     this.sprite.destroy();
-    if (this.state.imageUrl) {
+    if (this.state.imageHash) {
       VideoSource.defaultOptions = {
         ...VideoSource.defaultOptions,
         loop: true,
       };
 
+      //GET THE CONTENT
+      const content = getAsset(this.state.imageHash);
+      console.log("REPAINT", this.state.imageHash, content);
       if (
-        this.state.imageUrl.indexOf("data:image/gif;") >= 0 ||
-        this.state.imageUrl.indexOf(".gif") >= 0
+        content.startsWith("data:image/gif;") ||
+        content.indexOf(".gif") >= 0
       ) {
-        fetch(this.state.imageUrl)
+        fetch(content)
           .then((res) => res.arrayBuffer())
           .then(AnimatedGIF.fromBuffer)
           .then((image) => {
@@ -170,7 +184,7 @@ export class ImageLayer extends ContainerLayer {
             DataStore.getInstance().touch("layers");
           });
       } else {
-        const texturePromise = Assets.load<Texture>(this.state.imageUrl);
+        const texturePromise = Assets.load<Texture>(content);
         texturePromise.then((resolvedTexture: Texture) => {
           this.sprite = Sprite.from(resolvedTexture);
           this.container.addChild(this.sprite);
@@ -182,6 +196,22 @@ export class ImageLayer extends ContainerLayer {
       this.sprite = new Sprite();
       this.container.addChild(this.sprite);
     }
+  }
+
+  urlContentToDataUri(url: string): Promise<string> {
+    return fetch(url)
+      .then((response) => response.blob())
+      .then(
+        (blob) =>
+          new Promise((callback) => {
+            let reader = new FileReader();
+            reader.onload = function () {
+              console.log("ONLOAD", this.result);
+              callback(this.result as string);
+            };
+            reader.readAsDataURL(blob);
+          })
+      );
   }
 
   reposition() {

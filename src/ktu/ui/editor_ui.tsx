@@ -19,7 +19,7 @@ export class EditorUI {
             <export-canvas-button></export-canvas-button>
           </div>
           <div className="panel left">
-            <file-info-panel binding="metadata"></file-info-panel>
+            <file-info-panel binding="metadata,history"></file-info-panel>
           </div>
         </div>
         <div className="right-ui">
