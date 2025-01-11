@@ -1,6 +1,7 @@
 import { Container, FederatedPointerEvent, Point, Text } from "pixi.js";
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import DataStore from "../ui/core/data_store";
+import { getStartingText } from "../helpers/sparkle";
 
 export type TextLayerState = ContainerLayerState & {
   text: string;
@@ -104,11 +105,11 @@ export class TextLayer extends ContainerLayer {
   defaultState(): TextLayerState {
     return {
       ...super.defaultState(),
-      text: "TEXT GOES HERE",
+      text: getStartingText().toUpperCase(),
       fontSize: 64,
       color: "#FFFFFF",
-      panX: 0,
-      panY: 0,
+      panX: Math.floor(Math.random() * 0.7 * window.innerWidth),
+      panY: Math.floor(Math.random() * 0.7 * window.innerHeight),
       alpha: 1,
     };
   }
@@ -149,6 +150,7 @@ export class TextLayer extends ContainerLayer {
         fontFamily: "Arial",
         fontSize: this.state.fontSize,
         fill: this.state.color,
+        align: "center",
       },
     });
     this.text.x = this.state.panX;

@@ -4731,3 +4731,11 @@ export const getStartingName = (): string => {
     NOUNS[Math.floor(Math.random() * NOUNS.length)]
   );
 };
+
+export const getStartingText = (): string => {
+  return (
+    VERBS[Math.floor(Math.random() * VERBS.length)] +
+    " " +
+    NOUNS[Math.floor(Math.random() * NOUNS.length)]
+  );
+};
