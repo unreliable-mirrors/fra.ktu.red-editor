@@ -3,8 +3,9 @@ import jsx from "texsaur";
 import EventDispatcher from "../../core/event_dispatcher";
 import { KTUComponent } from "../../core/ktu_component";
 import { ShaderLayer } from "../../../shaders/shader_layer";
-import { IconClose } from "../../../helpers/icons";
+import { IconClose, IconDown, IconUp } from "../../../helpers/icons";
 import { ContainerLayer } from "../../../layers/container_layer";
+import DataStore from "../../core/data_store";
 
 export class ShaderComponent extends KTUComponent {
   shader: ShaderLayer;
@@ -78,6 +79,33 @@ export class ShaderComponent extends KTUComponent {
             {this.shader.state.name} - {this.shader.state.layerId}
           </div>
           <div className="icons">
+            <span onclick={() => this.handleUpClick()}>
+              {(this.containerLayer &&
+                this.containerLayer?.shaders.indexOf(this.shader) + 1 !=
+                  this.containerLayer?.shaders.length) ||
+              (!this.containerLayer &&
+                DataStore.getInstance()
+                  .getStore("shaders")
+                  .indexOf(this.shader) +
+                  1 !=
+                  DataStore.getInstance().getStore("shaders").length) ? (
+                IconUp()
+              ) : (
+                <></>
+              )}
+            </span>
+            <span onclick={() => this.handleDownClick()}>
+              {(this.containerLayer &&
+                this.containerLayer?.shaders.indexOf(this.shader) != 0) ||
+              (!this.containerLayer &&
+                DataStore.getInstance()
+                  .getStore("shaders")
+                  .indexOf(this.shader) != 0) ? (
+                IconDown()
+              ) : (
+                <></>
+              )}
+            </span>
             <span onclick={() => this.handleCloseClick()}>{IconClose()}</span>
           </div>
         </div>
@@ -91,6 +119,28 @@ export class ShaderComponent extends KTUComponent {
       EventDispatcher.getInstance().dispatchEvent(
         "scene",
         "activateLayer",
+        this.shader
+      );
+    }
+  }
+  handleUpClick() {
+    if (this.containerLayer) {
+      this.containerLayer.moveUpShader(this.shader);
+    } else {
+      EventDispatcher.getInstance().dispatchEvent(
+        "scene",
+        "moveUpShader",
+        this.shader
+      );
+    }
+  }
+  handleDownClick() {
+    if (this.containerLayer) {
+      this.containerLayer.moveDownShader(this.shader);
+    } else {
+      EventDispatcher.getInstance().dispatchEvent(
+        "scene",
+        "moveDownShader",
         this.shader
       );
     }

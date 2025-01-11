@@ -106,6 +106,65 @@ export abstract class ContainerLayer implements IEditorLayer {
     );
   }
 
+  moveUpShader(shader: ShaderLayer) {
+    const index = this.shaders.indexOf(shader);
+    if (index > -1) {
+      const newIndex = index + 1;
+      const otherShader = this.shaders[newIndex];
+      this.shaders.splice(newIndex, 0, this.shaders.splice(index, 1)[0]);
+      if (this.container.filters instanceof Array) {
+        const filters: Filter[] = [];
+        for (let i = 0; i < this.container.filters.length; i++) {
+          if (i === index) {
+            filters.push(otherShader.shader);
+          } else if (i === newIndex) {
+            filters.push(shader.shader);
+          } else {
+            filters.push(this.container.filters[i]);
+          }
+        }
+        this.container.filters = filters;
+      }
+    }
+    DataStore.getInstance().touch("layers");
+    if (!shader.active) {
+      EventDispatcher.getInstance().dispatchEvent(
+        "scene",
+        "activateLayer",
+        shader
+      );
+    }
+  }
+  moveDownShader(shader: ShaderLayer) {
+    const index = this.shaders.indexOf(shader);
+    if (index > 0) {
+      const newIndex = index - 1;
+      const otherShader = this.shaders[newIndex];
+      this.shaders.splice(newIndex, 0, this.shaders.splice(index, 1)[0]);
+      if (this.container.filters instanceof Array) {
+        const filters: Filter[] = [];
+        for (let i = 0; i < this.container.filters.length; i++) {
+          if (i === index) {
+            filters.push(otherShader.shader);
+          } else if (i === newIndex) {
+            filters.push(shader.shader);
+          } else {
+            filters.push(this.container.filters[i]);
+          }
+        }
+        this.container.filters = filters;
+      }
+    }
+    DataStore.getInstance().touch("layers");
+    if (!shader.active) {
+      EventDispatcher.getInstance().dispatchEvent(
+        "scene",
+        "activateLayer",
+        shader
+      );
+    }
+  }
+
   removeShader(shader: ShaderLayer) {
     const index = this.shaders.indexOf(shader);
     if (index > -1) {

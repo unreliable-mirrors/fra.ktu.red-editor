@@ -1,4 +1,4 @@
-import { FederatedPointerEvent, Graphics, Ticker } from "pixi.js";
+import { FederatedPointerEvent, Filter, Graphics, Ticker } from "pixi.js";
 import DataStore from "../ui/core/data_store";
 import EventDispatcher from "../ui/core/event_dispatcher";
 import { BaseScene } from "../../engine/scenes/base_scene";
@@ -217,6 +217,20 @@ export class EditorScene extends BaseScene {
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
+      "moveUpShader",
+      (payload: ShaderLayer) => {
+        this.moveUpShader(payload);
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "moveDownShader",
+      (payload: ShaderLayer) => {
+        this.moveDownShader(payload);
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
       "removeLayer",
       (payload: ContainerLayer) => {
         this.removeLayer(payload);
@@ -393,6 +407,56 @@ export class EditorScene extends BaseScene {
     DataStore.getInstance().setStore("layers", this.layers);
     if (!layer.active) {
       this.activateLayer(layer);
+    }
+  }
+  moveUpShader(shader: ShaderLayer) {
+    const index = this.shaders.indexOf(shader);
+    if (index > -1) {
+      const newIndex = index + 1;
+      const otherShader = this.shaders[newIndex];
+      this.shaders.splice(newIndex, 0, this.shaders.splice(index, 1)[0]);
+      if (this.container.filters instanceof Array) {
+        const filters: Filter[] = [];
+        for (let i = 0; i < this.container.filters.length; i++) {
+          if (i === index) {
+            filters.push(otherShader.shader);
+          } else if (i === newIndex) {
+            filters.push(shader.shader);
+          } else {
+            filters.push(this.container.filters[i]);
+          }
+        }
+        this.container.filters = filters;
+      }
+    }
+    DataStore.getInstance().setStore("shaders", this.shaders);
+    if (!shader.active) {
+      this.activateLayer(shader);
+    }
+  }
+  moveDownShader(shader: ShaderLayer) {
+    const index = this.shaders.indexOf(shader);
+    if (index > 0) {
+      const newIndex = index - 1;
+      const otherShader = this.shaders[newIndex];
+      this.shaders.splice(newIndex, 0, this.shaders.splice(index, 1)[0]);
+      if (this.container.filters instanceof Array) {
+        const filters: Filter[] = [];
+        for (let i = 0; i < this.container.filters.length; i++) {
+          if (i === index) {
+            filters.push(otherShader.shader);
+          } else if (i === newIndex) {
+            filters.push(shader.shader);
+          } else {
+            filters.push(this.container.filters[i]);
+          }
+        }
+        this.container.filters = filters;
+      }
+    }
+    DataStore.getInstance().setStore("shaders", this.shaders);
+    if (!shader.active) {
+      this.activateLayer(shader);
     }
   }
 
