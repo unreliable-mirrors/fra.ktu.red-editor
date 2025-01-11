@@ -123,18 +123,27 @@ export class HintPanel extends KTUComponent {
             <h3>Attributes</h3>
             <div className="tip">
               <div>
-                <strong>Color</strong>: Each layer is Single Color.
+                <strong>Brush</strong>: Choose Different styles of drawing.
               </div>
               <div>
-                <strong>Pixel Size</strong>: Resize keeping pixel-perfect style.
+                <strong>Brush Size</strong>: How big of a blot you want.
+              </div>
+              <div>
+                <strong>Grid Size</strong>: How spaced you want your blots.
+              </div>
+              <div>
+                <strong>Color</strong>: Each layer is Single Color.
               </div>
             </div>
           </div>
           <div className="block">
             <h3>Tips</h3>
             <div className="tip">
-              <div>Use Pixel Size to regulate your drawing "zoom".</div>
-              <div>Increase Pixel Size to draw details, decrease later.</div>
+              <div>Default Drawing Mode is weird on purpose.</div>
+            </div>
+            <div className="tip">
+              <div>Use Grid Size to sort of "zoom".</div>
+              <div>Increase Grid Size to draw details, decrease later.</div>
             </div>
           </div>
         </>

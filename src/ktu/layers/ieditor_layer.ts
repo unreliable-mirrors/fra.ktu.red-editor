@@ -11,6 +11,7 @@ export type EditorLayerState = {
 export type EditorLayerSetting = {
   field: string;
   type: string;
+  values?: string[];
   onchange: (value: string) => void;
 };
 

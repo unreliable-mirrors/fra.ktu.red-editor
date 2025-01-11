@@ -5,16 +5,26 @@ import DataStore from "../ui/core/data_store";
 
 export type DrawLayerState = ContainerLayerState & {
   points: Record<string, boolean>;
+  brush: string;
+  brushSize: number;
+  gridSize: number;
   color: string;
   alpha: number;
-  pixelSize: number;
   panX: number;
   panY: number;
 };
 
 export type DrawLayerSetting = {
-  field: "color" | "pixelSize" | "panX" | "panY" | "alpha";
-  type: "color" | "integer" | "float";
+  field:
+    | "brush"
+    | "brushSize"
+    | "gridSize"
+    | "color"
+    | "alpha"
+    | "panX"
+    | "panY";
+  type: "options" | "color" | "integer" | "float";
+  values?: string[];
   onchange: (value: string) => void;
 };
 
@@ -31,6 +41,32 @@ export class DrawLayer extends ContainerLayer {
   declare state: DrawLayerState;
   settings: DrawLayerSetting[] = [
     {
+      field: "brush",
+      type: "options",
+      values: ["rect", "ellipse", "cross"],
+      onchange: (value: string) => {
+        this.state.brush = value;
+        console.log(this.state.brush);
+        this.repaint();
+      },
+    },
+    {
+      field: "brushSize",
+      type: "integer",
+      onchange: (value: string) => {
+        this.state.brushSize = parseInt(value);
+        this.repaint();
+      },
+    },
+    {
+      field: "gridSize",
+      type: "integer",
+      onchange: (value: string) => {
+        this.state.gridSize = parseInt(value);
+        this.repaint();
+      },
+    },
+    {
       field: "color",
       type: "color",
       onchange: (value: string) => {
@@ -43,14 +79,6 @@ export class DrawLayer extends ContainerLayer {
       type: "float",
       onchange: (value: string) => {
         this.state.alpha = parseFloat(value);
-        this.repaint();
-      },
-    },
-    {
-      field: "pixelSize",
-      type: "integer",
-      onchange: (value: string) => {
-        this.state.pixelSize = parseInt(value);
         this.repaint();
       },
     },
@@ -82,9 +110,11 @@ export class DrawLayer extends ContainerLayer {
       this.state = {
         ...this.state,
         points: {},
+        brush: state.brush,
+        brushSize: state.brushSize,
+        gridSize: state.gridSize,
         color: state.color,
         alpha: state.alpha,
-        pixelSize: state.pixelSize,
         panX: state.panX,
         panY: state.panY,
       };
@@ -107,9 +137,11 @@ export class DrawLayer extends ContainerLayer {
     return {
       ...super.defaultState(),
       points: {},
+      brush: "rect",
+      brushSize: 15,
+      gridSize: 15,
       color: "#FFFFFF",
       alpha: 1,
-      pixelSize: 15,
       panX: 0,
       panY: 0,
     };
@@ -153,10 +185,12 @@ export class DrawLayer extends ContainerLayer {
   metapaint(event: FederatedPointerEvent) {
     if (this.clicking) {
       const x = Math.floor(
-        (event.globalX - this.state.panX) / this.state.pixelSize
+        (event.globalX + this.state.gridSize / 2 - this.state.panX) /
+          this.state.gridSize
       );
       const y = Math.floor(
-        (event.globalY - this.state.panY) / this.state.pixelSize
+        (event.globalY + this.state.gridSize / 2 - this.state.panY) /
+          this.state.gridSize
       );
       if (!this.stroke[`${x}X${y}`]) {
         this.stroke[`${x}X${y}`] = true;
@@ -174,30 +208,59 @@ export class DrawLayer extends ContainerLayer {
     for (var key in this.state.points) {
       const x = parseInt(key.split("X")[0]);
       const y = parseInt(key.split("X")[1]);
-      this.graphics
-        .rect(
-          x * this.state.pixelSize + this.state.panX,
-          y * this.state.pixelSize + this.state.panY,
-          this.state.pixelSize,
-          this.state.pixelSize
-        )
-        .fill({ color: this.state.color, alpha: this.state.alpha });
+      this.drawPoint(x, y);
     }
   }
 
   paint(x: number, y: number) {
     if (!this.state.points[`${x}X${y}`]) {
-      this.graphics
-        .rect(
-          x * this.state.pixelSize + this.state.panX,
-          y * this.state.pixelSize + this.state.panY,
-          this.state.pixelSize,
-          this.state.pixelSize
-        )
-        .fill({ color: this.state.color, alpha: this.state.alpha });
+      this.drawPoint(x, y);
       this.state.points[`${x}X${y}`] = true;
     } else if (!this.hardPainting) {
       this.erase(x, y);
+    }
+  }
+
+  drawPoint(x: number, y: number) {
+    if (this.state.brush === "rect") {
+      this.graphics
+        .rect(
+          x * this.state.gridSize + this.state.panX - this.state.gridSize / 2,
+          y * this.state.gridSize + this.state.panY - this.state.gridSize / 2,
+          this.state.brushSize,
+          this.state.brushSize
+        )
+        .fill({ color: this.state.color, alpha: this.state.alpha });
+    } else if (this.state.brush === "ellipse") {
+      this.graphics
+        .ellipse(
+          x * this.state.gridSize + this.state.panX,
+          y * this.state.gridSize + this.state.panY,
+          this.state.brushSize / 2,
+          this.state.brushSize / 2
+        )
+        .fill({ color: this.state.color, alpha: this.state.alpha });
+    } else if (this.state.brush === "cross") {
+      this.graphics
+        .moveTo(
+          x * this.state.gridSize + this.state.panX,
+          y * this.state.gridSize + this.state.panY - this.state.brushSize / 2
+        )
+        .lineTo(
+          x * this.state.gridSize + this.state.panX,
+          y * this.state.gridSize + this.state.panY + this.state.brushSize / 2
+        )
+        .stroke({ width: 2, color: this.state.color });
+      this.graphics
+        .moveTo(
+          x * this.state.gridSize + this.state.panX - this.state.brushSize / 2,
+          y * this.state.gridSize + this.state.panY
+        )
+        .lineTo(
+          x * this.state.gridSize + this.state.panX + this.state.brushSize / 2,
+          y * this.state.gridSize + this.state.panY
+        )
+        .stroke({ width: 2, color: this.state.color });
     }
   }
   erase(x: number, y: number) {

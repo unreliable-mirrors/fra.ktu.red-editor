@@ -52,6 +52,9 @@ export class LayerComponent extends KTUComponent {
               <input
                 type="number"
                 value={this.layer.state[setting.field]}
+                spellcheck="false"
+                autocomplete="off"
+                aria-autocomplete="none"
                 oninput={(e) => {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
@@ -68,6 +71,9 @@ export class LayerComponent extends KTUComponent {
                 min="0"
                 max="1"
                 step="0.01"
+                spellcheck="false"
+                autocomplete="off"
+                aria-autocomplete="none"
                 oninput={(e) => {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
@@ -81,6 +87,9 @@ export class LayerComponent extends KTUComponent {
               <input
                 type="text"
                 value={this.layer.state[setting.field]}
+                spellcheck="false"
+                autocomplete="off"
+                aria-autocomplete="none"
                 oninput={(e) => {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
@@ -97,6 +106,19 @@ export class LayerComponent extends KTUComponent {
                   layer: this.layer as ImageLayer,
                 })
               }
+            </div>
+          );
+        } else if (setting.type === "options") {
+          settings.push(
+            <div>
+              <span>{setting.field}: </span>
+              {setting.values ? (
+                setting.values.map((e) => (
+                  <button onclick={() => setting.onchange(e)}>{e}</button>
+                ))
+              ) : (
+                <></>
+              )}
             </div>
           );
         }
