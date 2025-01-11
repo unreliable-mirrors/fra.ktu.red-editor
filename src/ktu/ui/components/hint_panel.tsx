@@ -25,7 +25,10 @@ export class HintPanel extends KTUComponent {
   render(): Element {
     let content = <></>;
     console.log("BD", this.bindingData["activeLayer"]);
-    if (!this.bindingData["activeLayer"]) {
+    if (
+      !this.bindingData["activeLayer"] ||
+      this.bindingData["showGeneralTips"]
+    ) {
       content = (
         <>
           <div className="block">
@@ -292,7 +295,7 @@ export class HintPanel extends KTUComponent {
   }
 
   defaultBinding() {
-    return {};
+    return { showGeneralTips: false };
   }
 }
 

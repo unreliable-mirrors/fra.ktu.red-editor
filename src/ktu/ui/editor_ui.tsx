@@ -32,7 +32,7 @@ export class EditorUI {
         </div>
         <div className="bottom-ui">
           <div id="hintsPanel" className="panel bottom">
-            <hint-panel binding="activeLayer"></hint-panel>
+            <hint-panel binding="activeLayer,showGeneralTips"></hint-panel>
           </div>
         </div>
       </div>

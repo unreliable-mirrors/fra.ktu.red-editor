@@ -32,6 +32,7 @@ export class EditorScene extends BaseScene {
   shaders: ShaderLayer[];
   metadata: EditorSceneMetadata;
   history: EditorSceneHistoryEntry[];
+  showGeneralTips: boolean;
 
   public constructor() {
     super();
@@ -39,12 +40,19 @@ export class EditorScene extends BaseScene {
     this.shaders = [];
     this.container.eventMode = "static";
     this.setupContainer();
+    this.showGeneralTips = false;
+    DataStore.getInstance().setStore("showGeneralTips", this.showGeneralTips);
 
     this.metadata = { name: getStartingName(), timestamp: Date.now() };
     DataStore.getInstance().setStore("metadata", this.metadata);
 
     this.history = [];
     DataStore.getInstance().setStore("history", this.history);
+
+    setInterval(() => {
+      this.showGeneralTips = !this.showGeneralTips;
+      DataStore.getInstance().setStore("showGeneralTips", this.showGeneralTips);
+    }, 60000);
 
     setInterval(async () => {
       let jsonState = JSON.stringify(this.getStateObject());
@@ -340,6 +348,8 @@ export class EditorScene extends BaseScene {
     this.activeLayer.active = true;
     DataStore.getInstance().setStore("layers", this.layers);
     DataStore.getInstance().setStore("shaders", this.shaders);
+    this.showGeneralTips = false;
+    DataStore.getInstance().setStore("showGeneralTips", this.showGeneralTips);
   }
   deactivateLayer() {
     console.log("DEACTIVATE");
