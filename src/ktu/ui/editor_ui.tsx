@@ -30,8 +30,8 @@ export class EditorUI {
             <shaders-list binding="shaders"></shaders-list>
           </div>
         </div>
-        <div className="right-bottom-ui">
-          <div className="panel right-bottom">
+        <div className="bottom-ui">
+          <div id="hintsPanel" className="panel bottom">
             <hint-panel binding="activeLayer"></hint-panel>
           </div>
         </div>

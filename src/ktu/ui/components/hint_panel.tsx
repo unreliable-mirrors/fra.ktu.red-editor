@@ -17,24 +17,31 @@ export class HintPanel extends KTUComponent {
     if (!this.bindingData["activeLayer"]) {
       content = (
         <>
-          <h3>Layer Types</h3>
-          <div>{IconBackground()} Background</div>
-          <div>{IconDraw()} Draw</div>
-          <div>{IconImage()} Image/Video</div>
-          <div>{IconText()} Text</div>
-          <div className="spacer"></div>
-          <h3>Shortcuts</h3>
-          <div className="tip">
-            <strong>CTRL + ALT + H</strong>: Hide Hints
+          <div className="block">
+            <h3>Layer Types</h3>
+            <div className="tip">{IconBackground()} Background</div>
+            <div className="tip">{IconDraw()} Draw</div>
+            <div className="tip">{IconImage()} Image/Video</div>
+            <div className="tip">{IconText()} Text</div>
           </div>
-          <div className="tip">
-            <strong>CTRL + ALT + J</strong>: Hide UI
+          <div className="block">
+            <h3>Shortcuts</h3>
+            <div className="tip">
+              <div>
+                <strong>CTRL + ALT + H</strong>: Hide Hints
+              </div>
+              <div>
+                <strong>CTRL + ALT + J</strong>: Hide UI
+              </div>
+            </div>
+            <div className="tip"></div>
           </div>
-          <div className="spacer"></div>
-          <h3>Tips</h3>
-          <div className="tip">Shaders = Cool Effects.</div>
-          <div className="tip">Layers First, Shaders Later.</div>
-          <div className="tip">There is no Undo, this is by design.</div>
+          <div className="block">
+            <h3>Tips</h3>
+            <div className="tip">Shaders = Cool Effects.</div>
+            <div className="tip">Layers First, Shaders Later.</div>
+            <div className="tip">There is no Undo, this is by design.</div>
+          </div>
         </>
       );
     } else if (
@@ -43,10 +50,13 @@ export class HintPanel extends KTUComponent {
     ) {
       content = (
         <>
-          <h3>Background Layer</h3>
-          <div>It's very, very big</div>
-          <div className="spacer"></div>
-          <div>Having several with alpha makes cool tints</div>
+          <div className="block">
+            <h3>Background Layer</h3>
+            <div className="tip">It's very, very big</div>
+            <div className="tip">
+              Having several with alpha makes cool tints
+            </div>
+          </div>
         </>
       );
     } else if (
@@ -55,39 +65,44 @@ export class HintPanel extends KTUComponent {
     ) {
       content = (
         <>
-          <h3>Draw Layer</h3>
-          <div>Draw cool stuff on Pixel style.</div>
-          <div className="spacer"></div>
-          <h3>Shortcuts</h3>
-          <div className="tip">
-            <strong>LEFT CLICK</strong>: Draw in <strong>Toggle Mode</strong>
+          <div className="block">
+            <h3>Draw Layer</h3>
+            <div>Draw cool stuff on Pixel style.</div>
           </div>
-          <div className="tip">
-            <strong>RIGHT CLICK</strong>: Erase
+          <div className="block">
+            <h3>Shortcuts</h3>
+            <div className="tip">
+              <div>
+                <strong>LEFT CLICK</strong>: Draw in{" "}
+                <strong>Toggle Mode</strong>
+              </div>
+              <div>
+                <strong>RIGHT CLICK</strong>: Erase
+              </div>
+            </div>
+            <div className="tip">
+              <div>
+                <strong>SHIFT + CLICK</strong>: Draw in{" "}
+                <strong>Normal Mode</strong>
+              </div>
+              <div>
+                <strong>CTRL + CLICK</strong>: Drag/Pan Layer
+              </div>
+            </div>
           </div>
-          <div className="tip">
-            <strong>SHIFT + CLICK</strong>: Draw in <strong>Normal Mode</strong>
-          </div>
-          <div className="tip">
-            <strong>CTRL + CLICK</strong>: Drag/Pan Layer
-          </div>
-          <div className="spacer"></div>
-          <h3>Tips</h3>
-          <div className="tip">
-            <strong>Color</strong>: Each layer is Single Color. Have several
-            colors, using several layers
-          </div>
-          <div className="tip">
-            <strong>Pixel Size</strong>: Resize keeping pixel-perfect style
+          <div className="block">
+            <h3>Tips</h3>
+            <div className="tip">
+              <strong>Color</strong>: Each layer is Single Color.
+            </div>
+            <div className="tip">
+              <strong>Pixel Size</strong>: Resize keeping pixel-perfect style
+            </div>
           </div>
         </>
       );
     }
-    return (
-      <div id="hintsPanel" className="hintPanel">
-        {content}
-      </div>
-    );
+    return <div className="hintPanel">{content}</div>;
   }
 
   defaultBinding() {
