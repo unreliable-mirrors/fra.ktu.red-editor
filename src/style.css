@@ -200,6 +200,9 @@ button {
 .hintPanel .spacer {
   height: 10px;
 }
+.hintPanel .tip {
+  margin-bottom: 10px;
+}
 
 .historyRow {
   position: relative;
