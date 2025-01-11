@@ -1,4 +1,4 @@
-import { Container, Graphics } from "pixi.js";
+import { Color, Container, Graphics } from "pixi.js";
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 
 export type BackgroundLayerState = ContainerLayerState & {
@@ -55,7 +55,11 @@ export class BackgroundLayer extends ContainerLayer {
   defaultState(): BackgroundLayerState {
     return {
       ...super.defaultState(),
-      color: "#000000",
+      color: new Color({
+        h: Math.floor(Math.random() * 360),
+        s: 100,
+        l: 53,
+      }).toHex(),
       alpha: 1,
     };
   }
