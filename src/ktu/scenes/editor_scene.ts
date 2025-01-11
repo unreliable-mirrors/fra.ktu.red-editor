@@ -10,17 +10,18 @@ import {
 } from "../layers/background_layer";
 import { ImageLayer, ImageLayerState } from "../layers/image_layer";
 import { ShaderLayer, ShaderState } from "../shaders/shader_layer";
-import { ContainerLayer } from "../layers/container_layer";
+import { ContainerLayer, ContainerLayerState } from "../layers/container_layer";
 import { TextLayer, TextLayerState } from "../layers/text_layer";
 import { DrawLayer, DrawLayerState } from "../layers/draw_layer";
 import { downloadContent } from "../helpers/file";
 import { getStartingName } from "../helpers/sparkle";
 import { getShaderByName } from "../helpers/shaders";
 import { ASSETS_MAP, rebuildAssets } from "../helpers/assets";
+import { getLayerByName } from "../helpers/layers";
 
 export type EditorSceneState = {
-  layers: EditorLayerState[];
-  shaders: EditorLayerState[];
+  layers: ContainerLayerState[];
+  shaders: ShaderState[];
   metadata: EditorSceneMetadata;
   assets: Record<string, string>;
 };
@@ -103,30 +104,9 @@ export class EditorScene extends BaseScene {
 
     EventDispatcher.getInstance().addEventListener(
       "scene",
-      "add_draw_layer",
-      () => {
-        this.addMonoPixelDrawLayer();
-      }
-    );
-    EventDispatcher.getInstance().addEventListener(
-      "scene",
-      "add_background_layer",
-      () => {
-        this.addBackgroundLayer();
-      }
-    );
-    EventDispatcher.getInstance().addEventListener(
-      "scene",
-      "add_image_layer",
-      () => {
-        this.addImageLayer();
-      }
-    );
-    EventDispatcher.getInstance().addEventListener(
-      "scene",
-      "add_text_layer",
-      () => {
-        this.addTextLayer();
+      "add_layer",
+      (layerName: string) => {
+        this.addGenericLayer(layerName);
       }
     );
     EventDispatcher.getInstance().addEventListener(
@@ -159,15 +139,15 @@ export class EditorScene extends BaseScene {
       "duplicateLayer",
       (payload: ContainerLayer) => {
         const state = JSON.parse(JSON.stringify(payload.state));
-        if (state.name === "draw_layer") {
-          this.addMonoPixelDrawLayer(state as DrawLayerState);
-        } else if (state.name === "background_layer") {
-          this.addBackgroundLayer(state as BackgroundLayerState);
-        } else if (state.name === "image_layer") {
-          this.addImageLayer(state as ImageLayerState);
-        } else if (state.name === "text_layer") {
-          this.addTextLayer(state as TextLayerState);
-        }
+        this.addGenericLayer(state.name, state);
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "duplicateShader",
+      (payload: ShaderLayer) => {
+        const state = JSON.parse(JSON.stringify(payload.state));
+        this.addGenericShader(state.name, state);
       }
     );
     EventDispatcher.getInstance().addEventListener(
@@ -274,7 +254,7 @@ export class EditorScene extends BaseScene {
             fr.onload = (e) => {
               const payload: string = e.target!.result as string;
               console.log("URL", payload);
-              this.addImageLayer({
+              this.addGenericLayer(ImageLayer.LAYER_NAME, {
                 ...ImageLayer.DEFAULT_STATE,
                 imageUrl: payload,
               });
@@ -347,15 +327,7 @@ export class EditorScene extends BaseScene {
     rebuildAssets(payload.assets);
 
     for (const state of payload.layers) {
-      if (state.name === "draw_layer") {
-        this.addMonoPixelDrawLayer(state as DrawLayerState);
-      } else if (state.name === "background_layer") {
-        this.addBackgroundLayer(state as BackgroundLayerState);
-      } else if (state.name === "image_layer") {
-        this.addImageLayer(state as ImageLayerState);
-      } else if (state.name === "text_layer") {
-        this.addTextLayer(state as TextLayerState);
-      }
+      this.addGenericLayer(state.name, state);
     }
 
     for (const state of payload.shaders) {
@@ -376,11 +348,22 @@ export class EditorScene extends BaseScene {
     DataStore.getInstance().setStore("layers", this.layers);
     DataStore.getInstance().setStore("shaders", this.shaders);
   }
+  deactivateLayer() {
+    console.log("DEACTIVATE");
+    if (this.activeLayer) this.activeLayer.active = false;
+    this.activeLayer = undefined;
+    console.log("AL", this.activeLayer);
+    DataStore.getInstance().setStore("activeLayer", this.activeLayer);
+    DataStore.getInstance().setStore("layers", this.layers);
+    DataStore.getInstance().setStore("shaders", this.shaders);
+  }
   removeLayer(layer: ContainerLayer) {
     super.removeLayer(layer);
     DataStore.getInstance().setStore("layers", this.layers);
     if (layer.active && this.layers.length > 0) {
       this.activateLayer(this.layers[0]);
+    } else {
+      this.deactivateLayer();
     }
   }
   moveUpLayer(layer: ContainerLayer) {
@@ -394,6 +377,8 @@ export class EditorScene extends BaseScene {
     DataStore.getInstance().setStore("layers", this.layers);
     if (!layer.active) {
       this.activateLayer(layer);
+    } else {
+      this.deactivateLayer();
     }
   }
   moveDownLayer(layer: ContainerLayer) {
@@ -478,24 +463,9 @@ export class EditorScene extends BaseScene {
       this.activateLayer(this.shaders[0]);
     }
   }
-
-  addMonoPixelDrawLayer(state?: DrawLayerState) {
-    const layer = new DrawLayer(state);
-    this.addLayer(layer);
-  }
-
-  addBackgroundLayer(state?: BackgroundLayerState) {
-    const layer = new BackgroundLayer(state);
-    this.addLayer(layer);
-  }
-  addImageLayer(state?: ImageLayerState) {
-    console.log("STATE", state);
-    const layer = new ImageLayer(state);
-    this.addLayer(layer);
-  }
-  addTextLayer(state?: TextLayerState) {
-    const layer = new TextLayer(state);
-    this.addLayer(layer);
+  addGenericLayer(layerName: string, state?: ContainerLayerState) {
+    const layer = getLayerByName(layerName, state);
+    this.addLayer(layer!);
   }
   addGenericShader(shaderName: string, state?: ShaderState) {
     const layer = getShaderByName(shaderName, state);

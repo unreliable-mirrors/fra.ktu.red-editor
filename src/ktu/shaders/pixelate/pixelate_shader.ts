@@ -8,8 +8,8 @@ export type PixelateShaderState = ShaderState & {
 };
 
 export type PixelateShaderSetting = {
-  field: "pixelSize" | "missProbability" | "seed";
-  type: "integer" | "float";
+  field: "pixelSize";
+  type: "integer";
   onchange: (value: string) => void;
 };
 
@@ -25,24 +25,6 @@ export class PixelateShader extends ShaderLayer {
       onchange: (value) => {
         this.state.pixelSize = parseInt(value);
         this.uniforms.uniforms.uPixelSize = this.state.pixelSize;
-        this.refreshSize();
-      },
-    },
-    {
-      field: "missProbability",
-      type: "float",
-      onchange: (value) => {
-        this.state.missProbability = parseFloat(value);
-        this.uniforms.uniforms.uMissProbability = this.state.missProbability;
-        this.refreshSize();
-      },
-    },
-    {
-      field: "seed",
-      type: "integer",
-      onchange: (value) => {
-        this.state.seed = parseInt(value);
-        this.uniforms.uniforms.uSeed = this.state.seed;
         this.refreshSize();
       },
     },

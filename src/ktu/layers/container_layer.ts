@@ -106,6 +106,11 @@ export abstract class ContainerLayer implements IEditorLayer {
     );
   }
 
+  duplicateShader(shader: ShaderLayer) {
+    const state = JSON.parse(JSON.stringify(shader.state));
+    this.addShaderFromState(state.name, state);
+  }
+
   moveUpShader(shader: ShaderLayer) {
     const index = this.shaders.indexOf(shader);
     if (index > -1) {

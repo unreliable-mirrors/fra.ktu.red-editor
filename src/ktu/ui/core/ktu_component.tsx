@@ -37,7 +37,8 @@ export class KTUComponent extends HTMLElement {
       if (DataStore.getInstance().getStore(bindingKey)) {
         this.bindingData[bindingKey] =
           DataStore.getInstance().getStore(bindingKey);
-      }
+      } else
+        [(this.bindingData[bindingKey] = this.defaultBinding()[bindingKey])];
     }
   }
   defaultBinding(): Record<string, any> {

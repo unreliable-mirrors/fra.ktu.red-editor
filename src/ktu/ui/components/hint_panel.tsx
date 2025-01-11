@@ -2,9 +2,13 @@ import jsx from "texsaur";
 import { KTUComponent } from "../core/ktu_component";
 import {
   IconBackground,
+  IconClose,
+  IconDown,
   IconDraw,
+  IconDuplicate,
   IconImage,
   IconText,
+  IconUp,
 } from "../../helpers/icons";
 import { BackgroundLayer } from "../../layers/background_layer";
 import { ContainerLayer } from "../../layers/container_layer";
@@ -13,6 +17,9 @@ import { ImageLayer } from "../../layers/image_layer";
 import { TextLayer } from "../../layers/text_layer";
 import { ShaderLayer } from "../../shaders/shader_layer";
 import { BnwShader } from "../../shaders/bnw/bnw_shader";
+import { VintageShader } from "../../shaders/vintage/vintage_shader";
+import { PixelateShader } from "../../shaders/pixelate/pixelate_shader";
+import { MontecarloSampleShader } from "../../shaders/montecarlo_sample/montecarlo_sample";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -23,10 +30,25 @@ export class HintPanel extends KTUComponent {
         <>
           <div className="block">
             <h3>Layer Types</h3>
-            <div className="tip">{IconBackground()} Background</div>
-            <div className="tip">{IconDraw()} Draw</div>
-            <div className="tip">{IconImage()} Image/Video</div>
-            <div className="tip">{IconText()} Text</div>
+            <div className="tip">
+              <div>{IconBackground()} Background</div>
+              <div>{IconImage()} Image/Video</div>
+            </div>
+            <div className="tip">
+              <div>{IconDraw()} Draw</div>
+              <div>{IconText()} Text</div>
+            </div>
+          </div>
+          <div className="block">
+            <h3>Layer Actions</h3>
+            <div className="tip">
+              <div>{IconUp()} Move Layer Up</div>
+              <div>{IconDown()} Move Layer Down</div>
+            </div>
+            <div className="tip">
+              <div>{IconDuplicate()} Duplicate Layer</div>
+              <div>{IconClose()} Remove Layer</div>
+            </div>
           </div>
           <div className="block">
             <h3>Shortcuts</h3>
@@ -37,16 +59,10 @@ export class HintPanel extends KTUComponent {
               <div>
                 <strong>CTRL + ALT + J</strong>: Hide UI
               </div>
-            </div>
-            <div className="tip">
               <div>
                 <strong>CTRL + V</strong>: Paste Image in a new Image Layer
               </div>
-              <div>
-                <strong>CTRL + V</strong>: Paste a Text in a new Text Layer
-              </div>
             </div>
-            <div className="tip"></div>
           </div>
           <div className="block">
             <h3>Tips</h3>
@@ -91,8 +107,6 @@ export class HintPanel extends KTUComponent {
               <div>
                 <strong>RIGHT CLICK</strong>: Erase
               </div>
-            </div>
-            <div className="tip">
               <div>
                 <strong>SHIFT + CLICK</strong>: Draw in{" "}
                 <strong>Normal Mode</strong>
@@ -103,12 +117,21 @@ export class HintPanel extends KTUComponent {
             </div>
           </div>
           <div className="block">
+            <h3>Attributes</h3>
+            <div className="tip">
+              <div>
+                <strong>Color</strong>: Each layer is Single Color.
+              </div>
+              <div>
+                <strong>Pixel Size</strong>: Resize keeping pixel-perfect style.
+              </div>
+            </div>
+          </div>
+          <div className="block">
             <h3>Tips</h3>
             <div className="tip">
-              <strong>Color</strong>: Each layer is Single Color.
-            </div>
-            <div className="tip">
-              <strong>Pixel Size</strong>: Resize keeping pixel-perfect style
+              <div>Use Pixel Size to regulate your drawing "zoom".</div>
+              <div>Increase Pixel Size to draw details, decrease later.</div>
             </div>
           </div>
         </>
@@ -185,6 +208,80 @@ export class HintPanel extends KTUComponent {
               <div>
                 <strong>Strength</strong>: Regulates how much gray it is. Lower
                 levels allow some color to pass.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == VintageShader.SHADER_NAME
+    ) {
+      content = (
+        <>
+          <div className="block">
+            <h3>Vintage Shader</h3>
+            <div className="tip">
+              Makes everything look a bit polaroid. A bit reddish.
+            </div>
+          </div>
+          <div className="block">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Strength</strong>: Regulates how much redish it is.
+                Lower levels make it closer to the original.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == PixelateShader.SHADER_NAME
+    ) {
+      content = (
+        <>
+          <div className="block">
+            <h3>Pixelate Shader</h3>
+            <div className="tip">Turns everything into squares.</div>
+          </div>
+          <div className="block">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Pixel Size</strong>: How big do you want your squares to
+                be.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() ==
+        MontecarloSampleShader.SHADER_NAME
+    ) {
+      content = (
+        <>
+          <div className="block">
+            <h3>Montecarlo Sampling Shader</h3>
+            <div className="tip">Filters the image randomly.</div>
+          </div>
+          <div className="block">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Strength</strong>: How much filtering do you want to
+                happen. The lower, the more image is preserved.
+              </div>
+              <div>
+                <strong>Refresh Chance</strong>: How often do you want it to
+                refresh. 1 = Updates every frame. 0 = Never updates. (0-1) =
+                Somewhere in the middle...
               </div>
             </div>
           </div>

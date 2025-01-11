@@ -3,7 +3,14 @@ import jsx from "texsaur";
 import EventDispatcher from "../../core/event_dispatcher";
 import { KTUComponent } from "../../core/ktu_component";
 import { ShaderLayer } from "../../../shaders/shader_layer";
-import { IconClose, IconDown, IconUp } from "../../../helpers/icons";
+import {
+  IconClose,
+  IconDown,
+  IconDuplicate,
+  IconHidden,
+  IconUp,
+  IconVisible,
+} from "../../../helpers/icons";
 import { ContainerLayer } from "../../../layers/container_layer";
 import DataStore from "../../core/data_store";
 
@@ -106,6 +113,9 @@ export class ShaderComponent extends KTUComponent {
                 <></>
               )}
             </span>
+            <span onclick={() => this.handleDuplicateClick()}>
+              {IconDuplicate()}
+            </span>
             <span onclick={() => this.handleCloseClick()}>{IconClose()}</span>
           </div>
         </div>
@@ -145,7 +155,17 @@ export class ShaderComponent extends KTUComponent {
       );
     }
   }
-
+  handleDuplicateClick() {
+    if (this.containerLayer) {
+      this.containerLayer.duplicateShader(this.shader);
+    } else {
+      EventDispatcher.getInstance().dispatchEvent(
+        "scene",
+        "duplicateShader",
+        this.shader
+      );
+    }
+  }
   handleCloseClick() {
     if (this.containerLayer) {
       this.containerLayer.removeShader(this.shader);

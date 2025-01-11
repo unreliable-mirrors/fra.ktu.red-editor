@@ -28,8 +28,8 @@ export class AddLayerButtonComponent extends KTUComponent {
     } else {
       EventDispatcher.getInstance().dispatchEvent(
         "scene",
-        `add_${this.layerName}`,
-        {}
+        `add_layer`,
+        this.layerName
       );
     }
   }

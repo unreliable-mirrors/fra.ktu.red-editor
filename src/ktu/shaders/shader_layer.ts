@@ -64,10 +64,12 @@ export abstract class ShaderLayer implements IEditorLayer {
 
   //@ts-ignore
   set visible(value: boolean) {
-    //CANNOT HIDE A SHADER
+    this.state.visible = value;
+    this.shader.enabled = this.state.visible;
+    console.log("ENABLED", this.shader.enabled);
   }
   get visible(): boolean {
-    return true;
+    return this.state.visible;
   }
 
   //@ts-ignore
