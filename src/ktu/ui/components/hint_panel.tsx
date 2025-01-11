@@ -10,6 +10,7 @@ import { BackgroundLayer } from "../../layers/background_layer";
 import { ContainerLayer } from "../../layers/container_layer";
 import { DrawLayer } from "../../layers/draw_layer";
 import { ImageLayer } from "../../layers/image_layer";
+import { TextLayer } from "../../layers/text_layer";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -141,6 +142,27 @@ export class HintPanel extends KTUComponent {
               Copies of the same file, will be time synced.
             </div>
             <div className="tip">URLs without CORS will fail.</div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ContainerLayer &&
+      this.bindingData["activeLayer"].layerName() == TextLayer.LAYER_NAME
+    ) {
+      content = (
+        <>
+          <div className="block">
+            <h3>Text Layer</h3>
+            <div className="tip">Put your heart into words.</div>
+          </div>
+          <div className="block">
+            <h3>Shortcuts</h3>
+
+            <div className="tip">
+              <div>
+                <strong>CTRL + CLICK</strong>: Drag/Pan Layer
+              </div>
+            </div>
           </div>
         </>
       );
