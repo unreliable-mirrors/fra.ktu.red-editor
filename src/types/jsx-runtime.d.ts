@@ -9,5 +9,6 @@ declare namespace JSX {
     ["hint-panel"]: any;
     ["export-canvas-button"]: any;
     ["file-info-panel"]: any;
+    ["layers-buttons"]: any;
   }
 }

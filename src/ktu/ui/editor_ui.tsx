@@ -24,7 +24,13 @@ export class EditorUI {
         </div>
         <div className="right-ui">
           <div className="panel right">
-            <layers-list binding="layers"></layers-list>
+            <div>
+              <h3>Layers</h3>
+              <layers-buttons></layers-buttons>
+              <div className="layerListContainer">
+                <layers-list binding="layers"></layers-list>
+              </div>
+            </div>
           </div>
           <div className="panel right">
             <shaders-list binding="shaders"></shaders-list>

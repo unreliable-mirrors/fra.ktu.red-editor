@@ -4735,7 +4735,7 @@ export const getStartingName = (): string => {
 export const getStartingText = (): string => {
   return (
     VERBS[Math.floor(Math.random() * VERBS.length)] +
-    " " +
+    " THE " +
     NOUNS[Math.floor(Math.random() * NOUNS.length)]
   );
 };

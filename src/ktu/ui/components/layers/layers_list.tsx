@@ -19,13 +19,7 @@ export class LayersList extends KTUComponent {
     ].reverse()) {
       items.push(new LayerComponent(layer));
     }
-    return (
-      <div>
-        <h3>Layers</h3>
-        <div className="layerIcons">{layerButtons}</div>
-        <div className="layerList">{items}</div>
-      </div>
-    );
+    return <div className="layerList">{items}</div>;
   }
 
   defaultBinding() {

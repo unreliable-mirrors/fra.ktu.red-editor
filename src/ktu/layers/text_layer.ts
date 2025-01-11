@@ -1,10 +1,18 @@
-import { Container, FederatedPointerEvent, Point, Text } from "pixi.js";
+import {
+  Container,
+  FederatedPointerEvent,
+  Point,
+  Text,
+  TextStyleFontStyle,
+  TextStyleFontWeight,
+} from "pixi.js";
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import DataStore from "../ui/core/data_store";
 import { getStartingText } from "../helpers/sparkle";
 
 export type TextLayerState = ContainerLayerState & {
   text: string;
+  font: string;
   fontSize: number;
   color: string;
   panX: number;
@@ -13,13 +21,24 @@ export type TextLayerState = ContainerLayerState & {
 };
 
 export type TextLayerSetting = {
-  field: "text" | "fontSize" | "color" | "panX" | "panY" | "alpha";
-  type: "text" | "integer" | "color" | "float";
+  field: "font" | "text" | "fontSize" | "color" | "panX" | "panY" | "alpha";
+  type: "text" | "integer" | "color" | "float" | "options";
+  values?: string[];
   onchange: (value: string) => void;
 };
 
 export class TextLayer extends ContainerLayer {
   static LAYER_NAME: string = "text_layer";
+  static FONTS: string[] = [
+    "Orbitron",
+    "Permanent Marker",
+    "Montserrat",
+    "Noto",
+    "Caveat",
+    "NewNord",
+    "Press Start",
+  ];
+
   declare state: TextLayerState;
   text: Text;
   clicking: boolean = false;
@@ -32,6 +51,15 @@ export class TextLayer extends ContainerLayer {
       type: "text",
       onchange: (value) => {
         this.state.text = value;
+        this.repaint();
+      },
+    },
+    {
+      field: "font",
+      type: "options",
+      values: TextLayer.FONTS,
+      onchange: (value) => {
+        this.state.font = value;
         this.repaint();
       },
     },
@@ -86,6 +114,7 @@ export class TextLayer extends ContainerLayer {
       this.state = {
         ...this.state,
         text: state.text,
+        font: state.font,
         fontSize: state.fontSize,
         color: state.color,
         panX: state.panX,
@@ -106,10 +135,11 @@ export class TextLayer extends ContainerLayer {
     return {
       ...super.defaultState(),
       text: getStartingText().toUpperCase(),
-      fontSize: 64,
+      font: TextLayer.FONTS[Math.floor(Math.random() * TextLayer.FONTS.length)],
+      fontSize: 32,
       color: "#FFFFFF",
-      panX: Math.floor(Math.random() * 0.7 * window.innerWidth),
-      panY: Math.floor(Math.random() * 0.7 * window.innerHeight),
+      panX: Math.floor((Math.random() * 0.8 + 0.1) * window.innerWidth),
+      panY: Math.floor((Math.random() * 0.8 + 0.1) * window.innerHeight),
       alpha: 1,
     };
   }
@@ -147,7 +177,7 @@ export class TextLayer extends ContainerLayer {
     this.text = new Text({
       text: this.state.text,
       style: {
-        fontFamily: "Arial",
+        ...this.getFontData(),
         fontSize: this.state.fontSize,
         fill: this.state.color,
         align: "center",
@@ -156,6 +186,56 @@ export class TextLayer extends ContainerLayer {
     this.text.x = this.state.panX;
     this.text.y = this.state.panY;
     this.text.alpha = this.state.alpha;
+    this.text.anchor.set(0.5, 0.5);
     this.container.addChild(this.text);
+  }
+
+  getFontData(): {
+    fontFamily: string;
+    fontWeight: TextStyleFontWeight;
+    fontStyle: TextStyleFontStyle;
+  } {
+    console.log("FONT", this.state.font);
+    if (this.state.font === "Orbitron") {
+      return { fontFamily: "Orbitron", fontWeight: "400", fontStyle: "normal" };
+    } else if (this.state.font === "Permanent Marker") {
+      return {
+        fontFamily: "Permanent Marker",
+        fontWeight: "400",
+        fontStyle: "normal",
+      };
+    } else if (this.state.font === "Montserrat") {
+      return {
+        fontFamily: "Montserrat",
+        fontWeight: "100",
+        fontStyle: "normal",
+      };
+    } else if (this.state.font === "Noto") {
+      return {
+        fontFamily: "Noto Sans JP",
+        fontWeight: "400",
+        fontStyle: "normal",
+      };
+    } else if (this.state.font === "Caveat") {
+      return {
+        fontFamily: "Caveat",
+        fontWeight: "400",
+        fontStyle: "normal",
+      };
+    } else if (this.state.font === "NewNord") {
+      return {
+        fontFamily: "newnord",
+        fontWeight: "700",
+        fontStyle: "italic",
+      };
+    } else if (this.state.font === "Press Start") {
+      return {
+        fontFamily: "Press Start 2P",
+        fontWeight: "400",
+        fontStyle: "normal",
+      };
+    }
+    console.log("ARIALING");
+    return { fontFamily: "Arial", fontWeight: "400", fontStyle: "normal" };
   }
 }

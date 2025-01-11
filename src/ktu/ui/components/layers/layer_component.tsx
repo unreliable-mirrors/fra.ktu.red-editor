@@ -150,7 +150,7 @@ export class LayerComponent extends KTUComponent {
             {this.layer.state.name} - {this.layer.state.layerId}
           </div>
           <div className="icons">
-            <span onclick={() => this.handleUpClick()}>
+            <span onclick={(e) => this.handleUpClick(e)}>
               {DataStore.getInstance().getStore("layers").indexOf(this.layer) +
                 1 !=
               DataStore.getInstance().getStore("layers").length ? (
@@ -159,7 +159,7 @@ export class LayerComponent extends KTUComponent {
                 <></>
               )}
             </span>
-            <span onclick={() => this.handleDownClick()}>
+            <span onclick={(e) => this.handleDownClick(e)}>
               {DataStore.getInstance().getStore("layers").indexOf(this.layer) !=
               0 ? (
                 IconDown()
@@ -204,19 +204,35 @@ export class LayerComponent extends KTUComponent {
     this.layer.visible = !this.layer.visible;
     DataStore.getInstance().touch("layers");
   }
-  handleUpClick() {
-    EventDispatcher.getInstance().dispatchEvent(
-      "scene",
-      "moveUpLayer",
-      this.layer
-    );
+  handleUpClick(e: MouseEvent) {
+    if (e.shiftKey) {
+      EventDispatcher.getInstance().dispatchEvent(
+        "scene",
+        "moveToTopLayer",
+        this.layer
+      );
+    } else {
+      EventDispatcher.getInstance().dispatchEvent(
+        "scene",
+        "moveUpLayer",
+        this.layer
+      );
+    }
   }
-  handleDownClick() {
-    EventDispatcher.getInstance().dispatchEvent(
-      "scene",
-      "moveDownLayer",
-      this.layer
-    );
+  handleDownClick(e: MouseEvent) {
+    if (e.shiftKey) {
+      EventDispatcher.getInstance().dispatchEvent(
+        "scene",
+        "moveToBottomLayer",
+        this.layer
+      );
+    } else {
+      EventDispatcher.getInstance().dispatchEvent(
+        "scene",
+        "moveDownLayer",
+        this.layer
+      );
+    }
   }
   handleDuplicateClick() {
     EventDispatcher.getInstance().dispatchEvent(

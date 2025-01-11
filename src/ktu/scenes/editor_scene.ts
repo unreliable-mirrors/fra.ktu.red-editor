@@ -198,6 +198,20 @@ export class EditorScene extends BaseScene {
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
+      "moveToTopLayer",
+      (payload: ContainerLayer) => {
+        this.moveToTopLayer(payload);
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "moveToBottomLayer",
+      (payload: ContainerLayer) => {
+        this.moveToBottomLayer(payload);
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
       "moveUpShader",
       (payload: ShaderLayer) => {
         this.moveUpShader(payload);
@@ -391,6 +405,34 @@ export class EditorScene extends BaseScene {
       const otherLayer = this.layers[newIndex];
       this.layers.splice(newIndex, 0, this.layers.splice(index, 1)[0]);
       this.container.swapChildren(layer.container, otherLayer.container);
+    }
+    DataStore.getInstance().setStore("layers", this.layers);
+    if (!layer.active) {
+      this.activateLayer(layer);
+    }
+  }
+  moveToTopLayer(layer: ContainerLayer) {
+    console.log("MTT");
+    const index = this.layers.indexOf(layer);
+    if (index > -1) {
+      console.log("MTT I");
+      this.layers.splice(index, 1);
+      this.layers.push(layer);
+      this.container.removeChild(layer.container);
+      this.container.addChild(layer.container);
+    }
+    DataStore.getInstance().setStore("layers", this.layers);
+    if (!layer.active) {
+      this.activateLayer(layer);
+    }
+  }
+  moveToBottomLayer(layer: ContainerLayer) {
+    const index = this.layers.indexOf(layer);
+    if (index > 0) {
+      this.layers.splice(index, 1);
+      this.layers.unshift(layer);
+      this.container.removeChild(layer.container);
+      this.container.addChildAt(layer.container, 1);
     }
     DataStore.getInstance().setStore("layers", this.layers);
     if (!layer.active) {
