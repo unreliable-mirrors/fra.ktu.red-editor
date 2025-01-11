@@ -2,22 +2,15 @@ import { FederatedPointerEvent, Filter, Graphics, Ticker } from "pixi.js";
 import DataStore from "../ui/core/data_store";
 import EventDispatcher from "../ui/core/event_dispatcher";
 import { BaseScene } from "../../engine/scenes/base_scene";
-import { EditorLayerState, IEditorLayer } from "../layers/ieditor_layer";
-
-import {
-  BackgroundLayer,
-  BackgroundLayerState,
-} from "../layers/background_layer";
-import { ImageLayer, ImageLayerState } from "../layers/image_layer";
+import { ImageLayer } from "../layers/image_layer";
 import { ShaderLayer, ShaderState } from "../shaders/shader_layer";
 import { ContainerLayer, ContainerLayerState } from "../layers/container_layer";
-import { TextLayer, TextLayerState } from "../layers/text_layer";
-import { DrawLayer, DrawLayerState } from "../layers/draw_layer";
 import { downloadContent } from "../helpers/file";
 import { getStartingName } from "../helpers/sparkle";
 import { getShaderByName } from "../helpers/shaders";
 import { ASSETS_MAP, rebuildAssets } from "../helpers/assets";
 import { getLayerByName } from "../helpers/layers";
+import { IEditorLayer } from "../layers/ieditor_layer";
 
 export type EditorSceneState = {
   layers: ContainerLayerState[];

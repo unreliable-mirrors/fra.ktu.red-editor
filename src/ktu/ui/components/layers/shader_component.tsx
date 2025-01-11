@@ -7,9 +7,7 @@ import {
   IconClose,
   IconDown,
   IconDuplicate,
-  IconHidden,
   IconUp,
-  IconVisible,
 } from "../../../helpers/icons";
 import { ContainerLayer } from "../../../layers/container_layer";
 import DataStore from "../../core/data_store";
