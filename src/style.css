@@ -198,6 +198,9 @@ button {
   display: inline-block;
   margin: auto;
   height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .hintPanel svg {
@@ -223,7 +226,7 @@ button {
 .historyRow img {
   width: 100px;
   border-style: solid;
-  border-weight: 1px;
+  border-width: 1px;
 }
 .historyRow div {
   display: inline-block;

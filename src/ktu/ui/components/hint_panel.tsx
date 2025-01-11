@@ -9,6 +9,7 @@ import {
 import { BackgroundLayer } from "../../layers/background_layer";
 import { ContainerLayer } from "../../layers/container_layer";
 import { DrawLayer } from "../../layers/draw_layer";
+import { ImageLayer } from "../../layers/image_layer";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -32,6 +33,14 @@ export class HintPanel extends KTUComponent {
               </div>
               <div>
                 <strong>CTRL + ALT + J</strong>: Hide UI
+              </div>
+            </div>
+            <div className="tip">
+              <div>
+                <strong>CTRL + V</strong>: Paste Image in a new Image Layer
+              </div>
+              <div>
+                <strong>CTRL + V</strong>: Paste a Text in a new Text Layer
               </div>
             </div>
             <div className="tip"></div>
@@ -67,7 +76,7 @@ export class HintPanel extends KTUComponent {
         <>
           <div className="block">
             <h3>Draw Layer</h3>
-            <div>Draw cool stuff on Pixel style.</div>
+            <div className="tip">Draw cool stuff on Pixel style.</div>
           </div>
           <div className="block">
             <h3>Shortcuts</h3>
@@ -98,6 +107,40 @@ export class HintPanel extends KTUComponent {
             <div className="tip">
               <strong>Pixel Size</strong>: Resize keeping pixel-perfect style
             </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ContainerLayer &&
+      this.bindingData["activeLayer"].layerName() == ImageLayer.LAYER_NAME
+    ) {
+      content = (
+        <>
+          <div className="block">
+            <h3>Image Layer</h3>
+            <div className="tip">
+              Load cool Images and Videos into your thing!
+            </div>
+          </div>
+          <div className="block">
+            <h3>Shortcuts</h3>
+
+            <div className="tip">
+              <div>
+                <strong>CTRL + CLICK</strong>: Drag/Pan Layer
+              </div>
+            </div>
+          </div>
+          <div className="block">
+            <h3>Tips</h3>
+            <div className="tip">
+              All Images, Gifs and Videos are supported.
+            </div>
+            <div className="tip">Max Size 100mb per file.</div>
+            <div className="tip">
+              Copies of the same file, will be time synced.
+            </div>
+            <div className="tip">URLs without CORS will fail.</div>
           </div>
         </>
       );

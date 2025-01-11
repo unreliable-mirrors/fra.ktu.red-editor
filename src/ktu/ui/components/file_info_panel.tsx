@@ -11,7 +11,7 @@ export class FileInfoPanel extends KTUComponent {
   render(): Element {
     console.log("FIP RENDER", this.bindingData);
     return (
-      <div className="hintPanel">
+      <div className="filePanel">
         <h3>File Info</h3>
         <div>
           <span>Name: </span>
