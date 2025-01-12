@@ -29,12 +29,18 @@ export abstract class ContainerLayer implements IEditorLayer {
   active: boolean;
   shaders: ShaderLayer[];
   lastSize: Point;
+  absorbingLayer: boolean = false;
 
   public constructor(state?: ContainerLayerState) {
     this.container = new Container();
     this.active = false;
     this.shaders = [];
     this.layerId = getSecureIndex();
+
+    this.container.interactive = true;
+    this.container.on("pointerdown", (event: FederatedPointerEvent) =>
+      this.onClick(event)
+    );
 
     if (state) {
       this.state = {
@@ -53,6 +59,14 @@ export abstract class ContainerLayer implements IEditorLayer {
       console.log("CONST STATE", this.state);
     }
     this.lastSize = new Point(0, 0);
+  }
+
+  onClick(event: FederatedPointerEvent) {
+    console.log("CLICK", this);
+    EventDispatcher.getInstance().dispatchEvent("scene", "clickLayer", {
+      event: event,
+      layer: this,
+    });
   }
 
   abstract layerName(): string;

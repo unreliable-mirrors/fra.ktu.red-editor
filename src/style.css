@@ -12,6 +12,9 @@ body {
   font-weight: 400;
   font-style: normal;
   font-size: 14px;
+
+  scrollbar-color: #66ff66 #33333322;
+  scrollbar-width: thin;
 }
 
 h3 {
@@ -155,8 +158,6 @@ button {
 .layerListContainer {
   max-height: 60vh;
   overflow: auto;
-  scrollbar-color: #66ff66 #33333322;
-  scrollbar-width: thin;
 }
 .layerItem,
 .shaderItem {
@@ -227,8 +228,6 @@ button {
   white-space: nowrap;
   position: relative;
   width: 100%;
-  scrollbar-color: #66ff66 #33333322;
-  scrollbar-width: thin;
 }
 
 .hintPanel svg {
@@ -267,6 +266,11 @@ button {
   height: 100%;
   vertical-align: top;
   margin-right: 40px;
+}
+
+.filePanel {
+  max-height: 60vw;
+  overflow: auto;
 }
 
 .historyRow {

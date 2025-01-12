@@ -39,6 +39,8 @@ export class DrawLayer extends ContainerLayer {
   clickStart?: Point | null;
   stroke: Record<string, boolean>;
   declare state: DrawLayerState;
+  absorbingLayer: boolean = true;
+
   settings: DrawLayerSetting[] = [
     {
       field: "brush",

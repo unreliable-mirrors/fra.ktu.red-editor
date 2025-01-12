@@ -27,6 +27,7 @@ export abstract class ShaderLayer implements IEditorLayer {
   abstract fragment: string;
   abstract uniforms: UniformGroup;
   bindedLayer?: ILayer;
+  absorbingLayer: boolean = false;
 
   public constructor(state?: ShaderState) {
     this.layerId = getSecureIndex();

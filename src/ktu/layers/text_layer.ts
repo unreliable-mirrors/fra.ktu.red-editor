@@ -146,11 +146,9 @@ export class TextLayer extends ContainerLayer {
 
   pointerDown(event: FederatedPointerEvent): void {
     this.clicking = true;
-    if (event.ctrlKey || event.metaKey) {
-      this.panning = true;
-      this.panStart = new Point(this.state.panX, this.state.panY);
-      this.clickStart = new Point(event.globalX, event.globalY);
-    }
+    this.panning = true;
+    this.panStart = new Point(this.state.panX, this.state.panY);
+    this.clickStart = new Point(event.globalX, event.globalY);
   }
   pointerUp(): void {
     this.clicking = false;

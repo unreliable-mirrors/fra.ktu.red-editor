@@ -106,9 +106,11 @@ export class EditorScene extends BaseScene {
     });
 
     this.container.on("pointerdown", (event: FederatedPointerEvent) => {
-      console.log("CLICK HEIGHT", window.innerHeight);
-      this.activeLayer?.pointerDown(event);
+      if (this.activeLayer?.absorbingLayer) {
+        this.activeLayer?.pointerDown(event);
+      }
     });
+
     this.container.on("pointerup", (event: FederatedPointerEvent) => {
       this.activeLayer?.pointerUp(event);
     });
@@ -245,6 +247,18 @@ export class EditorScene extends BaseScene {
       "activateLayer",
       (payload: IEditorLayer) => {
         this.activateLayer(payload);
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "clickLayer",
+      (payload: { event: FederatedPointerEvent; layer: IEditorLayer }) => {
+        if (this.activeLayer === payload.layer) {
+          this.activeLayer.pointerDown(payload.event);
+        } else if (!this.activeLayer?.absorbingLayer) {
+          this.activateLayer(payload.layer);
+          this.activeLayer?.pointerDown(payload.event);
+        }
       }
     );
     EventDispatcher.getInstance().addEventListener(

@@ -19,6 +19,7 @@ export interface IEditorLayer extends ILayer {
   active: boolean;
   state: EditorLayerState;
   settings: EditorLayerSetting[];
+  absorbingLayer: boolean;
   pointerDown(event: FederatedPointerEvent): void;
   pointerUp(event: FederatedPointerEvent): void;
   pointerMove(event: FederatedPointerEvent): void;

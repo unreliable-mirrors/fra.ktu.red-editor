@@ -137,11 +137,9 @@ export class ImageLayer extends ContainerLayer {
 
   pointerDown(event: FederatedPointerEvent): void {
     this.clicking = true;
-    if (event.ctrlKey || event.metaKey) {
-      this.panning = true;
-      this.panStart = new Point(this.state.panX, this.state.panY);
-      this.clickStart = new Point(event.globalX, event.globalY);
-    }
+    this.panning = true;
+    this.panStart = new Point(this.state.panX, this.state.panY);
+    this.clickStart = new Point(event.globalX, event.globalY);
   }
   pointerUp(): void {
     this.clicking = false;
@@ -209,6 +207,9 @@ export class ImageLayer extends ContainerLayer {
       this.sprite = new Sprite();
       this.container.addChild(this.sprite);
     }
+
+    //this.sprite.interactive = true;
+    console.log("INTERACTIVE", this.sprite.interactive);
   }
 
   urlContentToDataUri(url: string): Promise<string> {
