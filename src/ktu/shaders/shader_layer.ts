@@ -14,6 +14,7 @@ import {
 import { getSecureIndex } from "../../engine/helpers/secure_index_helper";
 
 import vertex from "./defaultFilter.vert?raw";
+import { ILayer } from "../../engine/ilayer";
 
 export type ShaderState = EditorLayerState;
 
@@ -25,6 +26,7 @@ export abstract class ShaderLayer implements IEditorLayer {
   shader!: Filter;
   abstract fragment: string;
   abstract uniforms: UniformGroup;
+  bindedLayer?: ILayer;
 
   public constructor(state?: ShaderState) {
     this.layerId = getSecureIndex();
@@ -73,8 +75,9 @@ export abstract class ShaderLayer implements IEditorLayer {
   }
 
   //@ts-ignore
-  bind(container: Container): void {
+  bind(container: Container, layer?: ILayer): void {
     this.buildShader();
+    this.bindedLayer = layer;
   }
 
   unbind(): void {

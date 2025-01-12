@@ -14,27 +14,33 @@ export type ShortcutSetting = {
   metaKey: boolean;
 };
 export type ShortcutMeta = {
-  pcHint: string;
-  macHint: string;
+  keyHint: string;
   globalHint: string;
   command: string;
-  feature: string;
-  show: boolean;
   payload?: any;
 };
 export type ShortcutConfigSetting = {
   meta: ShortcutMeta;
   shortcuts: ShortcutSetting[];
 };
+
+export const ctrlKey = (): string => {
+  if (
+    navigator.platform.indexOf("Mac") === 0 ||
+    navigator.platform === "iPhone"
+  ) {
+    return "⌘";
+  } else {
+    return "CTRL";
+  }
+};
+
 export const SHORTCUTS: ShortcutConfigSetting[] = [
   {
     meta: {
-      feature: "global",
-      pcHint: "H",
-      macHint: "H",
+      keyHint: "H",
       globalHint: "Toggle Help",
       command: "toggleHints",
-      show: true,
     },
     shortcuts: [
       {
@@ -55,12 +61,9 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
   },
   {
     meta: {
-      feature: "global",
-      pcHint: "Tab",
-      macHint: "Tab",
+      keyHint: "Tab",
       globalHint: "Toggle UI",
       command: "toggleUI",
-      show: true,
     },
     shortcuts: [
       {
@@ -74,24 +77,18 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
   },
   {
     meta: {
-      feature: "global",
-      pcHint: "CTRL + V",
-      macHint: "⌘ + V",
+      keyHint: `${ctrlKey()} + V`,
       globalHint: "Paste Image",
       command: "PASTEIMAGE",
-      show: true,
     },
     shortcuts: [],
   },
   {
     meta: {
-      feature: "global",
-      pcHint: "1",
-      macHint: "1",
+      keyHint: "1",
       globalHint: "New Background Layer",
       command: "add_layer",
       payload: BackgroundLayer.LAYER_NAME,
-      show: false,
     },
     shortcuts: [
       {
@@ -105,13 +102,10 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
   },
   {
     meta: {
-      feature: "global",
-      pcHint: "2",
-      macHint: "2",
+      keyHint: "2",
       globalHint: "New Draw Layer",
       command: "add_layer",
       payload: DrawLayer.LAYER_NAME,
-      show: false,
     },
     shortcuts: [
       {
@@ -125,13 +119,10 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
   },
   {
     meta: {
-      feature: "global",
-      pcHint: "3",
-      macHint: "3",
+      keyHint: "3",
       globalHint: "New Background Layer",
       command: "add_layer",
       payload: ImageLayer.LAYER_NAME,
-      show: false,
     },
     shortcuts: [
       {
@@ -145,19 +136,98 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
   },
   {
     meta: {
-      feature: "global",
-      pcHint: "4",
-      macHint: "4",
+      keyHint: "4",
+
       globalHint: "New Background Layer",
       command: "add_layer",
       payload: TextLayer.LAYER_NAME,
-      show: false,
     },
     shortcuts: [
       {
         key: "4",
         ctrlKey: false,
         shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+    ],
+  },
+  {
+    meta: {
+      keyHint: "4",
+      globalHint: "New Background Layer",
+      command: "add_layer",
+      payload: TextLayer.LAYER_NAME,
+    },
+    shortcuts: [
+      {
+        key: "4",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+    ],
+  },
+  {
+    meta: {
+      keyHint: "PgUp",
+      globalHint: "Move Active Layer/Shader Up",
+      command: "moveUp",
+    },
+    shortcuts: [
+      {
+        key: "PageUp",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+    ],
+  },
+  {
+    meta: {
+      keyHint: "PgDown",
+      globalHint: "Move Active Layer/Shader Down",
+      command: "moveDown",
+    },
+    shortcuts: [
+      {
+        key: "PageDown",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+    ],
+  },
+  {
+    meta: {
+      keyHint: "Shift + PgUp",
+      globalHint: "Move Active Layer/Shader to Top",
+      command: "moveToTop",
+    },
+    shortcuts: [
+      {
+        key: "PageUp",
+        ctrlKey: false,
+        shiftKey: true,
+        altKey: false,
+        metaKey: false,
+      },
+    ],
+  },
+  {
+    meta: {
+      keyHint: "Shift + PgDown",
+      globalHint: "Move Active Layer/Shader to Bottom",
+      command: "moveToBottom",
+    },
+    shortcuts: [
+      {
+        key: "PageDown",
+        ctrlKey: false,
+        shiftKey: true,
         altKey: false,
         metaKey: false,
       },
@@ -180,35 +250,12 @@ for (const shortcutSetting of SHORTCUTS) {
 }
 
 export const getShortcutText = (command: string): Element => {
-  if (
-    navigator.platform.indexOf("Mac") === 0 ||
-    navigator.platform === "iPhone"
-  ) {
-    return (
-      <>
-        <strong>{SHORTCUTS_DICTIONARY[command].meta.macHint}</strong>:{" "}
-        {SHORTCUTS_DICTIONARY[command].meta.globalHint}
-      </>
-    );
-  } else {
-    return (
-      <>
-        <strong>{SHORTCUTS_DICTIONARY[command].meta.pcHint}</strong>:{" "}
-        {SHORTCUTS_DICTIONARY[command].meta.globalHint}
-      </>
-    );
-  }
-};
-
-export const ctrlKey = (): string => {
-  if (
-    navigator.platform.indexOf("Mac") === 0 ||
-    navigator.platform === "iPhone"
-  ) {
-    return "⌘";
-  } else {
-    return "CTRL";
-  }
+  return (
+    <>
+      <strong>{SHORTCUTS_DICTIONARY[command].meta.keyHint}</strong>:{" "}
+      {SHORTCUTS_DICTIONARY[command].meta.globalHint}
+    </>
+  );
 };
 
 export const listenKeyboardEvents = () => {

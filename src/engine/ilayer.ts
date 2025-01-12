@@ -6,7 +6,7 @@ export interface ILayer {
   set visible(value: boolean);
   get visible(): boolean;
 
-  bind(container: Container): void;
+  bind(container: Container, layer?: ILayer): void;
   unbind(): void;
   tick(time: Ticker): void;
 }

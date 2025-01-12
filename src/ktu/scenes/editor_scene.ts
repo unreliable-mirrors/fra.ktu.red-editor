@@ -204,6 +204,74 @@ export class EditorScene extends BaseScene {
         this.activateLayer(payload);
       }
     );
+    EventDispatcher.getInstance().addEventListener("scene", "moveUp", () => {
+      if (this.activeLayer) {
+        if (this.activeLayer instanceof ContainerLayer) {
+          this.moveUpLayer(this.activeLayer);
+        } else if (
+          this.activeLayer instanceof ShaderLayer &&
+          this.activeLayer.bindedLayer
+        ) {
+          (this.activeLayer.bindedLayer as ContainerLayer).moveUpShader(
+            this.activeLayer
+          );
+        } else {
+          this.moveUpShader(this.activeLayer as ShaderLayer);
+        }
+      }
+    });
+    EventDispatcher.getInstance().addEventListener("scene", "moveDown", () => {
+      if (this.activeLayer) {
+        if (this.activeLayer instanceof ContainerLayer) {
+          this.moveDownLayer(this.activeLayer);
+        } else if (
+          this.activeLayer instanceof ShaderLayer &&
+          this.activeLayer.bindedLayer
+        ) {
+          (this.activeLayer.bindedLayer as ContainerLayer).moveDownShader(
+            this.activeLayer
+          );
+        } else {
+          this.moveDownShader(this.activeLayer as ShaderLayer);
+        }
+      }
+    });
+    EventDispatcher.getInstance().addEventListener("scene", "moveToTop", () => {
+      if (this.activeLayer) {
+        if (this.activeLayer instanceof ContainerLayer) {
+          this.moveToTopLayer(this.activeLayer);
+        } else if (
+          this.activeLayer instanceof ShaderLayer &&
+          this.activeLayer.bindedLayer
+        ) {
+          (this.activeLayer.bindedLayer as ContainerLayer).moveToTopShader(
+            this.activeLayer
+          );
+        } else {
+          this.moveToTopShader(this.activeLayer as ShaderLayer);
+        }
+      }
+    });
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "moveToBottom",
+      () => {
+        if (this.activeLayer) {
+          if (this.activeLayer instanceof ContainerLayer) {
+            this.moveToBottomLayer(this.activeLayer);
+          } else if (
+            this.activeLayer instanceof ShaderLayer &&
+            this.activeLayer.bindedLayer
+          ) {
+            (this.activeLayer.bindedLayer as ContainerLayer).moveToBottomShader(
+              this.activeLayer
+            );
+          } else {
+            this.moveToBottomShader(this.activeLayer as ShaderLayer);
+          }
+        }
+      }
+    );
     EventDispatcher.getInstance().addEventListener(
       "scene",
       "moveUpLayer",
@@ -407,17 +475,15 @@ export class EditorScene extends BaseScene {
   }
   moveUpLayer(layer: ContainerLayer) {
     const index = this.layers.indexOf(layer);
-    if (index > -1) {
+    if (index > -1 && index < this.layers.length - 1) {
       const newIndex = index + 1;
       const otherLayer = this.layers[newIndex];
       this.layers.splice(newIndex, 0, this.layers.splice(index, 1)[0]);
       this.container.swapChildren(layer.container, otherLayer.container);
+      DataStore.getInstance().setStore("layers", this.layers);
     }
-    DataStore.getInstance().setStore("layers", this.layers);
     if (!layer.active) {
       this.activateLayer(layer);
-    } else {
-      this.deactivateLayer();
     }
   }
   moveDownLayer(layer: ContainerLayer) {
@@ -427,8 +493,8 @@ export class EditorScene extends BaseScene {
       const otherLayer = this.layers[newIndex];
       this.layers.splice(newIndex, 0, this.layers.splice(index, 1)[0]);
       this.container.swapChildren(layer.container, otherLayer.container);
+      DataStore.getInstance().setStore("layers", this.layers);
     }
-    DataStore.getInstance().setStore("layers", this.layers);
     if (!layer.active) {
       this.activateLayer(layer);
     }
@@ -436,14 +502,14 @@ export class EditorScene extends BaseScene {
   moveToTopLayer(layer: ContainerLayer) {
     console.log("MTT");
     const index = this.layers.indexOf(layer);
-    if (index > -1) {
+    if (index > -1 && index < this.layers.length - 1) {
       console.log("MTT I");
       this.layers.splice(index, 1);
       this.layers.push(layer);
       this.container.removeChild(layer.container);
       this.container.addChild(layer.container);
+      DataStore.getInstance().setStore("layers", this.layers);
     }
-    DataStore.getInstance().setStore("layers", this.layers);
     if (!layer.active) {
       this.activateLayer(layer);
     }
@@ -455,15 +521,15 @@ export class EditorScene extends BaseScene {
       this.layers.unshift(layer);
       this.container.removeChild(layer.container);
       this.container.addChildAt(layer.container, 1);
+      DataStore.getInstance().setStore("layers", this.layers);
     }
-    DataStore.getInstance().setStore("layers", this.layers);
     if (!layer.active) {
       this.activateLayer(layer);
     }
   }
   moveUpShader(shader: ShaderLayer) {
     const index = this.shaders.indexOf(shader);
-    if (index > -1) {
+    if (index > -1 && index < this.shaders.length - 1) {
       const newIndex = index + 1;
       const otherShader = this.shaders[newIndex];
       this.shaders.splice(newIndex, 0, this.shaders.splice(index, 1)[0]);
@@ -480,8 +546,8 @@ export class EditorScene extends BaseScene {
         }
         this.container.filters = filters;
       }
+      DataStore.getInstance().setStore("shaders", this.shaders);
     }
-    DataStore.getInstance().setStore("shaders", this.shaders);
     if (!shader.active) {
       this.activateLayer(shader);
     }
@@ -505,8 +571,50 @@ export class EditorScene extends BaseScene {
         }
         this.container.filters = filters;
       }
+      DataStore.getInstance().setStore("shaders", this.shaders);
     }
-    DataStore.getInstance().setStore("shaders", this.shaders);
+    if (!shader.active) {
+      this.activateLayer(shader);
+    }
+  }
+  moveToTopShader(shader: ShaderLayer) {
+    const index = this.shaders.indexOf(shader);
+    if (index > -1 && index < this.shaders.length - 1) {
+      this.shaders.splice(index, 1);
+      this.shaders.push(shader);
+      if (this.container.filters instanceof Array) {
+        const filters: Filter[] = [];
+        for (let i = 0; i < this.container.filters.length; i++) {
+          if (i !== index) {
+            filters.push(this.container.filters[i]);
+          }
+        }
+        filters.push(shader.shader);
+        this.container.filters = filters;
+      }
+      DataStore.getInstance().setStore("shaders", this.shaders);
+    }
+    if (!shader.active) {
+      this.activateLayer(shader);
+    }
+  }
+  moveToBottomShader(shader: ShaderLayer) {
+    const index = this.shaders.indexOf(shader);
+    if (index > 0) {
+      this.shaders.splice(index, 1);
+      this.shaders.unshift(shader);
+      if (this.container.filters instanceof Array) {
+        const filters: Filter[] = [];
+        for (let i = 0; i < this.container.filters.length; i++) {
+          if (i !== index) {
+            filters.push(this.container.filters[i]);
+          }
+        }
+        filters.unshift(shader.shader);
+        this.container.filters = filters;
+      }
+      DataStore.getInstance().setStore("shaders", this.shaders);
+    }
     if (!shader.active) {
       this.activateLayer(shader);
     }
@@ -528,6 +636,10 @@ export class EditorScene extends BaseScene {
     DataStore.getInstance().setStore("shaders", this.shaders);
     if (shader.active && this.shaders.length > 0) {
       this.activateLayer(this.shaders[0]);
+    } else if (shader.bindedLayer) {
+      this.activateLayer(shader.bindedLayer as IEditorLayer);
+    } else {
+      this.deactivateLayer();
     }
   }
   addGenericLayer(layerName: string, state?: ContainerLayerState) {

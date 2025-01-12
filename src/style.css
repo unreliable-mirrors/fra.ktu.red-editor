@@ -247,6 +247,7 @@ button {
   display: inline-block;
   height: 100%;
   vertical-align: top;
+  margin-right: 40px;
 }
 
 .historyRow {
