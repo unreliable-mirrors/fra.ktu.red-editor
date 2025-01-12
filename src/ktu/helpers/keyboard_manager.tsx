@@ -448,6 +448,15 @@ export const listenKeyboardEvents = () => {
 };
 
 export const keyboardExists = (): boolean => {
-  //@ts-ignore
-  return !!window.navigator.keyboard;
+  return !(
+    [
+      "iPad Simulator",
+      "iPhone Simulator",
+      "iPod Simulator",
+      "iPad",
+      "iPhone",
+      "iPod",
+    ].includes(navigator.platform) ||
+    navigator.userAgent.toLowerCase().indexOf("android") > -1
+  );
 };
