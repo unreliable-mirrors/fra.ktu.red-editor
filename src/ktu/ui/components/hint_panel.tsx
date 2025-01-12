@@ -28,7 +28,6 @@ import { ctrlKey, getShortcutText } from "../../helpers/keyboard_manager";
 export class HintPanel extends KTUComponent {
   render(): Element {
     let content = <></>;
-    console.log("BD", this.bindingData["hintsVisibility"]);
     if (
       !this.bindingData["activeLayer"] ||
       this.bindingData["showGeneralTips"]

@@ -63,6 +63,9 @@ export class MontecarloSampleShader extends ShaderLayer {
       this.state.refreshChance === 1 ||
       Math.random() < this.state.refreshChance
     ) {
+      if ((this.uniforms.uniforms.uTime as number) > 60) {
+        (this.uniforms.uniforms.uTime as number) = 0;
+      }
       this.uniforms.uniforms.uTime =
         (this.uniforms.uniforms.uTime as number) + time.elapsedMS / 1000;
     }

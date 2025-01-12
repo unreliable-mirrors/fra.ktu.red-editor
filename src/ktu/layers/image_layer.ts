@@ -116,21 +116,23 @@ export class ImageLayer extends ContainerLayer {
 
   defaultState(): ImageLayerState {
     return {
-      ...ImageLayer.DEFAULT_STATE,
+      ...ImageLayer.DEFAULT_STATE(),
       ...super.defaultState(),
       panX: Math.floor(Math.random() * 0.7 * window.innerWidth),
       panY: Math.floor(Math.random() * 0.7 * window.innerHeight),
     };
   }
 
-  static DEFAULT_STATE: ImageLayerState = {
-    ...ContainerLayer.DEFAULT_STATE,
-    name: ImageLayer.LAYER_NAME,
-    alpha: 1,
-    panX: 0,
-    panY: 0,
-    scale: 100,
-    imageHash: "",
+  static DEFAULT_STATE = (): ImageLayerState => {
+    return {
+      ...ContainerLayer.DEFAULT_STATE(),
+      name: ImageLayer.LAYER_NAME,
+      alpha: 1,
+      panX: 0,
+      panY: 0,
+      scale: 100,
+      imageHash: "",
+    };
   };
 
   pointerDown(event: FederatedPointerEvent): void {
@@ -162,6 +164,8 @@ export class ImageLayer extends ContainerLayer {
 
   unbind(): void {
     super.unbind();
+
+    this.sprite.destroy();
     if (this.state.imageHash) {
       freeAsset(this.state.imageHash, this.layerId);
     }

@@ -36,9 +36,11 @@ export abstract class ContainerLayer implements IEditorLayer {
         visible: state.visible,
         shaders: [],
       };
+      /*
       for (var shader of state.shaders) {
         this.addShaderFromState(shader.name, shader);
       }
+        */
     } else {
       this.state = this.defaultState();
       console.log("CONST STATE", this.state);
@@ -49,22 +51,24 @@ export abstract class ContainerLayer implements IEditorLayer {
 
   defaultState(): ContainerLayerState {
     console.log("SUPER DEFAULT", {
-      ...ContainerLayer.DEFAULT_STATE,
+      ...ContainerLayer.DEFAULT_STATE(),
       name: this.layerName(),
       layerId: this.layerId,
     });
     return {
-      ...ContainerLayer.DEFAULT_STATE,
+      ...ContainerLayer.DEFAULT_STATE(),
       name: this.layerName(),
       layerId: this.layerId,
     };
   }
 
-  static DEFAULT_STATE: ContainerLayerState = {
-    name: "",
-    layerId: 0,
-    visible: true,
-    shaders: [],
+  static DEFAULT_STATE = (): ContainerLayerState => {
+    return {
+      name: "",
+      layerId: 0,
+      visible: true,
+      shaders: [],
+    };
   };
 
   set visible(value: boolean) {
@@ -247,7 +251,14 @@ export abstract class ContainerLayer implements IEditorLayer {
   //@ts-ignore
   bind(container: Container): void {}
 
-  unbind(): void {}
+  unbind(): void {
+    for (const shader of this.shaders) {
+      shader.unbind();
+    }
+    this.container.removeChildren();
+    this.container.filters = [];
+    this.container.destroy();
+  }
 
   //@ts-ignore
   tick(time: Ticker): void {

@@ -314,7 +314,7 @@ export class EditorScene extends BaseScene {
               const payload: string = e.target!.result as string;
               console.log("URL", payload);
               this.addGenericLayer(ImageLayer.LAYER_NAME, {
-                ...ImageLayer.DEFAULT_STATE,
+                ...ImageLayer.DEFAULT_STATE(),
                 imageUrl: payload,
               });
             };

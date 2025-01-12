@@ -259,6 +259,43 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
       },
     ],
   },
+  {
+    meta: {
+      keyHint: `${ctrlKey()} + N`,
+      globalHint: "New File",
+      command: "newState",
+    },
+    shortcuts: [
+      {
+        key: "N",
+        ctrlKey: true,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+      {
+        key: "N",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: true,
+      },
+      {
+        key: "n",
+        ctrlKey: true,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+      {
+        key: "n",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: true,
+      },
+    ],
+  },
 ];
 
 export const INVERTED_SHORTCUTS: {

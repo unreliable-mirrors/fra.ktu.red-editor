@@ -8,7 +8,6 @@ import { AddLayerButtonComponent } from "./add_layer_button";
 
 export class LayersList extends KTUComponent {
   render(): Element {
-    console.log("LAYERS LIST RENDER", this.bindingData["layers"].length);
     const items: Element[] = [];
     const layerButtons: Element[] = [];
     for (const layerName of AVAILABLE_LAYER_NAMES) {

@@ -46,6 +46,13 @@ export class BackgroundLayer extends ContainerLayer {
         this.addShaderFromState(shader.name, shader);
       }
     }
+
+    console.log(
+      "CONSTRUCT",
+      state,
+      this.state.shaders.length,
+      this.state.shaders
+    );
   }
 
   layerName(): string {
