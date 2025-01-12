@@ -1,4 +1,4 @@
-import { Container, Graphics } from "pixi.js";
+import { Container, Graphics, Point, Ticker } from "pixi.js";
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import { getFunColor } from "../helpers/sparkle";
 
@@ -17,6 +17,8 @@ export class BackgroundLayer extends ContainerLayer {
   static LAYER_NAME: string = "background_layer";
   declare state: BackgroundLayerState;
   graphics: Graphics;
+  backgroundSize: Point;
+
   settings: BackgroundLayerSetting[] = [
     {
       field: "color",
@@ -40,6 +42,7 @@ export class BackgroundLayer extends ContainerLayer {
     super();
     this.graphics = new Graphics();
     this.container.addChild(this.graphics);
+    this.backgroundSize = new Point(window.innerWidth, window.innerHeight);
 
     if (state) {
       this.state = { ...this.state, color: state.color, alpha: state.alpha };
@@ -66,6 +69,17 @@ export class BackgroundLayer extends ContainerLayer {
       color: getFunColor(),
       alpha: 1,
     };
+  }
+
+  tick(time: Ticker): void {
+    super.tick(time);
+    if (
+      this.backgroundSize.x != window.innerWidth ||
+      this.backgroundSize.y != window.innerHeight
+    ) {
+      this.backgroundSize = new Point(window.innerWidth, window.innerHeight);
+      this.repaint();
+    }
   }
 
   bind(container: Container): void {

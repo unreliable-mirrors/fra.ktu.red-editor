@@ -13,6 +13,7 @@ import {
   MontecarloSampleShader,
   MontecarloSampleShaderState,
 } from "../shaders/montecarlo_sample/montecarlo_sample";
+import { NoBlackShader } from "../shaders/noblack/noblack_shader";
 import {
   PixelateShader,
   PixelateShaderState,
@@ -45,6 +46,7 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   VLinesShader,
   HLinesShader,
   GridShader,
+  NoBlackShader,
 ];
 
 export const AVAILABLE_SHADERS_MAP: Record<string, ShaderClass> =
@@ -80,6 +82,8 @@ export const getShaderByName = (
     return new HLinesShader(state as HLinesShaderState);
   } else if (shaderName === GridShader.SHADER_NAME) {
     return new GridShader(state as GridShaderState);
+  } else if (shaderName === NoBlackShader.SHADER_NAME) {
+    return new NoBlackShader(state as ShaderState);
   }
   return null;
 };

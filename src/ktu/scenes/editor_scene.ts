@@ -1,4 +1,11 @@
-import { FederatedPointerEvent, Filter, Graphics, Ticker } from "pixi.js";
+import {
+  FederatedPointerEvent,
+  Filter,
+  Graphics,
+  Point,
+  Rectangle,
+  Ticker,
+} from "pixi.js";
 import DataStore from "../ui/core/data_store";
 import EventDispatcher from "../ui/core/event_dispatcher";
 import { BaseScene } from "../../engine/scenes/base_scene";
@@ -33,19 +40,19 @@ export class EditorScene extends BaseScene {
   shaders: ShaderLayer[];
   metadata: EditorSceneMetadata;
   history: EditorSceneHistoryEntry[];
-  showGeneralTips: boolean;
+  lastSize: Point;
+  graphics: Graphics;
 
   public constructor() {
     super();
     this.layers = [];
     this.shaders = [];
     this.container.eventMode = "static";
+    this.graphics = new Graphics();
+    this.container.addChild(this.graphics);
     this.setupContainer();
-    this.showGeneralTips = false;
 
     listenKeyboardEvents();
-
-    DataStore.getInstance().setStore("showGeneralTips", this.showGeneralTips);
 
     this.metadata = { name: getStartingName(), timestamp: Date.now() };
     DataStore.getInstance().setStore("metadata", this.metadata);
@@ -53,6 +60,7 @@ export class EditorScene extends BaseScene {
     this.history = [];
     DataStore.getInstance().setStore("history", this.history);
 
+    this.lastSize = new Point(window.innerWidth, window.innerHeight);
     DataStore.getInstance().setStore("uiVisibility", true);
     DataStore.getInstance().setStore("hintsVisibility", true);
     console.log("INNERWIDTH", window.innerWidth);
@@ -65,10 +73,6 @@ export class EditorScene extends BaseScene {
       DataStore.getInstance().setStore("shadersVisibility", false);
       DataStore.getInstance().setStore("filesVisibility", false);
     }
-
-    setTimeout(() => {
-      this.newState();
-    }, 500);
 
     setInterval(async () => {
       let jsonState = JSON.stringify(this.getStateObject());
@@ -97,7 +101,15 @@ export class EditorScene extends BaseScene {
     }, 60000);
 
     Ticker.shared.add((time) => {
+      if (
+        this.lastSize.x != window.innerWidth ||
+        this.lastSize.y != window.innerHeight
+      ) {
+        this.lastSize = new Point(window.innerWidth, window.innerHeight);
+        this.setupContainer();
+      }
       for (const layer of this.layers) {
+        console.log("LAYER TICK", layer);
         layer.tick(time);
       }
       for (const shader of this.shaders) {
@@ -239,7 +251,10 @@ export class EditorScene extends BaseScene {
         const filename = this.metadata.name + ".png";
         const content = await DataStore.getInstance()
           .getStore("app")
-          .renderer.extract.base64(this.container);
+          .renderer.extract.base64({
+            target: this.container,
+            frame: new Rectangle(0, 0, window.innerWidth, innerHeight),
+          });
         downloadContent(filename, content);
       }
     );
@@ -258,13 +273,18 @@ export class EditorScene extends BaseScene {
           if (!this.activeLayer?.absorbingLayer) {
             this.activeLayer.pointerDown(payload.event);
           }
-        } else if (!this.activeLayer?.absorbingLayer) {
+        } else if (
+          !this.activeLayer?.absorbingLayer &&
+          !payload.event.ctrlKey
+        ) {
           if (!payload.layer.absorbingLayer || payload.event.ctrlKey) {
             this.activateLayer(payload.layer);
             if (!this.activeLayer?.absorbingLayer) {
               this.activeLayer?.pointerDown(payload.event);
             }
           }
+        } else {
+          this.activeLayer?.pointerDown(payload.event);
         }
       }
     );
@@ -395,9 +415,9 @@ export class EditorScene extends BaseScene {
   setupContainer() {
     const width = window.innerWidth;
     const height = window.innerHeight;
-    const g = new Graphics().rect(0, 0, width, height).fill(0xff0000);
-    g.alpha = 0;
-    this.container.addChild(g);
+    this.graphics.clear();
+    this.graphics.rect(0, 0, width, height).fill(0xff0000);
+    this.graphics.alpha = 0;
   }
   set visible(value: boolean) {
     this.container.visible = value;
@@ -441,6 +461,7 @@ export class EditorScene extends BaseScene {
     DataStore.getInstance().setStore("layers", this.layers);
 
     this.setupContainer();
+    this.container.addChild(this.graphics);
   }
 
   importState(payload: EditorSceneState, importing: boolean = false) {
@@ -467,8 +488,6 @@ export class EditorScene extends BaseScene {
     this.activeLayer.active = true;
     DataStore.getInstance().setStore("layers", this.layers);
     DataStore.getInstance().setStore("shaders", this.shaders);
-    this.showGeneralTips = false;
-    DataStore.getInstance().setStore("showGeneralTips", this.showGeneralTips);
   }
   deactivateLayer() {
     console.log("DEACTIVATE");

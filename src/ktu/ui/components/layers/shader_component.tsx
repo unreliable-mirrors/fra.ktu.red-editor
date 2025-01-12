@@ -33,6 +33,9 @@ export class ShaderComponent extends KTUComponent {
               <span>{setting.field}: </span>
               <input
                 type="color"
+                spellcheck="false"
+                autocomplete="off"
+                aria-autocomplete="none"
                 value={this.shader.state[setting.field]}
                 oninput={(e) => {
                   setting.onchange((e.target as HTMLInputElement).value);
@@ -46,6 +49,9 @@ export class ShaderComponent extends KTUComponent {
               <span>{setting.field}: </span>
               <input
                 type="number"
+                spellcheck="false"
+                autocomplete="off"
+                aria-autocomplete="none"
                 value={this.shader.state[setting.field]}
                 oninput={(e) => {
                   setting.onchange((e.target as HTMLInputElement).value);
@@ -59,6 +65,9 @@ export class ShaderComponent extends KTUComponent {
               <span>{setting.field}: </span>
               <input
                 type="number"
+                spellcheck="false"
+                autocomplete="off"
+                aria-autocomplete="none"
                 value={this.shader.state[setting.field]}
                 min="0"
                 max="1"
