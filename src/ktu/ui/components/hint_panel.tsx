@@ -140,7 +140,7 @@ export class HintPanel extends KTUComponent {
     ) {
       extraContent = (
         <>
-          <div className="block">
+          <div className="block extraLast">
             <h3>Background Layer</h3>
             <div className="tip">It's very, very big</div>
             <div className="tip">
@@ -199,7 +199,7 @@ export class HintPanel extends KTUComponent {
               </div>
             </div>
           </div>
-          <div className="block">
+          <div className="block extraLast">
             <h3>Tips</h3>
             <div className="tip">
               <div>Default Drawing Mode is weird on purpose.</div>
@@ -236,7 +236,7 @@ export class HintPanel extends KTUComponent {
           ) : (
             <></>
           )}
-          <div className="block">
+          <div className="block extraLast">
             <h3>Tips</h3>
             <div className="tip">
               All Images, Gifs and Videos are supported.
@@ -255,12 +255,12 @@ export class HintPanel extends KTUComponent {
     ) {
       extraContent = (
         <>
-          <div className="block">
+          <div className={`block ${!keyboardExists() ? "extraLast" : ""}`}>
             <h3>Text Layer</h3>
             <div className="tip">Put your heart into words.</div>
           </div>
           {keyboardExists() ? (
-            <div className="block">
+            <div className="block extraLast">
               <h3>Shortcuts</h3>
 
               <div className="tip">
@@ -280,12 +280,12 @@ export class HintPanel extends KTUComponent {
     ) {
       extraContent = (
         <>
-          <div className="block">
+          <div className={`block ${!keyboardExists() ? "extraLast" : ""}`}>
             <h3>Shape Layer</h3>
             <div className="tip">Three shapes is enough, right?.</div>
           </div>
           {keyboardExists() ? (
-            <div className="block">
+            <div className="block extraLast">
               <h3>Shortcuts</h3>
 
               <div className="tip">
@@ -309,7 +309,7 @@ export class HintPanel extends KTUComponent {
             <h3>Black & White Shader</h3>
             <div className="tip">See things how your grandparents did</div>
           </div>
-          <div className="block">
+          <div className="block extraLast">
             <h3>Attributes</h3>
 
             <div className="tip">
@@ -333,7 +333,7 @@ export class HintPanel extends KTUComponent {
               Makes everything look a bit polaroid. A bit reddish.
             </div>
           </div>
-          <div className="block">
+          <div className="block extraLast">
             <h3>Attributes</h3>
 
             <div className="tip">
@@ -355,7 +355,7 @@ export class HintPanel extends KTUComponent {
             <h3>Pixelate Shader</h3>
             <div className="tip">Turns everything into squares.</div>
           </div>
-          <div className="block">
+          <div className="block extraLast">
             <h3>Attributes</h3>
 
             <div className="tip">
@@ -378,7 +378,7 @@ export class HintPanel extends KTUComponent {
             <h3>Montecarlo Sampling Shader</h3>
             <div className="tip">Filters the image randomly.</div>
           </div>
-          <div className="block">
+          <div className="block extraLast">
             <h3>Attributes</h3>
 
             <div className="tip">
@@ -407,7 +407,7 @@ export class HintPanel extends KTUComponent {
               Separates Blue and Red channels to the sides. Like the 3D movies!
             </div>
           </div>
-          <div className="block">
+          <div className="block extraLast">
             <h3>Attributes</h3>
 
             <div className="tip">
@@ -433,7 +433,7 @@ export class HintPanel extends KTUComponent {
               Makes Dark Tones VERY DARK and Light Tones VERY BRIGHT.
             </div>
           </div>
-          <div className="block">
+          <div className="block extraLast">
             <h3>Attributes</h3>
 
             <div className="tip">
@@ -460,9 +460,7 @@ export class HintPanel extends KTUComponent {
               {`HIDE${keyboardExists() ? " (H)" : ""}`}
             </div>
             <div className="hintPanel">
-              <div id="extraContent" className="extraContent">
-                {extraContent}
-              </div>
+              {extraContent}
               {content}
             </div>
           </div>

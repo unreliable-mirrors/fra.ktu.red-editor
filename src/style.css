@@ -256,16 +256,12 @@ button {
   max-width: 400px;
   white-space: normal;
 }
-.hintPanel .extraContent {
+.hintPanel .extraLast {
   border-style: solid;
   border-width: 1px;
   border-left: 0;
   border-top: 0;
   border-bottom: 0;
-  display: inline-block;
-  height: 100%;
-  vertical-align: top;
-  margin-right: 40px;
 }
 
 .filePanel {
