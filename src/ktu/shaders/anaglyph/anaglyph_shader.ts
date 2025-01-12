@@ -2,7 +2,6 @@ import { Container, Point, UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import fragment from "./anaglyph_shader.frag?raw";
-import { ContainerLayer } from "../../layers/container_layer";
 import { ILayer } from "../../../engine/ilayer";
 
 export type AnaglyphShaderState = ShaderState & {

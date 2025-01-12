@@ -5,6 +5,7 @@ import {
 import { ContainerLayer, ContainerLayerState } from "../layers/container_layer";
 import { DrawLayer, DrawLayerState } from "../layers/draw_layer";
 import { ImageLayer, ImageLayerState } from "../layers/image_layer";
+import { ShapeLayer, ShapeLayerState } from "../layers/shape_layer";
 import { TextLayer, TextLayerState } from "../layers/text_layer";
 
 export type LayerClass = {
@@ -15,6 +16,7 @@ export const AVAILABLE_LAYERS: LayerClass[] = [
   DrawLayer,
   ImageLayer,
   TextLayer,
+  ShapeLayer,
 ];
 export const AVAILABLE_LAYER_NAMES: string[] = AVAILABLE_LAYERS.map(
   (e) => e.LAYER_NAME
@@ -32,6 +34,8 @@ export const getLayerByName = (
     return new ImageLayer(state as ImageLayerState);
   } else if (layerName === TextLayer.LAYER_NAME) {
     return new TextLayer(state as TextLayerState);
+  } else if (layerName === ShapeLayer.LAYER_NAME) {
+    return new ShapeLayer(state as ShapeLayerState);
   }
   return null;
 };

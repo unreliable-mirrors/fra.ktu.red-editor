@@ -1,5 +1,6 @@
-import { Color, Container, Graphics } from "pixi.js";
+import { Container, Graphics } from "pixi.js";
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
+import { getFunColor } from "../helpers/sparkle";
 
 export type BackgroundLayerState = ContainerLayerState & {
   color: string;
@@ -62,11 +63,7 @@ export class BackgroundLayer extends ContainerLayer {
   defaultState(): BackgroundLayerState {
     return {
       ...super.defaultState(),
-      color: new Color({
-        h: Math.floor(Math.random() * 360),
-        s: 100,
-        l: 53,
-      }).toHex(),
+      color: getFunColor(),
       alpha: 1,
     };
   }

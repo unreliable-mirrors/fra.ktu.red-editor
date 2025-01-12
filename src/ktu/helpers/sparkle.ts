@@ -1,3 +1,5 @@
+import { Color } from "pixi.js";
+
 const ADJECTIVES = [
   "abandoned",
   "able",
@@ -4738,4 +4740,12 @@ export const getStartingText = (): string => {
     " THE " +
     NOUNS[Math.floor(Math.random() * NOUNS.length)]
   );
+};
+
+export const getFunColor = (): string => {
+  return new Color({
+    h: Math.floor(Math.random() * 360),
+    s: 100,
+    l: 53,
+  }).toHex();
 };

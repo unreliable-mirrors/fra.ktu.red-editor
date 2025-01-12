@@ -59,8 +59,10 @@ export class KTUComponent extends HTMLElement {
   reRender() {
     this.innerHTML = "";
     this.appendChild(this.render());
+    this.afterRender();
   }
   render(): Element {
     return <></>;
   }
+  afterRender() {}
 }

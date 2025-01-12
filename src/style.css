@@ -1,4 +1,7 @@
 /*---GLOBAL---*/
+html {
+  scroll-behavior: smooth;
+}
 body {
   margin: 0;
   color: #66ff66;
@@ -133,7 +136,6 @@ button {
   width: 100%;
   text-align: left;
   z-index: 2;
-  height: 130px;
 }
 .panel {
   background-color: #111111cc;
@@ -209,20 +211,24 @@ button {
   border-radius: 10px 0 0 0;
 }
 .helpFloat {
+  font-family: "Orbitron", serif;
   position: absolute;
   top: 0px;
   right: 0px;
+  padding: 20px;
+  z-index: 10;
 }
 .hintPanel {
   font-family: "Orbitron", serif;
   display: inline-block;
   margin: auto;
   height: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: auto;
   white-space: nowrap;
   position: relative;
   width: 100%;
+  scrollbar-color: #66ff66 #33333322;
+  scrollbar-width: thin;
 }
 
 .hintPanel svg {
@@ -248,6 +254,13 @@ button {
   height: 100%;
   vertical-align: top;
   margin-right: 40px;
+}
+.hintPanel .extraContent {
+  border-style: solid;
+  border-width: 1px;
+  border-left: 0;
+  border-top: 0;
+  border-bottom: 0;
 }
 
 .historyRow {

@@ -6,6 +6,7 @@ import { ImageLayer } from "../layers/image_layer";
 import { TextLayer } from "../layers/text_layer";
 import EventDispatcher from "../ui/core/event_dispatcher";
 import DataStore from "../ui/core/data_store";
+import { ShapeLayer } from "../layers/shape_layer";
 
 export type ShortcutSetting = {
   key: string;
@@ -146,6 +147,24 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
     shortcuts: [
       {
         key: "4",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+    ],
+  },
+  {
+    meta: {
+      keyHint: "5",
+
+      globalHint: "New Shape Layer",
+      command: "add_layer",
+      payload: () => ShapeLayer.LAYER_NAME,
+    },
+    shortcuts: [
+      {
+        key: "5",
         ctrlKey: false,
         shiftKey: false,
         altKey: false,
