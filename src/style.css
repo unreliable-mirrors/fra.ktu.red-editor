@@ -254,6 +254,8 @@ button {
   height: 100%;
   vertical-align: top;
   margin-right: 40px;
+  max-width: 400px;
+  white-space: normal;
 }
 .hintPanel .extraContent {
   border-style: solid;
@@ -261,6 +263,10 @@ button {
   border-left: 0;
   border-top: 0;
   border-bottom: 0;
+  display: inline-block;
+  height: 100%;
+  vertical-align: top;
+  margin-right: 40px;
 }
 
 .historyRow {

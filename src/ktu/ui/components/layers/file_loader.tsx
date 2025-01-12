@@ -23,7 +23,14 @@ export class FileLoaderComponent extends KTUComponent {
   }
 
   render(): Element {
-    this.urlInput = <input type="text"></input>;
+    this.urlInput = (
+      <input
+        type="text"
+        spellcheck="false"
+        autocomplete="off"
+        aria-autocomplete="none"
+      ></input>
+    );
     this.urlElement = (
       <div class="hidden">
         <span>URL: </span>

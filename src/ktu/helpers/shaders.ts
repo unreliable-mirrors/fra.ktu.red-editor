@@ -11,6 +11,10 @@ import {
   PixelateShader,
   PixelateShaderState,
 } from "../shaders/pixelate/pixelate_shader";
+import {
+  PosterizeShader,
+  PosterizeShaderState,
+} from "../shaders/posterize/posterize_shader";
 import { ShaderLayer, ShaderState } from "../shaders/shader_layer";
 import {
   VintageShader,
@@ -26,6 +30,7 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   PixelateShader,
   MontecarloSampleShader,
   AnaglyphShader,
+  PosterizeShader,
 ];
 
 export const AVAILABLE_SHADERS_MAP: Record<string, ShaderClass> =
@@ -51,6 +56,8 @@ export const getShaderByName = (
     return new MontecarloSampleShader(state as MontecarloSampleShaderState);
   } else if (shaderName === AnaglyphShader.SHADER_NAME) {
     return new AnaglyphShader(state as AnaglyphShaderState);
+  } else if (shaderName === PosterizeShader.SHADER_NAME) {
+    return new PosterizeShader(state as PosterizeShaderState);
   }
   return null;
 };

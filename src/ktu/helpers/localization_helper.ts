@@ -5,6 +5,7 @@ const texts: Record<string, string> = {
   add_vintage_shader_button: "Vintage",
   add_montecarlo_sample_shader_button: "Montecarlo",
   add_anaglyph_shader_button: "Anaglyph",
+  add_posterize_shader_button: "Posterize",
 
   export_state: "Save File",
   import_state: "Import File",

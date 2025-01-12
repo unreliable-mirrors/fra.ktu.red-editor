@@ -7,7 +7,6 @@ import {
   IconDraw,
   IconDuplicate,
   IconImage,
-  IconLeft,
   IconShape,
   IconText,
   IconUp,
@@ -23,9 +22,10 @@ import { VintageShader } from "../../shaders/vintage/vintage_shader";
 import { PixelateShader } from "../../shaders/pixelate/pixelate_shader";
 import { MontecarloSampleShader } from "../../shaders/montecarlo_sample/montecarlo_sample";
 import EventDispatcher from "../core/event_dispatcher";
-import DataStore from "../core/data_store";
 import { ctrlKey, getShortcutText } from "../../helpers/keyboard_manager";
 import { ShapeLayer } from "../../layers/shape_layer";
+import { AnaglyphShader } from "../../shaders/anaglyph/anaglyph_shader";
+import { PosterizeShader } from "../../shaders/posterize/posterize_shader";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -371,6 +371,56 @@ export class HintPanel extends KTUComponent {
           </div>
         </>
       );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == AnaglyphShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>Anaglyph Shader</h3>
+            <div className="tip">
+              Separates Blue and Red channels to the sides. Like the 3D movies!
+            </div>
+          </div>
+          <div className="block">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Strength</strong>: How much far from the center you want
+                it. Technically it should be measured in pixels, but my math was
+                not good enough.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() ==
+        PosterizeShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>Posterize Shader</h3>
+            <div className="tip">
+              Makes Dark Tones VERY DARK and Light Tones VERY BRIGHT.
+            </div>
+          </div>
+          <div className="block">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Threshold</strong>: Move the cutting point, the higher
+                the Threshold, the darker the image.
+              </div>
+            </div>
+          </div>
+        </>
+      );
     }
     if (this.bindingData["hintsVisibility"]) {
       return (
@@ -386,7 +436,7 @@ export class HintPanel extends KTUComponent {
               HIDE (H)
             </div>
             <div className="hintPanel">
-              <div id="extraContent" className="block extraContent">
+              <div id="extraContent" className="extraContent">
                 {extraContent}
               </div>
               {content}
