@@ -34,7 +34,7 @@ export class KTUComponent extends HTMLElement {
 
   updateState() {
     for (const bindingKey of this.bindingKeys) {
-      if (DataStore.getInstance().getStore(bindingKey)) {
+      if (typeof DataStore.getInstance().getStore(bindingKey) !== "undefined") {
         this.bindingData[bindingKey] =
           DataStore.getInstance().getStore(bindingKey);
       } else

@@ -1,4 +1,5 @@
 import jsx from "texsaur";
+import EventDispatcher from "./core/event_dispatcher";
 
 export class EditorUI {
   anchor: HTMLElement;
@@ -36,25 +37,21 @@ export class EditorUI {
             <shaders-list binding="shaders"></shaders-list>
           </div>
         </div>
-        <div className="bottom-ui">
-          <div id="hintsPanel" className="panel bottom">
-            <hint-panel binding="activeLayer,showGeneralTips"></hint-panel>
-          </div>
-        </div>
+
+        <hint-panel binding="activeLayer,showGeneralTips,hintsVisibility"></hint-panel>
       </div>
     );
-    document.addEventListener("keyup", (e) => {
-      if (["j", "J"].includes(e.key) && e.ctrlKey && e.altKey) {
-        this.toggle("ui");
+    EventDispatcher.getInstance().addEventListener(
+      "uiVisibility",
+      "update",
+      () => {
+        this.toggle();
       }
-      if (["h", "H"].includes(e.key) && e.ctrlKey && e.altKey) {
-        this.toggle("hintsPanel");
-      }
-    });
+    );
   }
 
-  toggle(id: string) {
-    const ui = document.getElementById(id);
+  toggle() {
+    const ui = document.getElementById("ui");
     console.log("TOGGLE", ui?.className.includes("hidden"));
     if (ui?.className.includes("hidden")) {
       ui.className = ui.className.replace("hidden", "");

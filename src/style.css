@@ -124,7 +124,7 @@ button {
   right: 0;
   text-align: right;
   z-index: 2;
-  max-width: 310px;
+  max-width: 322px;
 }
 .bottom-ui {
   position: fixed;
@@ -147,8 +147,7 @@ button {
   border-radius: 10px 0 0 10px;
 }
 .panel.bottom {
-  border-radius: 10px 0 10px 0;
-  width: 100%;
+  border-radius: 10px 10px 0 0;
   height: 100%;
 }
 .layerListContainer {
@@ -200,6 +199,20 @@ button {
   display: none;
 }
 
+.helpTooltip {
+  position: fixed;
+  color: #66ff66;
+  bottom: 0px;
+  right: 0px;
+  z-index: 3;
+  font-family: "Orbitron", serif;
+  border-radius: 10px 0 0 0;
+}
+.helpFloat {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
 .hintPanel {
   font-family: "Orbitron", serif;
   display: inline-block;
@@ -208,10 +221,19 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  position: relative;
+  width: 100%;
 }
 
 .hintPanel svg {
   margin-right: 10px;
+}
+
+.hintPanel button {
+  margin-right: 10px;
+}
+.hintPanel button svg {
+  margin-right: 0px;
 }
 .hintPanel .spacer {
   height: 10px;
@@ -222,7 +244,6 @@ button {
   vertical-align: top;
 }
 .hintPanel .block {
-  margin-right: 40px;
   display: inline-block;
   height: 100%;
   vertical-align: top;

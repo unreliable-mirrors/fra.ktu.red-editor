@@ -135,7 +135,7 @@ export class ImageLayer extends ContainerLayer {
 
   pointerDown(event: FederatedPointerEvent): void {
     this.clicking = true;
-    if (event.ctrlKey) {
+    if (event.ctrlKey || event.metaKey) {
       this.panning = true;
       this.panStart = new Point(this.state.panX, this.state.panY);
       this.clickStart = new Point(event.globalX, event.globalY);

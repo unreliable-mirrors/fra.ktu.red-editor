@@ -7,6 +7,7 @@ import {
   IconDraw,
   IconDuplicate,
   IconImage,
+  IconLeft,
   IconText,
   IconUp,
 } from "../../helpers/icons";
@@ -20,11 +21,14 @@ import { BnwShader } from "../../shaders/bnw/bnw_shader";
 import { VintageShader } from "../../shaders/vintage/vintage_shader";
 import { PixelateShader } from "../../shaders/pixelate/pixelate_shader";
 import { MontecarloSampleShader } from "../../shaders/montecarlo_sample/montecarlo_sample";
+import EventDispatcher from "../core/event_dispatcher";
+import DataStore from "../core/data_store";
+import { ctrlKey, getShortcutText } from "../../helpers/keyboard_manager";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
     let content = <></>;
-    console.log("BD", this.bindingData["activeLayer"]);
+    console.log("BD", this.bindingData["hintsVisibility"]);
     if (
       !this.bindingData["activeLayer"] ||
       this.bindingData["showGeneralTips"]
@@ -34,12 +38,52 @@ export class HintPanel extends KTUComponent {
           <div className="block">
             <h3>Layer Types</h3>
             <div className="tip">
-              <div>{IconBackground()} Background</div>
-              <div>{IconImage()} Image/Video</div>
+              <div
+                onclick={() =>
+                  EventDispatcher.getInstance().dispatchEvent(
+                    "scene",
+                    "add_layer",
+                    BackgroundLayer.LAYER_NAME
+                  )
+                }
+              >
+                {IconBackground()} Background (1)
+              </div>
+              <div
+                onclick={() =>
+                  EventDispatcher.getInstance().dispatchEvent(
+                    "scene",
+                    "add_layer",
+                    DrawLayer.LAYER_NAME
+                  )
+                }
+              >
+                {IconImage()} Image/Video (3)
+              </div>
             </div>
             <div className="tip">
-              <div>{IconDraw()} Draw</div>
-              <div>{IconText()} Text</div>
+              <div
+                onclick={() =>
+                  EventDispatcher.getInstance().dispatchEvent(
+                    "scene",
+                    "add_layer",
+                    DrawLayer.LAYER_NAME
+                  )
+                }
+              >
+                {IconDraw()} Draw (2)
+              </div>
+              <div
+                onclick={() =>
+                  EventDispatcher.getInstance().dispatchEvent(
+                    "scene",
+                    "add_layer",
+                    TextLayer.LAYER_NAME
+                  )
+                }
+              >
+                {IconText()} Text (4)
+              </div>
             </div>
           </div>
           <div className="block">
@@ -56,15 +100,9 @@ export class HintPanel extends KTUComponent {
           <div className="block">
             <h3>Shortcuts</h3>
             <div className="tip">
-              <div>
-                <strong>CTRL + ALT + H</strong>: Hide Hints
-              </div>
-              <div>
-                <strong>CTRL + ALT + J</strong>: Hide UI
-              </div>
-              <div>
-                <strong>CTRL + V</strong>: Paste Image in a new Image Layer
-              </div>
+              <div>{getShortcutText("toggleHints")}</div>
+              <div>{getShortcutText("toggleUI")}</div>
+              <div>{getShortcutText("PASTEIMAGE")}</div>
             </div>
           </div>
           <div className="block">
@@ -82,6 +120,16 @@ export class HintPanel extends KTUComponent {
       content = (
         <>
           <div className="block">
+            <button
+              className="iconButton"
+              onclick={() =>
+                DataStore.getInstance().setStore("showGeneralTips", true)
+              }
+            >
+              {IconLeft()}
+            </button>
+          </div>
+          <div className="block">
             <h3>Background Layer</h3>
             <div className="tip">It's very, very big</div>
             <div className="tip">
@@ -96,6 +144,16 @@ export class HintPanel extends KTUComponent {
     ) {
       content = (
         <>
+          <div className="block">
+            <button
+              className="iconButton"
+              onclick={() =>
+                DataStore.getInstance().setStore("showGeneralTips", true)
+              }
+            >
+              {IconLeft()}
+            </button>
+          </div>
           <div className="block">
             <h3>Draw Layer</h3>
             <div className="tip">Draw cool stuff on Pixel style.</div>
@@ -115,7 +173,7 @@ export class HintPanel extends KTUComponent {
                 <strong>Normal Mode</strong>
               </div>
               <div>
-                <strong>CTRL + CLICK</strong>: Drag/Pan Layer
+                <strong>{ctrlKey()} + CLICK</strong>: Drag/Pan Layer
               </div>
             </div>
           </div>
@@ -155,6 +213,16 @@ export class HintPanel extends KTUComponent {
       content = (
         <>
           <div className="block">
+            <button
+              className="iconButton"
+              onclick={() =>
+                DataStore.getInstance().setStore("showGeneralTips", true)
+              }
+            >
+              {IconLeft()}
+            </button>
+          </div>
+          <div className="block">
             <h3>Image Layer</h3>
             <div className="tip">
               Load cool Images and Videos into your thing!
@@ -165,7 +233,7 @@ export class HintPanel extends KTUComponent {
 
             <div className="tip">
               <div>
-                <strong>CTRL + CLICK</strong>: Drag/Pan Layer
+                <strong>{ctrlKey()} + CLICK</strong>: Drag/Pan Layer
               </div>
             </div>
           </div>
@@ -189,6 +257,16 @@ export class HintPanel extends KTUComponent {
       content = (
         <>
           <div className="block">
+            <button
+              className="iconButton"
+              onclick={() =>
+                DataStore.getInstance().setStore("showGeneralTips", true)
+              }
+            >
+              {IconLeft()}
+            </button>
+          </div>
+          <div className="block">
             <h3>Text Layer</h3>
             <div className="tip">Put your heart into words.</div>
           </div>
@@ -197,7 +275,7 @@ export class HintPanel extends KTUComponent {
 
             <div className="tip">
               <div>
-                <strong>CTRL + CLICK</strong>: Drag/Pan Layer
+                <strong>{ctrlKey()} + CLICK</strong>: Drag/Pan Layer
               </div>
             </div>
           </div>
@@ -209,6 +287,16 @@ export class HintPanel extends KTUComponent {
     ) {
       content = (
         <>
+          <div className="block">
+            <button
+              className="iconButton"
+              onclick={() =>
+                DataStore.getInstance().setStore("showGeneralTips", true)
+              }
+            >
+              {IconLeft()}
+            </button>
+          </div>
           <div className="block">
             <h3>Black & White Shader</h3>
             <div className="tip">See things how your grandparents did</div>
@@ -231,6 +319,16 @@ export class HintPanel extends KTUComponent {
     ) {
       content = (
         <>
+          <div className="block">
+            <button
+              className="iconButton"
+              onclick={() =>
+                DataStore.getInstance().setStore("showGeneralTips", true)
+              }
+            >
+              {IconLeft()}
+            </button>
+          </div>
           <div className="block">
             <h3>Vintage Shader</h3>
             <div className="tip">
@@ -256,6 +354,16 @@ export class HintPanel extends KTUComponent {
       content = (
         <>
           <div className="block">
+            <button
+              className="iconButton"
+              onclick={() =>
+                DataStore.getInstance().setStore("showGeneralTips", true)
+              }
+            >
+              {IconLeft()}
+            </button>
+          </div>
+          <div className="block">
             <h3>Pixelate Shader</h3>
             <div className="tip">Turns everything into squares.</div>
           </div>
@@ -279,6 +387,16 @@ export class HintPanel extends KTUComponent {
       content = (
         <>
           <div className="block">
+            <button
+              className="iconButton"
+              onclick={() =>
+                DataStore.getInstance().setStore("showGeneralTips", true)
+              }
+            >
+              {IconLeft()}
+            </button>
+          </div>
+          <div className="block">
             <h3>Montecarlo Sampling Shader</h3>
             <div className="tip">Filters the image randomly.</div>
           </div>
@@ -300,11 +418,34 @@ export class HintPanel extends KTUComponent {
         </>
       );
     }
-    return <div className="hintPanel">{content}</div>;
+    if (this.bindingData["hintsVisibility"]) {
+      return (
+        <div className="bottom-ui">
+          <div id="hintsPanel" className="panel bottom">
+            <div className="hintPanel">
+              <div className="helpFloat" onclick={() => this.helpClick()}>
+                HIDE (H)
+              </div>
+              {content}
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="panel helpTooltip" onclick={() => this.helpClick()}>
+          HELP (H)
+        </div>
+      );
+    }
+  }
+
+  helpClick() {
+    EventDispatcher.getInstance().dispatchEvent("scene", "toggleHints", {});
   }
 
   defaultBinding() {
-    return { showGeneralTips: false };
+    return { showGeneralTips: false, hintsVisibility: false };
   }
 }
 

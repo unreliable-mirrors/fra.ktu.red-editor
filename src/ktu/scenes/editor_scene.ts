@@ -11,6 +11,7 @@ import { getShaderByName } from "../helpers/shaders";
 import { ASSETS_MAP, rebuildAssets } from "../helpers/assets";
 import { getLayerByName } from "../helpers/layers";
 import { IEditorLayer } from "../layers/ieditor_layer";
+import { listenKeyboardEvents } from "../helpers/keyboard_manager";
 
 export type EditorSceneState = {
   layers: ContainerLayerState[];
@@ -41,6 +42,9 @@ export class EditorScene extends BaseScene {
     this.container.eventMode = "static";
     this.setupContainer();
     this.showGeneralTips = false;
+
+    listenKeyboardEvents();
+
     DataStore.getInstance().setStore("showGeneralTips", this.showGeneralTips);
 
     this.metadata = { name: getStartingName(), timestamp: Date.now() };
@@ -49,10 +53,12 @@ export class EditorScene extends BaseScene {
     this.history = [];
     DataStore.getInstance().setStore("history", this.history);
 
-    setInterval(() => {
-      this.showGeneralTips = !this.showGeneralTips;
-      DataStore.getInstance().setStore("showGeneralTips", this.showGeneralTips);
-    }, 60000);
+    DataStore.getInstance().setStore("uiVisibility", true);
+    DataStore.getInstance().setStore("hintsVisibility", true);
+
+    setTimeout(() => {
+      this.newState();
+    }, 500);
 
     setInterval(async () => {
       let jsonState = JSON.stringify(this.getStateObject());
@@ -103,6 +109,22 @@ export class EditorScene extends BaseScene {
       this.activeLayer?.pointerMove(event);
     });
 
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "toggleHints",
+      () => {
+        DataStore.getInstance().setStore(
+          "hintsVisibility",
+          !DataStore.getInstance().getStore("hintsVisibility")
+        );
+      }
+    );
+    EventDispatcher.getInstance().addEventListener("scene", "toggleUI", () => {
+      DataStore.getInstance().setStore(
+        "uiVisibility",
+        !DataStore.getInstance().getStore("uiVisibility")
+      );
+    });
     EventDispatcher.getInstance().addEventListener(
       "scene",
       "add_layer",
@@ -249,7 +271,7 @@ export class EditorScene extends BaseScene {
     document.addEventListener(
       "contextmenu",
       (e) => {
-        if (!e.ctrlKey) {
+        if (!e.ctrlKey || e.metaKey) {
           e.preventDefault();
         }
       },

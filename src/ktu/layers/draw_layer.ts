@@ -154,7 +154,7 @@ export class DrawLayer extends ContainerLayer {
       this.erasing = true;
     } else if (event.shiftKey) {
       this.hardPainting = true;
-    } else if (event.ctrlKey) {
+    } else if (event.ctrlKey || event.metaKey) {
       this.panning = true;
       this.panStart = new Point(this.state.panX, this.state.panY);
       this.clickStart = new Point(event.globalX, event.globalY);
