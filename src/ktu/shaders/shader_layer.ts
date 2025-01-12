@@ -84,6 +84,8 @@ export abstract class ShaderLayer implements IEditorLayer {
     //TODO: REMOVE PROPERLY
   }
 
+  resize(container: Container): void {}
+
   //@ts-ignore
   tick(time: Ticker): void {}
 

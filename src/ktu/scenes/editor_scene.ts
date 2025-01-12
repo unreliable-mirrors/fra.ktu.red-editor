@@ -217,7 +217,7 @@ export class EditorScene extends BaseScene {
           } else if (layer instanceof ShaderLayer && layer.bindedLayer) {
             (layer.bindedLayer as ContainerLayer).moveUpShader(layer);
           } else {
-            this.moveUpShader(this.activeLayer as ShaderLayer);
+            this.moveUpShader(layer as ShaderLayer);
           }
         }
       }
@@ -233,7 +233,7 @@ export class EditorScene extends BaseScene {
           } else if (layer instanceof ShaderLayer && layer.bindedLayer) {
             (layer.bindedLayer as ContainerLayer).moveDownShader(layer);
           } else {
-            this.moveDownShader(this.activeLayer as ShaderLayer);
+            this.moveDownShader(layer as ShaderLayer);
           }
         }
       }
@@ -248,7 +248,7 @@ export class EditorScene extends BaseScene {
           } else if (layer instanceof ShaderLayer && layer.bindedLayer) {
             (layer.bindedLayer as ContainerLayer).moveToTopShader(layer);
           } else {
-            this.moveToTopShader(this.activeLayer as ShaderLayer);
+            this.moveToTopShader(layer as ShaderLayer);
           }
         }
       }
@@ -263,7 +263,7 @@ export class EditorScene extends BaseScene {
           } else if (layer instanceof ShaderLayer && layer.bindedLayer) {
             (layer.bindedLayer as ContainerLayer).moveToBottomShader(layer);
           } else {
-            this.moveToBottomShader(this.activeLayer as ShaderLayer);
+            this.moveToBottomShader(layer as ShaderLayer);
           }
         }
       }
@@ -507,6 +507,7 @@ export class EditorScene extends BaseScene {
     }
   }
   moveDownShader(shader: ShaderLayer) {
+    console.log("UNTIL HERE", shader);
     const index = this.shaders.indexOf(shader);
     if (index > 0) {
       const newIndex = index - 1;

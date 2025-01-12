@@ -1,3 +1,7 @@
+import {
+  AnaglyphShader,
+  AnaglyphShaderState,
+} from "../shaders/anaglyph/anaglyph_shader";
 import { BnwShader, BnwShaderState } from "../shaders/bnw/bnw_shader";
 import {
   MontecarloSampleShader,
@@ -21,6 +25,7 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   VintageShader,
   PixelateShader,
   MontecarloSampleShader,
+  AnaglyphShader,
 ];
 
 export const AVAILABLE_SHADERS_MAP: Record<string, ShaderClass> =
@@ -44,6 +49,8 @@ export const getShaderByName = (
     return new PixelateShader(state as PixelateShaderState);
   } else if (shaderName === MontecarloSampleShader.SHADER_NAME) {
     return new MontecarloSampleShader(state as MontecarloSampleShaderState);
+  } else if (shaderName === AnaglyphShader.SHADER_NAME) {
+    return new AnaglyphShader(state as AnaglyphShaderState);
   }
   return null;
 };

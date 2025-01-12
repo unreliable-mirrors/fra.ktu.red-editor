@@ -1,4 +1,10 @@
-import { Container, FederatedPointerEvent, Filter, Ticker } from "pixi.js";
+import {
+  Container,
+  FederatedPointerEvent,
+  Filter,
+  Point,
+  Ticker,
+} from "pixi.js";
 import {
   EditorLayerSetting,
   EditorLayerState,
@@ -22,6 +28,7 @@ export abstract class ContainerLayer implements IEditorLayer {
   abstract settings: EditorLayerSetting[];
   active: boolean;
   shaders: ShaderLayer[];
+  lastSize: Point;
 
   public constructor(state?: ContainerLayerState) {
     this.container = new Container();
@@ -45,6 +52,7 @@ export abstract class ContainerLayer implements IEditorLayer {
       this.state = this.defaultState();
       console.log("CONST STATE", this.state);
     }
+    this.lastSize = new Point(0, 0);
   }
 
   abstract layerName(): string;
@@ -262,6 +270,15 @@ export abstract class ContainerLayer implements IEditorLayer {
 
   //@ts-ignore
   tick(time: Ticker): void {
+    if (
+      this.lastSize.x != this.container.width ||
+      this.lastSize.y != this.container.height
+    ) {
+      this.lastSize = new Point(this.container.width, this.container.height);
+      for (const shader of this.shaders) {
+        shader.resize(this.container);
+      }
+    }
     for (const shader of this.shaders) {
       shader.tick(time);
     }
