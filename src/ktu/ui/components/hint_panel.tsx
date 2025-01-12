@@ -30,6 +30,10 @@ import {
 import { ShapeLayer } from "../../layers/shape_layer";
 import { AnaglyphShader } from "../../shaders/anaglyph/anaglyph_shader";
 import { PosterizeShader } from "../../shaders/posterize/posterize_shader";
+import { DotsShader } from "../../shaders/dots/dots_shader";
+import { VLinesShader } from "../../shaders/vLines/vLines_shader";
+import { HLinesShader } from "../../shaders/HLines/hLines_shader";
+import { GridShader } from "../../shaders/grid/grid_shader";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -440,6 +444,99 @@ export class HintPanel extends KTUComponent {
               <div>
                 <strong>Threshold</strong>: Move the cutting point, the higher
                 the Threshold, the darker the image.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == DotsShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>Dots Shader</h3>
+            <div className="tip">
+              Allows only a small grid of dots to pass through.
+            </div>
+          </div>
+          <div className="block extraLast">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Size</strong>: Distance between the dots.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == VLinesShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>vLines Shader</h3>
+            <div className="tip">
+              Allows only a bunch of vertical lines to pass through.
+            </div>
+          </div>
+          <div className="block extraLast">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Size</strong>: Distance between the lines.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == HLinesShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>hLines Shader</h3>
+            <div className="tip">
+              Allows only a bunch of horizontal lines to pass through.
+            </div>
+          </div>
+          <div className="block extraLast">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Size</strong>: Distance between the lines.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == GridShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>Grid Shader</h3>
+            <div className="tip">
+              Allows only a bunch of vertical AND horizontal lines to pass
+              through.
+            </div>
+          </div>
+          <div className="block extraLast">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Size</strong>: Distance between the lines.
               </div>
             </div>
           </div>

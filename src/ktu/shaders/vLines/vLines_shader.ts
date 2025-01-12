@@ -1,26 +1,26 @@
 import { Container, Point, UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
-import fragment from "./pixelate_shader.frag?raw";
+import fragment from "./vlines_shader.frag?raw";
 
-export type PixelateShaderState = ShaderState & {
+export type VLinesShaderState = ShaderState & {
   pixelSize: number;
 };
 
-export type PixelateShaderSetting = {
-  field: "pixelSize";
+export type VLinesShaderSetting = {
+  field: "size";
   type: "integer";
   onchange: (value: string) => void;
 };
 
-export class PixelateShader extends ShaderLayer {
-  static SHADER_NAME: string = "pixelate_shader";
-  declare state: PixelateShaderState;
+export class VLinesShader extends ShaderLayer {
+  static SHADER_NAME: string = "vlines_shader";
+  declare state: VLinesShaderState;
   fragment: string = fragment;
   container!: Container;
-  settings: PixelateShaderSetting[] = [
+  settings: VLinesShaderSetting[] = [
     {
-      field: "pixelSize",
+      field: "size",
       type: "integer",
       onchange: (value) => {
         this.state.pixelSize = parseInt(value);
@@ -31,7 +31,7 @@ export class PixelateShader extends ShaderLayer {
   ];
   uniforms: UniformGroup;
 
-  constructor(state?: PixelateShaderState) {
+  constructor(state?: VLinesShaderState) {
     super();
     console.log("CONSTRUCTOR", state, this.state);
     if (state) {
@@ -52,10 +52,10 @@ export class PixelateShader extends ShaderLayer {
   }
 
   shaderName(): string {
-    return PixelateShader.SHADER_NAME;
+    return VLinesShader.SHADER_NAME;
   }
 
-  defaultState(): PixelateShaderState {
+  defaultState(): VLinesShaderState {
     return {
       ...super.defaultState(),
       pixelSize: 15,
@@ -76,7 +76,7 @@ export class PixelateShader extends ShaderLayer {
     if (this.container.width > 0) {
       this.uniforms.uniforms.uSize = new Point(
         this.container.width,
-        this.container.width
+        this.container.height
       );
     }
   }

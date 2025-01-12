@@ -1,26 +1,26 @@
 import { Container, Point, UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
-import fragment from "./pixelate_shader.frag?raw";
+import fragment from "./grid_shader.frag?raw";
 
-export type PixelateShaderState = ShaderState & {
+export type GridShaderState = ShaderState & {
   pixelSize: number;
 };
 
-export type PixelateShaderSetting = {
-  field: "pixelSize";
+export type GridShaderSetting = {
+  field: "size";
   type: "integer";
   onchange: (value: string) => void;
 };
 
-export class PixelateShader extends ShaderLayer {
-  static SHADER_NAME: string = "pixelate_shader";
-  declare state: PixelateShaderState;
+export class GridShader extends ShaderLayer {
+  static SHADER_NAME: string = "grid_shader";
+  declare state: GridShaderState;
   fragment: string = fragment;
   container!: Container;
-  settings: PixelateShaderSetting[] = [
+  settings: GridShaderSetting[] = [
     {
-      field: "pixelSize",
+      field: "size",
       type: "integer",
       onchange: (value) => {
         this.state.pixelSize = parseInt(value);
@@ -31,7 +31,7 @@ export class PixelateShader extends ShaderLayer {
   ];
   uniforms: UniformGroup;
 
-  constructor(state?: PixelateShaderState) {
+  constructor(state?: GridShaderState) {
     super();
     console.log("CONSTRUCTOR", state, this.state);
     if (state) {
@@ -52,10 +52,10 @@ export class PixelateShader extends ShaderLayer {
   }
 
   shaderName(): string {
-    return PixelateShader.SHADER_NAME;
+    return GridShader.SHADER_NAME;
   }
 
-  defaultState(): PixelateShaderState {
+  defaultState(): GridShaderState {
     return {
       ...super.defaultState(),
       pixelSize: 15,
@@ -76,7 +76,7 @@ export class PixelateShader extends ShaderLayer {
     if (this.container.width > 0) {
       this.uniforms.uniforms.uSize = new Point(
         this.container.width,
-        this.container.width
+        this.container.height
       );
     }
   }
