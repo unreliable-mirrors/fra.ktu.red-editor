@@ -159,18 +159,21 @@ export class EditorScene extends BaseScene {
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
-      "duplicateLayer",
-      (payload: ContainerLayer) => {
+      "duplicate",
+      (payload: IEditorLayer) => {
         const state = JSON.parse(JSON.stringify(payload.state));
-        this.addGenericLayer(state.name, state);
-      }
-    );
-    EventDispatcher.getInstance().addEventListener(
-      "scene",
-      "duplicateShader",
-      (payload: ShaderLayer) => {
-        const state = JSON.parse(JSON.stringify(payload.state));
-        this.addGenericShader(state.name, state);
+        if (payload instanceof ContainerLayer) {
+          this.addGenericLayer(state.name, state);
+        } else if (payload instanceof ShaderLayer) {
+          if (payload.bindedLayer) {
+            (payload.bindedLayer as ContainerLayer).addGenericShader(
+              state.name,
+              state
+            );
+          } else {
+            this.addGenericShader(state.name, state);
+          }
+        }
       }
     );
     EventDispatcher.getInstance().addEventListener(
@@ -204,114 +207,65 @@ export class EditorScene extends BaseScene {
         this.activateLayer(payload);
       }
     );
-    EventDispatcher.getInstance().addEventListener("scene", "moveUp", () => {
-      if (this.activeLayer) {
-        if (this.activeLayer instanceof ContainerLayer) {
-          this.moveUpLayer(this.activeLayer);
-        } else if (
-          this.activeLayer instanceof ShaderLayer &&
-          this.activeLayer.bindedLayer
-        ) {
-          (this.activeLayer.bindedLayer as ContainerLayer).moveUpShader(
-            this.activeLayer
-          );
-        } else {
-          this.moveUpShader(this.activeLayer as ShaderLayer);
-        }
-      }
-    });
-    EventDispatcher.getInstance().addEventListener("scene", "moveDown", () => {
-      if (this.activeLayer) {
-        if (this.activeLayer instanceof ContainerLayer) {
-          this.moveDownLayer(this.activeLayer);
-        } else if (
-          this.activeLayer instanceof ShaderLayer &&
-          this.activeLayer.bindedLayer
-        ) {
-          (this.activeLayer.bindedLayer as ContainerLayer).moveDownShader(
-            this.activeLayer
-          );
-        } else {
-          this.moveDownShader(this.activeLayer as ShaderLayer);
-        }
-      }
-    });
-    EventDispatcher.getInstance().addEventListener("scene", "moveToTop", () => {
-      if (this.activeLayer) {
-        if (this.activeLayer instanceof ContainerLayer) {
-          this.moveToTopLayer(this.activeLayer);
-        } else if (
-          this.activeLayer instanceof ShaderLayer &&
-          this.activeLayer.bindedLayer
-        ) {
-          (this.activeLayer.bindedLayer as ContainerLayer).moveToTopShader(
-            this.activeLayer
-          );
-        } else {
-          this.moveToTopShader(this.activeLayer as ShaderLayer);
-        }
-      }
-    });
     EventDispatcher.getInstance().addEventListener(
       "scene",
-      "moveToBottom",
-      () => {
-        if (this.activeLayer) {
-          if (this.activeLayer instanceof ContainerLayer) {
-            this.moveToBottomLayer(this.activeLayer);
-          } else if (
-            this.activeLayer instanceof ShaderLayer &&
-            this.activeLayer.bindedLayer
-          ) {
-            (this.activeLayer.bindedLayer as ContainerLayer).moveToBottomShader(
-              this.activeLayer
-            );
+      "moveUp",
+      (layer: IEditorLayer) => {
+        if (layer) {
+          if (layer instanceof ContainerLayer) {
+            this.moveUpLayer(layer);
+          } else if (layer instanceof ShaderLayer && layer.bindedLayer) {
+            (layer.bindedLayer as ContainerLayer).moveUpShader(layer);
           } else {
-            this.moveToBottomShader(this.activeLayer as ShaderLayer);
+            this.moveUpShader(this.activeLayer as ShaderLayer);
           }
         }
       }
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
-      "moveUpLayer",
-      (payload: ContainerLayer) => {
-        this.moveUpLayer(payload);
+      "moveDown",
+      (layer: IEditorLayer) => {
+        console.log("BEFORE FUNCTION", layer);
+        if (layer) {
+          if (layer instanceof ContainerLayer) {
+            this.moveDownLayer(layer);
+          } else if (layer instanceof ShaderLayer && layer.bindedLayer) {
+            (layer.bindedLayer as ContainerLayer).moveDownShader(layer);
+          } else {
+            this.moveDownShader(this.activeLayer as ShaderLayer);
+          }
+        }
       }
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
-      "moveDownLayer",
-      (payload: ContainerLayer) => {
-        this.moveDownLayer(payload);
+      "moveToTop",
+      (layer: IEditorLayer) => {
+        if (layer) {
+          if (layer instanceof ContainerLayer) {
+            this.moveToTopLayer(layer);
+          } else if (layer instanceof ShaderLayer && layer.bindedLayer) {
+            (layer.bindedLayer as ContainerLayer).moveToTopShader(layer);
+          } else {
+            this.moveToTopShader(this.activeLayer as ShaderLayer);
+          }
+        }
       }
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
-      "moveToTopLayer",
-      (payload: ContainerLayer) => {
-        this.moveToTopLayer(payload);
-      }
-    );
-    EventDispatcher.getInstance().addEventListener(
-      "scene",
-      "moveToBottomLayer",
-      (payload: ContainerLayer) => {
-        this.moveToBottomLayer(payload);
-      }
-    );
-    EventDispatcher.getInstance().addEventListener(
-      "scene",
-      "moveUpShader",
-      (payload: ShaderLayer) => {
-        this.moveUpShader(payload);
-      }
-    );
-    EventDispatcher.getInstance().addEventListener(
-      "scene",
-      "moveDownShader",
-      (payload: ShaderLayer) => {
-        this.moveDownShader(payload);
+      "moveToBottom",
+      (layer: IEditorLayer) => {
+        if (layer) {
+          if (layer instanceof ContainerLayer) {
+            this.moveToBottomLayer(layer);
+          } else if (layer instanceof ShaderLayer && layer.bindedLayer) {
+            (layer.bindedLayer as ContainerLayer).moveToBottomShader(layer);
+          } else {
+            this.moveToBottomShader(this.activeLayer as ShaderLayer);
+          }
+        }
       }
     );
     EventDispatcher.getInstance().addEventListener(

@@ -84,7 +84,7 @@ export class ShaderComponent extends KTUComponent {
             {this.shader.state.name} - {this.shader.state.layerId}
           </div>
           <div className="icons">
-            <span onclick={() => this.handleUpClick()}>
+            <span onclick={(e: MouseEvent) => this.handleUpClick(e)}>
               {(this.containerLayer &&
                 this.containerLayer?.shaders.indexOf(this.shader) + 1 !=
                   this.containerLayer?.shaders.length) ||
@@ -99,7 +99,7 @@ export class ShaderComponent extends KTUComponent {
                 <></>
               )}
             </span>
-            <span onclick={() => this.handleDownClick()}>
+            <span onclick={(e: MouseEvent) => this.handleDownClick(e)}>
               {(this.containerLayer &&
                 this.containerLayer?.shaders.indexOf(this.shader) != 0) ||
               (!this.containerLayer &&
@@ -131,38 +131,42 @@ export class ShaderComponent extends KTUComponent {
       );
     }
   }
-  handleUpClick() {
-    if (this.containerLayer) {
-      this.containerLayer.moveUpShader(this.shader);
+  handleUpClick(e: MouseEvent) {
+    if (e.shiftKey) {
+      EventDispatcher.getInstance().dispatchEvent(
+        "scene",
+        "moveToTop",
+        this.shader
+      );
     } else {
       EventDispatcher.getInstance().dispatchEvent(
         "scene",
-        "moveUpShader",
+        "moveUp",
         this.shader
       );
     }
   }
-  handleDownClick() {
-    if (this.containerLayer) {
-      this.containerLayer.moveDownShader(this.shader);
+  handleDownClick(e: MouseEvent) {
+    if (e.shiftKey) {
+      EventDispatcher.getInstance().dispatchEvent(
+        "scene",
+        "moveToBottom",
+        this.shader
+      );
     } else {
       EventDispatcher.getInstance().dispatchEvent(
         "scene",
-        "moveDownShader",
+        "moveDown",
         this.shader
       );
     }
   }
   handleDuplicateClick() {
-    if (this.containerLayer) {
-      this.containerLayer.duplicateShader(this.shader);
-    } else {
-      EventDispatcher.getInstance().dispatchEvent(
-        "scene",
-        "duplicateShader",
-        this.shader
-      );
-    }
+    EventDispatcher.getInstance().dispatchEvent(
+      "scene",
+      "duplicate",
+      this.shader
+    );
   }
   handleCloseClick() {
     if (this.containerLayer) {

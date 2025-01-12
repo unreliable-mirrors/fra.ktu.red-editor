@@ -208,13 +208,13 @@ export class LayerComponent extends KTUComponent {
     if (e.shiftKey) {
       EventDispatcher.getInstance().dispatchEvent(
         "scene",
-        "moveToTopLayer",
+        "moveToTop",
         this.layer
       );
     } else {
       EventDispatcher.getInstance().dispatchEvent(
         "scene",
-        "moveUpLayer",
+        "moveUp",
         this.layer
       );
     }
@@ -223,13 +223,13 @@ export class LayerComponent extends KTUComponent {
     if (e.shiftKey) {
       EventDispatcher.getInstance().dispatchEvent(
         "scene",
-        "moveToBottomLayer",
+        "moveToBottom",
         this.layer
       );
     } else {
       EventDispatcher.getInstance().dispatchEvent(
         "scene",
-        "moveDownLayer",
+        "moveDown",
         this.layer
       );
     }
@@ -237,7 +237,7 @@ export class LayerComponent extends KTUComponent {
   handleDuplicateClick() {
     EventDispatcher.getInstance().dispatchEvent(
       "scene",
-      "duplicateLayer",
+      "duplicate",
       this.layer
     );
   }

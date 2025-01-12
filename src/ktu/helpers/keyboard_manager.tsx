@@ -5,6 +5,7 @@ import { DrawLayer } from "../layers/draw_layer";
 import { ImageLayer } from "../layers/image_layer";
 import { TextLayer } from "../layers/text_layer";
 import EventDispatcher from "../ui/core/event_dispatcher";
+import DataStore from "../ui/core/data_store";
 
 export type ShortcutSetting = {
   key: string;
@@ -17,7 +18,7 @@ export type ShortcutMeta = {
   keyHint: string;
   globalHint: string;
   command: string;
-  payload?: any;
+  payload?: Function;
 };
 export type ShortcutConfigSetting = {
   meta: ShortcutMeta;
@@ -88,7 +89,7 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
       keyHint: "1",
       globalHint: "New Background Layer",
       command: "add_layer",
-      payload: BackgroundLayer.LAYER_NAME,
+      payload: () => BackgroundLayer.LAYER_NAME,
     },
     shortcuts: [
       {
@@ -105,7 +106,7 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
       keyHint: "2",
       globalHint: "New Draw Layer",
       command: "add_layer",
-      payload: DrawLayer.LAYER_NAME,
+      payload: () => DrawLayer.LAYER_NAME,
     },
     shortcuts: [
       {
@@ -122,7 +123,7 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
       keyHint: "3",
       globalHint: "New Background Layer",
       command: "add_layer",
-      payload: ImageLayer.LAYER_NAME,
+      payload: () => ImageLayer.LAYER_NAME,
     },
     shortcuts: [
       {
@@ -140,24 +141,7 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
 
       globalHint: "New Background Layer",
       command: "add_layer",
-      payload: TextLayer.LAYER_NAME,
-    },
-    shortcuts: [
-      {
-        key: "4",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        metaKey: false,
-      },
-    ],
-  },
-  {
-    meta: {
-      keyHint: "4",
-      globalHint: "New Background Layer",
-      command: "add_layer",
-      payload: TextLayer.LAYER_NAME,
+      payload: () => TextLayer.LAYER_NAME,
     },
     shortcuts: [
       {
@@ -174,6 +158,7 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
       keyHint: "PgUp",
       globalHint: "Move Active Layer/Shader Up",
       command: "moveUp",
+      payload: () => DataStore.getInstance().getStore("activeLayer"),
     },
     shortcuts: [
       {
@@ -190,6 +175,7 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
       keyHint: "PgDown",
       globalHint: "Move Active Layer/Shader Down",
       command: "moveDown",
+      payload: () => DataStore.getInstance().getStore("activeLayer"),
     },
     shortcuts: [
       {
@@ -206,6 +192,7 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
       keyHint: "Shift + PgUp",
       globalHint: "Move Active Layer/Shader to Top",
       command: "moveToTop",
+      payload: () => DataStore.getInstance().getStore("activeLayer"),
     },
     shortcuts: [
       {
@@ -222,6 +209,7 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
       keyHint: "Shift + PgDown",
       globalHint: "Move Active Layer/Shader to Bottom",
       command: "moveToBottom",
+      payload: () => DataStore.getInstance().getStore("activeLayer"),
     },
     shortcuts: [
       {
@@ -230,6 +218,44 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
         shiftKey: true,
         altKey: false,
         metaKey: false,
+      },
+    ],
+  },
+  {
+    meta: {
+      keyHint: `${ctrlKey()} + D`,
+      globalHint: "Duplicate Active Layer/Shader",
+      command: "duplicate",
+      payload: () => DataStore.getInstance().getStore("activeLayer"),
+    },
+    shortcuts: [
+      {
+        key: "D",
+        ctrlKey: true,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+      {
+        key: "D",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: true,
+      },
+      {
+        key: "d",
+        ctrlKey: true,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+      {
+        key: "d",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: true,
       },
     ],
   },
@@ -288,7 +314,7 @@ export const listenKeyboardEvents = () => {
           EventDispatcher.getInstance().dispatchEvent(
             "scene",
             is.meta.command,
-            is.meta.payload
+            is.meta.payload ? is.meta.payload() : undefined
           );
         }
       }
