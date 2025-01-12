@@ -22,7 +22,11 @@ import { VintageShader } from "../../shaders/vintage/vintage_shader";
 import { PixelateShader } from "../../shaders/pixelate/pixelate_shader";
 import { MontecarloSampleShader } from "../../shaders/montecarlo_sample/montecarlo_sample";
 import EventDispatcher from "../core/event_dispatcher";
-import { ctrlKey, getShortcutText } from "../../helpers/keyboard_manager";
+import {
+  ctrlKey,
+  getShortcutText,
+  keyboardExists,
+} from "../../helpers/keyboard_manager";
 import { ShapeLayer } from "../../layers/shape_layer";
 import { AnaglyphShader } from "../../shaders/anaglyph/anaglyph_shader";
 import { PosterizeShader } from "../../shaders/posterize/posterize_shader";
@@ -433,7 +437,7 @@ export class HintPanel extends KTUComponent {
                 this.helpClick();
               }}
             >
-              HIDE (H)
+              {`HIDE${keyboardExists() ? " (H)" : ""}`}
             </div>
             <div className="hintPanel">
               <div id="extraContent" className="extraContent">
@@ -447,7 +451,7 @@ export class HintPanel extends KTUComponent {
     } else {
       return (
         <div className="panel helpTooltip" onclick={() => this.helpClick()}>
-          HELP (H)
+          {`HELP${keyboardExists() ? " (H)" : ""}`}
         </div>
       );
     }

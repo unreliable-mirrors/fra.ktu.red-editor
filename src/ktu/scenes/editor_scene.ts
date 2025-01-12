@@ -107,6 +107,7 @@ export class EditorScene extends BaseScene {
 
     this.container.on("pointerdown", (event: FederatedPointerEvent) => {
       if (this.activeLayer?.absorbingLayer) {
+        console.log("THERE");
         this.activeLayer?.pointerDown(event);
       }
     });
@@ -254,10 +255,16 @@ export class EditorScene extends BaseScene {
       "clickLayer",
       (payload: { event: FederatedPointerEvent; layer: IEditorLayer }) => {
         if (this.activeLayer === payload.layer) {
-          this.activeLayer.pointerDown(payload.event);
+          if (!this.activeLayer?.absorbingLayer) {
+            this.activeLayer.pointerDown(payload.event);
+          }
         } else if (!this.activeLayer?.absorbingLayer) {
-          this.activateLayer(payload.layer);
-          this.activeLayer?.pointerDown(payload.event);
+          if (!payload.layer.absorbingLayer || payload.event.ctrlKey) {
+            this.activateLayer(payload.layer);
+            if (!this.activeLayer?.absorbingLayer) {
+              this.activeLayer?.pointerDown(payload.event);
+            }
+          }
         }
       }
     );

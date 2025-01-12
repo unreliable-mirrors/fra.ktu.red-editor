@@ -446,3 +446,8 @@ export const listenKeyboardEvents = () => {
     }
   });
 };
+
+export const keyboardExists = (): boolean => {
+  //@ts-ignore
+  return !!window.navigator.keyboard;
+};
