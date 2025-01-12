@@ -2,8 +2,11 @@ import { Container, Point, UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import fragment from "./noblack_shader.frag?raw";
+import { ILayer } from "../../../engine/ilayer";
 
-export type NoBlackShaderState = ShaderState;
+export type NoBlackShaderState = ShaderState & {
+  color: string;
+};
 
 export type NoBlackShaderSetting = {
   field: "";
@@ -44,11 +47,12 @@ export class NoBlackShader extends ShaderLayer {
   defaultState(): NoBlackShaderState {
     return {
       ...super.defaultState(),
+      color: "#000000",
     };
   }
 
-  bind(container: Container): void {
-    super.bind(container);
+  bind(container: Container, layer?: ILayer): void {
+    super.bind(container, layer);
     this.container = container;
     this.refreshSize();
   }

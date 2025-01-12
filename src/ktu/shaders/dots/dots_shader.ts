@@ -2,9 +2,10 @@ import { Container, Point, UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import fragment from "./dots_shader.frag?raw";
+import { ILayer } from "../../../engine/ilayer";
 
 export type DotsShaderState = ShaderState & {
-  pixelSize: number;
+  size: number;
 };
 
 export type DotsShaderSetting = {
@@ -23,8 +24,8 @@ export class DotsShader extends ShaderLayer {
       field: "size",
       type: "integer",
       onchange: (value) => {
-        this.state.pixelSize = parseInt(value);
-        this.uniforms.uniforms.uPixelSize = this.state.pixelSize;
+        this.state.size = parseInt(value);
+        this.uniforms.uniforms.uPixelSize = this.state.size;
         this.refreshSize();
       },
     },
@@ -37,13 +38,11 @@ export class DotsShader extends ShaderLayer {
     if (state) {
       this.state = {
         ...this.state,
-        pixelSize: state.pixelSize,
-        missProbability: state.missProbability,
-        seed: state.seed,
+        size: state.size,
       };
     }
     this.uniforms = new UniformGroup({
-      uPixelSize: { value: this.state.pixelSize, type: "f32" },
+      uPixelSize: { value: this.state.size, type: "f32" },
       uSize: {
         value: new Point(window.innerWidth, window.innerHeight),
         type: "vec2<f32>",
@@ -58,12 +57,12 @@ export class DotsShader extends ShaderLayer {
   defaultState(): DotsShaderState {
     return {
       ...super.defaultState(),
-      pixelSize: 15,
+      size: 15,
     };
   }
 
-  bind(container: Container): void {
-    super.bind(container);
+  bind(container: Container, layer?: ILayer): void {
+    super.bind(container, layer);
     this.container = container;
     this.refreshSize();
   }

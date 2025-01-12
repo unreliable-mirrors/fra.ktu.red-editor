@@ -2,6 +2,7 @@ import { Container, Point, UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import fragment from "./pixelate_shader.frag?raw";
+import { ILayer } from "../../../engine/ilayer";
 
 export type PixelateShaderState = ShaderState & {
   pixelSize: number;
@@ -62,8 +63,8 @@ export class PixelateShader extends ShaderLayer {
     };
   }
 
-  bind(container: Container): void {
-    super.bind(container);
+  bind(container: Container, layer?: ILayer): void {
+    super.bind(container, layer);
     this.container = container;
     this.refreshSize();
   }

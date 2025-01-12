@@ -119,6 +119,7 @@ export class HintPanel extends KTUComponent {
               <div>{getShortcutText("toggleHints")}</div>
               <div>{getShortcutText("toggleUI")}</div>
               <div>{getShortcutText("PASTEIMAGE")}</div>
+              <div>{getShortcutText("DRAGLAYER")}</div>
             </div>
           </div>
         ) : (
@@ -227,19 +228,6 @@ export class HintPanel extends KTUComponent {
               Load cool Images and Videos into your thing!
             </div>
           </div>
-          {keyboardExists() ? (
-            <div className="block">
-              <h3>Shortcuts</h3>
-
-              <div className="tip">
-                <div>
-                  <strong>{ctrlKey()} + CLICK</strong>: Drag/Pan Layer
-                </div>
-              </div>
-            </div>
-          ) : (
-            <></>
-          )}
           <div className="block extraLast">
             <h3>Tips</h3>
             <div className="tip">
@@ -259,23 +247,10 @@ export class HintPanel extends KTUComponent {
     ) {
       extraContent = (
         <>
-          <div className={`block ${!keyboardExists() ? "extraLast" : ""}`}>
+          <div className="block extraLast">
             <h3>Text Layer</h3>
             <div className="tip">Put your heart into words.</div>
           </div>
-          {keyboardExists() ? (
-            <div className="block extraLast">
-              <h3>Shortcuts</h3>
-
-              <div className="tip">
-                <div>
-                  <strong>{ctrlKey()} + CLICK</strong>: Drag/Pan Layer
-                </div>
-              </div>
-            </div>
-          ) : (
-            <></>
-          )}
         </>
       );
     } else if (
@@ -284,23 +259,10 @@ export class HintPanel extends KTUComponent {
     ) {
       extraContent = (
         <>
-          <div className={`block ${!keyboardExists() ? "extraLast" : ""}`}>
+          <div className="block extraLast">
             <h3>Shape Layer</h3>
             <div className="tip">Three shapes is enough, right?.</div>
           </div>
-          {keyboardExists() ? (
-            <div className="block extraLast">
-              <h3>Shortcuts</h3>
-
-              <div className="tip">
-                <div>
-                  <strong>{ctrlKey()} + CLICK</strong>: Drag/Pan Layer
-                </div>
-              </div>
-            </div>
-          ) : (
-            <></>
-          )}
         </>
       );
     } else if (

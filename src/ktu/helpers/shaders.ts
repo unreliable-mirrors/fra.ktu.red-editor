@@ -13,7 +13,10 @@ import {
   MontecarloSampleShader,
   MontecarloSampleShaderState,
 } from "../shaders/montecarlo_sample/montecarlo_sample";
-import { NoBlackShader } from "../shaders/noblack/noblack_shader";
+import {
+  NoBlackShader,
+  NoBlackShaderState,
+} from "../shaders/noblack/noblack_shader";
 import {
   PixelateShader,
   PixelateShaderState,
@@ -83,7 +86,7 @@ export const getShaderByName = (
   } else if (shaderName === GridShader.SHADER_NAME) {
     return new GridShader(state as GridShaderState);
   } else if (shaderName === NoBlackShader.SHADER_NAME) {
-    return new NoBlackShader(state as ShaderState);
+    return new NoBlackShader(state as NoBlackShaderState);
   }
   return null;
 };

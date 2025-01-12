@@ -143,6 +143,11 @@ export abstract class ContainerLayer implements IEditorLayer {
       const newIndex = index + 1;
       const otherShader = this.shaders[newIndex];
       this.shaders.splice(newIndex, 0, this.shaders.splice(index, 1)[0]);
+      this.state.shaders.splice(
+        newIndex,
+        0,
+        this.state.shaders.splice(index, 1)[0]
+      );
       if (this.container.filters instanceof Array) {
         const filters: Filter[] = [];
         for (let i = 0; i < this.container.filters.length; i++) {
@@ -172,6 +177,11 @@ export abstract class ContainerLayer implements IEditorLayer {
       const newIndex = index - 1;
       const otherShader = this.shaders[newIndex];
       this.shaders.splice(newIndex, 0, this.shaders.splice(index, 1)[0]);
+      this.state.shaders.splice(
+        newIndex,
+        0,
+        this.state.shaders.splice(index, 1)[0]
+      );
       if (this.container.filters instanceof Array) {
         const filters: Filter[] = [];
         for (let i = 0; i < this.container.filters.length; i++) {
@@ -200,6 +210,8 @@ export abstract class ContainerLayer implements IEditorLayer {
     if (index > -1 && index < this.shaders.length - 1) {
       this.shaders.splice(index, 1);
       this.shaders.push(shader);
+      this.state.shaders.splice(index, 1);
+      this.state.shaders.push(shader.state);
       if (this.container.filters instanceof Array) {
         const filters: Filter[] = [];
         for (let i = 0; i < this.container.filters.length; i++) {
@@ -225,6 +237,8 @@ export abstract class ContainerLayer implements IEditorLayer {
     if (index > 0) {
       this.shaders.splice(index, 1);
       this.shaders.unshift(shader);
+      this.state.shaders.splice(index, 1);
+      this.state.shaders.unshift(shader.state);
       if (this.container.filters instanceof Array) {
         const filters: Filter[] = [];
         for (let i = 0; i < this.container.filters.length; i++) {
@@ -249,6 +263,7 @@ export abstract class ContainerLayer implements IEditorLayer {
     const index = this.shaders.indexOf(shader);
     if (index > -1) {
       this.shaders.splice(index, 1);
+      this.state.shaders.splice(index, 1);
       if (this.container.filters) {
         if (this.container.filters instanceof Array) {
           const filters = [...this.container.filters];
@@ -293,9 +308,7 @@ export abstract class ContainerLayer implements IEditorLayer {
         shader.resize(this.container);
       }
     }
-    console.log("CONT TICK");
     for (const shader of this.shaders) {
-      console.log("CONT TICK", shader);
       shader.tick(time);
     }
   }

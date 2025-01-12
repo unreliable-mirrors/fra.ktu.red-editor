@@ -156,6 +156,14 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
   },
   {
     meta: {
+      keyHint: `${ctrlKey()} + CLICK`,
+      globalHint: "Drag the Active Layer even if it's under another one",
+      command: "DRAGLAYER",
+    },
+    shortcuts: [],
+  },
+  {
+    meta: {
       keyHint: "1",
       globalHint: "New Background Layer",
       command: "add_layer",

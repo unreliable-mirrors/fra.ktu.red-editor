@@ -109,7 +109,6 @@ export class EditorScene extends BaseScene {
         this.setupContainer();
       }
       for (const layer of this.layers) {
-        console.log("LAYER TICK", layer);
         layer.tick(time);
       }
       for (const shader of this.shaders) {
@@ -119,7 +118,6 @@ export class EditorScene extends BaseScene {
 
     this.container.on("pointerdown", (event: FederatedPointerEvent) => {
       if (this.activeLayer?.absorbingLayer) {
-        console.log("THERE");
         this.activeLayer?.pointerDown(event);
       }
     });
@@ -236,7 +234,9 @@ export class EditorScene extends BaseScene {
       "exportState",
       () => {
         const state = this.getStateObject();
+        console.log("EXPORT", state);
         const jsonStr = JSON.stringify(state);
+        console.log("EXPORT", JSON.parse(jsonStr));
         const filename = this.metadata.name + ".red";
 
         const content =
@@ -307,7 +307,12 @@ export class EditorScene extends BaseScene {
       "scene",
       "moveDown",
       (layer: IEditorLayer) => {
-        console.log("BEFORE FUNCTION", layer);
+        console.log(
+          "BEFORE FUNCTION",
+          layer,
+          layer instanceof ShaderLayer,
+          (layer as ShaderLayer).bindedLayer
+        );
         if (layer) {
           if (layer instanceof ContainerLayer) {
             this.moveDownLayer(layer);
@@ -590,10 +595,12 @@ export class EditorScene extends BaseScene {
     console.log("UNTIL HERE", shader);
     const index = this.shaders.indexOf(shader);
     if (index > 0) {
+      console.log("UNTIL HERE 2", shader);
       const newIndex = index - 1;
       const otherShader = this.shaders[newIndex];
       this.shaders.splice(newIndex, 0, this.shaders.splice(index, 1)[0]);
       if (this.container.filters instanceof Array) {
+        console.log("UNTIL HERE 3", shader);
         const filters: Filter[] = [];
         for (let i = 0; i < this.container.filters.length; i++) {
           if (i === index) {
