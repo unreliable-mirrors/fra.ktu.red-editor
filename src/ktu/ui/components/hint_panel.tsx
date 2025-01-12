@@ -47,7 +47,7 @@ export class HintPanel extends KTUComponent {
                 )
               }
             >
-              {IconBackground()} Background (1)
+              {IconBackground()} {`Background ${keyboardExists() ? "(1)" : ""}`}
             </div>
             <div
               onclick={() =>
@@ -58,7 +58,7 @@ export class HintPanel extends KTUComponent {
                 )
               }
             >
-              {IconImage()} Image/Video (3)
+              {IconImage()} {`Image/Video ${keyboardExists() ? "(3)" : ""}`}
             </div>
             <div
               onclick={() =>
@@ -69,7 +69,7 @@ export class HintPanel extends KTUComponent {
                 )
               }
             >
-              {IconShape()} Shape (5)
+              {IconShape()} {`Shape ${keyboardExists() ? "(5)" : ""}`}
             </div>
           </div>
           <div className="tip">
@@ -82,7 +82,7 @@ export class HintPanel extends KTUComponent {
                 )
               }
             >
-              {IconDraw()} Draw (2)
+              {IconDraw()} {`Draw ${keyboardExists() ? "(2)" : ""}`}
             </div>
             <div
               onclick={() =>
@@ -93,7 +93,7 @@ export class HintPanel extends KTUComponent {
                 )
               }
             >
-              {IconText()} Text (4)
+              {IconText()} {`Text ${keyboardExists() ? " (4)" : ""}`}
             </div>
           </div>
         </div>
@@ -108,14 +108,18 @@ export class HintPanel extends KTUComponent {
             <div>{IconClose()} Remove Layer</div>
           </div>
         </div>
-        <div className="block">
-          <h3>Shortcuts</h3>
-          <div className="tip">
-            <div>{getShortcutText("toggleHints")}</div>
-            <div>{getShortcutText("toggleUI")}</div>
-            <div>{getShortcutText("PASTEIMAGE")}</div>
+        {keyboardExists() ? (
+          <div className="block">
+            <h3>Shortcuts</h3>
+            <div className="tip">
+              <div>{getShortcutText("toggleHints")}</div>
+              <div>{getShortcutText("toggleUI")}</div>
+              <div>{getShortcutText("PASTEIMAGE")}</div>
+            </div>
           </div>
-        </div>
+        ) : (
+          <></>
+        )}
         <div className="block">
           <h3>Tips</h3>
           <div className="tip">Shaders = Cool Effects.</div>
@@ -155,25 +159,29 @@ export class HintPanel extends KTUComponent {
             <h3>Draw Layer</h3>
             <div className="tip">Draw cool stuff on Pixel style.</div>
           </div>
-          <div className="block">
-            <h3>Shortcuts</h3>
-            <div className="tip">
-              <div>
-                <strong>LEFT CLICK</strong>: Draw in{" "}
-                <strong>Toggle Mode</strong>
-              </div>
-              <div>
-                <strong>RIGHT CLICK</strong>: Erase
-              </div>
-              <div>
-                <strong>SHIFT + CLICK</strong>: Draw in{" "}
-                <strong>Normal Mode</strong>
-              </div>
-              <div>
-                <strong>{ctrlKey()} + CLICK</strong>: Drag/Pan Layer
+          {keyboardExists() ? (
+            <div className="block">
+              <h3>Shortcuts</h3>
+              <div className="tip">
+                <div>
+                  <strong>LEFT CLICK</strong>: Draw in{" "}
+                  <strong>Toggle Mode</strong>
+                </div>
+                <div>
+                  <strong>RIGHT CLICK</strong>: Erase
+                </div>
+                <div>
+                  <strong>SHIFT + CLICK</strong>: Draw in{" "}
+                  <strong>Normal Mode</strong>
+                </div>
+                <div>
+                  <strong>{ctrlKey()} + CLICK</strong>: Drag/Pan Layer
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <></>
+          )}
           <div className="block">
             <h3>Attributes</h3>
             <div className="tip">
@@ -215,15 +223,19 @@ export class HintPanel extends KTUComponent {
               Load cool Images and Videos into your thing!
             </div>
           </div>
-          <div className="block">
-            <h3>Shortcuts</h3>
+          {keyboardExists() ? (
+            <div className="block">
+              <h3>Shortcuts</h3>
 
-            <div className="tip">
-              <div>
-                <strong>{ctrlKey()} + CLICK</strong>: Drag/Pan Layer
+              <div className="tip">
+                <div>
+                  <strong>{ctrlKey()} + CLICK</strong>: Drag/Pan Layer
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <></>
+          )}
           <div className="block">
             <h3>Tips</h3>
             <div className="tip">
@@ -247,15 +259,19 @@ export class HintPanel extends KTUComponent {
             <h3>Text Layer</h3>
             <div className="tip">Put your heart into words.</div>
           </div>
-          <div className="block">
-            <h3>Shortcuts</h3>
+          {keyboardExists() ? (
+            <div className="block">
+              <h3>Shortcuts</h3>
 
-            <div className="tip">
-              <div>
-                <strong>{ctrlKey()} + CLICK</strong>: Drag/Pan Layer
+              <div className="tip">
+                <div>
+                  <strong>{ctrlKey()} + CLICK</strong>: Drag/Pan Layer
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <></>
+          )}
         </>
       );
     } else if (
@@ -268,15 +284,19 @@ export class HintPanel extends KTUComponent {
             <h3>Shape Layer</h3>
             <div className="tip">Three shapes is enough, right?.</div>
           </div>
-          <div className="block">
-            <h3>Shortcuts</h3>
+          {keyboardExists() ? (
+            <div className="block">
+              <h3>Shortcuts</h3>
 
-            <div className="tip">
-              <div>
-                <strong>{ctrlKey()} + CLICK</strong>: Drag/Pan Layer
+              <div className="tip">
+                <div>
+                  <strong>{ctrlKey()} + CLICK</strong>: Drag/Pan Layer
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <></>
+          )}
         </>
       );
     } else if (

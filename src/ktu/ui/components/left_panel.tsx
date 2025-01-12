@@ -1,6 +1,7 @@
 import jsx from "texsaur";
 import { KTUComponent } from "../core/ktu_component";
 import EventDispatcher from "../core/event_dispatcher";
+import { keyboardExists } from "../../helpers/keyboard_manager";
 
 export class LeftPanel extends KTUComponent {
   render(): Element {
@@ -27,7 +28,9 @@ export class LeftPanel extends KTUComponent {
     return (
       <div className="left-ui">
         <div className="panel left">
-          <h3 onclick={() => this.click()}>Open/Save (F)</h3>
+          <h3 onclick={() => this.click()}>{`Open/Save ${
+            keyboardExists() ? " (F)" : ""
+          }`}</h3>
           {filesContent}
         </div>
         {historyContent}
