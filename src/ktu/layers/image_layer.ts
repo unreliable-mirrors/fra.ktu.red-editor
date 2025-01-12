@@ -177,7 +177,7 @@ export class ImageLayer extends ContainerLayer {
       };
 
       //GET THE CONTENT
-      const content = getAsset(this.state.imageHash);
+      const content = getAsset(this.state.imageHash, this.layerId);
       console.log("REPAINT", this.state.imageHash, content);
       if (
         content.startsWith("data:image/gif;") ||
