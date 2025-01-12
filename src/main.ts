@@ -11,6 +11,8 @@ import { HintPanel } from "./ktu/ui/components/hint_panel";
 import { ExportCanvasButtonComponent } from "./ktu/ui/components/file/export_canvas";
 import { FileInfoPanel } from "./ktu/ui/components/file_info_panel";
 import { LayersButtons } from "./ktu/ui/components/layers/layer_buttons";
+import { LayersPanel } from "./ktu/ui/components/layers_panel";
+import { LeftPanel } from "./ktu/ui/components/left_panel";
 
 declare global {
   interface Window {
@@ -53,4 +55,6 @@ export default {
   ExportCanvasButtonComponent,
   FileInfoPanel,
   LayersButtons,
+  LayersPanel,
+  LeftPanel,
 };

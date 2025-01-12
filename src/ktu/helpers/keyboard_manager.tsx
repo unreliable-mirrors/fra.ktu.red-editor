@@ -63,6 +63,75 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
   },
   {
     meta: {
+      keyHint: "L",
+      globalHint: "Toggle Layers Panel",
+      command: "toggleLayers",
+    },
+    shortcuts: [
+      {
+        key: "L",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+      {
+        key: "l",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+    ],
+  },
+  {
+    meta: {
+      keyHint: "S",
+      globalHint: "Toggle Shaders Panel",
+      command: "toggleShaders",
+    },
+    shortcuts: [
+      {
+        key: "S",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+      {
+        key: "s",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+    ],
+  },
+  {
+    meta: {
+      keyHint: "F",
+      globalHint: "Toggle File Panel",
+      command: "toggleFiles",
+    },
+    shortcuts: [
+      {
+        key: "F",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+      {
+        key: "f",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+    ],
+  },
+  {
+    meta: {
       keyHint: "Tab",
       globalHint: "Toggle UI",
       command: "toggleUI",

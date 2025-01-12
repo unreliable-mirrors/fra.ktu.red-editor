@@ -55,6 +55,16 @@ export class EditorScene extends BaseScene {
 
     DataStore.getInstance().setStore("uiVisibility", true);
     DataStore.getInstance().setStore("hintsVisibility", true);
+    console.log("INNERWIDTH", window.innerWidth);
+    if (window.innerWidth > 1000) {
+      DataStore.getInstance().setStore("layersVisibility", true);
+      DataStore.getInstance().setStore("shadersVisibility", true);
+      DataStore.getInstance().setStore("filesVisibility", true);
+    } else {
+      DataStore.getInstance().setStore("layersVisibility", false);
+      DataStore.getInstance().setStore("shadersVisibility", false);
+      DataStore.getInstance().setStore("filesVisibility", false);
+    }
 
     setTimeout(() => {
       this.newState();
@@ -116,6 +126,36 @@ export class EditorScene extends BaseScene {
         DataStore.getInstance().setStore(
           "hintsVisibility",
           !DataStore.getInstance().getStore("hintsVisibility")
+        );
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "toggleFiles",
+      () => {
+        DataStore.getInstance().setStore(
+          "filesVisibility",
+          !DataStore.getInstance().getStore("filesVisibility")
+        );
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "toggleLayers",
+      () => {
+        DataStore.getInstance().setStore(
+          "layersVisibility",
+          !DataStore.getInstance().getStore("layersVisibility")
+        );
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "toggleShaders",
+      () => {
+        DataStore.getInstance().setStore(
+          "shadersVisibility",
+          !DataStore.getInstance().getStore("shadersVisibility")
         );
       }
     );

@@ -9,35 +9,8 @@ export class EditorUI {
   public init() {
     this.anchor.appendChild(
       <div>
-        <div className="left-ui">
-          <div className="panel left">
-            <h3>Open/Save</h3>
-            <new-state-button></new-state-button>
-            <open-state-button></open-state-button>
-            <export-state-button></export-state-button>
-            <span className="separator"></span>
-            <import-state-button></import-state-button>
-            <export-canvas-button></export-canvas-button>
-          </div>
-          <div className="panel left">
-            <file-info-panel binding="metadata,history"></file-info-panel>
-          </div>
-        </div>
-        <div className="right-ui">
-          <div className="panel right">
-            <div>
-              <h3>Layers</h3>
-              <layers-buttons></layers-buttons>
-              <div className="layerListContainer">
-                <layers-list binding="layers"></layers-list>
-              </div>
-            </div>
-          </div>
-          <div className="panel right">
-            <shaders-list binding="shaders"></shaders-list>
-          </div>
-        </div>
-
+        <left-panel binding="filesVisibility"></left-panel>
+        <layers-panel binding="layersVisibility,shadersVisibility"></layers-panel>
         <hint-panel binding="activeLayer,showGeneralTips,hintsVisibility"></hint-panel>
       </div>
     );

@@ -5,6 +5,7 @@ import { ShaderComponent } from "./shader_component";
 import { ShaderLayer } from "../../../shaders/shader_layer";
 import { AVAILABLE_SHADERS_NAMES } from "../../../helpers/shaders";
 import { AddShaderButtonComponent } from "./add_shader_button";
+import EventDispatcher from "../../core/event_dispatcher";
 
 export class ShadersList extends KTUComponent {
   render(): Element {
@@ -18,17 +19,29 @@ export class ShadersList extends KTUComponent {
     ].reverse()) {
       items.push(new ShaderComponent(layer));
     }
-    return (
-      <div>
-        <h3>Global Shaders</h3>
+
+    const content = this.bindingData["shadersVisibility"] ? (
+      <>
         {shaderButtons}
         <div className="shadersList">{items}</div>
+      </>
+    ) : (
+      <></>
+    );
+    return (
+      <div>
+        <h3 onclick={() => this.click()}>Global Shaders (S)</h3>
+        {content}
       </div>
     );
   }
 
   defaultBinding() {
-    return { shaders: [] };
+    return { shaders: [], shadersVisibility: true };
+  }
+
+  click() {
+    EventDispatcher.getInstance().dispatchEvent("scene", "toggleShaders", {});
   }
 }
 
