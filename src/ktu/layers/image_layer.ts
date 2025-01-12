@@ -11,7 +11,7 @@ import {
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import DataStore from "../ui/core/data_store";
 import { AnimatedGIF } from "@pixi/gif";
-import { cacheAsset, getAsset } from "../helpers/assets";
+import { cacheAsset, freeAsset, getAsset } from "../helpers/assets";
 
 export type ImageLayerState = ContainerLayerState & {
   alpha: number;
@@ -158,6 +158,13 @@ export class ImageLayer extends ContainerLayer {
   bind(container: Container): void {
     super.bind(container);
     this.repaint();
+  }
+
+  unbind(): void {
+    super.unbind();
+    if (this.state.imageHash) {
+      freeAsset(this.state.imageHash, this.layerId);
+    }
   }
 
   repaint() {
