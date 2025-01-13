@@ -45,7 +45,7 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   MontecarloSampleShader,
   AnaglyphShader,
   PosterizeShader,
-  DotsShader,
+  //DotsShader,
   VLinesShader,
   HLinesShader,
   GridShader,

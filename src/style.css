@@ -152,7 +152,7 @@ button {
   border-radius: 10px 0 0 10px;
 }
 .panel.bottom {
-  border-radius: 10px 10px 0 0;
+  border-radius: 10px 0 0 0;
   height: 100%;
 }
 .layerListContainer {
@@ -216,8 +216,11 @@ button {
   position: absolute;
   top: 0px;
   right: 0px;
-  padding: 20px;
+  padding: 10px;
   z-index: 10;
+  margin-top: -17px;
+  border-radius: 10px 0 0 0;
+  padding-bottom: 0;
 }
 .hintPanel {
   font-family: "Orbitron", serif;

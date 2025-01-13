@@ -510,7 +510,7 @@ export class HintPanel extends KTUComponent {
         <div className="bottom-ui">
           <div id="hintsPanel" className="panel bottom">
             <div
-              className="helpFloat"
+              className="panel helpFloat"
               onclick={() => {
                 console.log("CLICK");
                 this.helpClick();
