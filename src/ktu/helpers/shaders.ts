@@ -8,7 +8,7 @@ import { GridShader, GridShaderState } from "../shaders/grid/grid_shader";
 import {
   HLinesShader,
   HLinesShaderState,
-} from "../shaders/HLines/hLines_shader";
+} from "../shaders/hlines/hlines_shader";
 import {
   MontecarloSampleShader,
   MontecarloSampleShaderState,
@@ -33,7 +33,7 @@ import {
 import {
   VLinesShader,
   VLinesShaderState,
-} from "../shaders/vLines/vLines_shader";
+} from "../shaders/vlines/vlines_shader";
 
 export type ShaderClass = {
   SHADER_NAME: string;
