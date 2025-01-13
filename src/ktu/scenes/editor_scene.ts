@@ -19,7 +19,6 @@ import { ASSETS_MAP, rebuildAssets } from "../helpers/assets";
 import { getLayerByName } from "../helpers/layers";
 import { IEditorLayer } from "../layers/ieditor_layer";
 import { listenKeyboardEvents } from "../helpers/keyboard_manager";
-import { ILayer } from "../../engine/ilayer";
 
 export type EditorSceneState = {
   layers: ContainerLayerState[];
@@ -80,6 +79,7 @@ export class EditorScene extends BaseScene {
       console.log("PREHISTORY", this.metadata.timestamp, this.history);
       if (this.history.length === 0 || this.history[0].raw != jsonState) {
         this.metadata.timestamp = Date.now();
+        console.log("GAME STATE OBJECT", this.getStateObject());
         jsonState = JSON.stringify(this.getStateObject());
         this.history.unshift({
           timestamp: this.metadata.timestamp,
@@ -95,7 +95,6 @@ export class EditorScene extends BaseScene {
         this.history = this.history.slice(0, 5);
 
         DataStore.getInstance().setStore("history", this.history);
-        console.log("POSTHISTORY", this.metadata.timestamp, this.history);
       } else {
         console.log("NOTHING CHANGED");
       }

@@ -1,25 +1,25 @@
 import { Color, Container, UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
-import fragment from "./noblack_shader.frag?raw";
+import fragment from "./chroma_shader.frag?raw";
 
-export type NoBlackShaderState = ShaderState & {
+export type ChromaShaderState = ShaderState & {
   color: string;
   threshold: number;
 };
 
-export type NoBlackShaderSetting = {
+export type ChromaShaderSetting = {
   field: "color" | "threshold";
   type: "color" | "float";
   onchange: (value: string) => void;
 };
 
-export class NoBlackShader extends ShaderLayer {
-  static SHADER_NAME: string = "noblack_shader";
-  declare state: NoBlackShaderState;
+export class ChromaShader extends ShaderLayer {
+  static SHADER_NAME: string = "chroma_shader";
+  declare state: ChromaShaderState;
   fragment: string = fragment;
   container!: Container;
-  settings: NoBlackShaderSetting[] = [
+  settings: ChromaShaderSetting[] = [
     {
       field: "color",
       type: "color",
@@ -43,15 +43,14 @@ export class NoBlackShader extends ShaderLayer {
   ];
   uniforms: UniformGroup;
 
-  constructor(state?: NoBlackShaderState) {
+  constructor(state?: ChromaShaderState) {
     super();
 
     if (state) {
       this.state = {
         ...this.state,
-        pixelSize: state.pixelSize,
-        missProbability: state.missProbability,
-        seed: state.seed,
+        color: state.color,
+        threshold: state.threshold,
       };
     }
     this.uniforms = new UniformGroup({
@@ -63,10 +62,10 @@ export class NoBlackShader extends ShaderLayer {
   }
 
   shaderName(): string {
-    return NoBlackShader.SHADER_NAME;
+    return ChromaShader.SHADER_NAME;
   }
 
-  defaultState(): NoBlackShaderState {
+  defaultState(): ChromaShaderState {
     return {
       ...super.defaultState(),
       color: "#000000",

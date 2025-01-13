@@ -34,6 +34,7 @@ import { DotsShader } from "../../shaders/dots/dots_shader";
 import { GridShader } from "../../shaders/grid/grid_shader";
 import { VLinesShader } from "../../shaders/vines/vines_shader";
 import { HLinesShader } from "../../shaders/hines/hines_shader";
+import { ChromaShader } from "../../shaders/chroma/chroma_shader";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -499,6 +500,34 @@ export class HintPanel extends KTUComponent {
             <div className="tip">
               <div>
                 <strong>Size</strong>: Distance between the lines.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == ChromaShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>Chroma Shader</h3>
+            <div className="tip">
+              Makes the selected color from the layer transparent. Like the
+              Green Screen in the movies!
+            </div>
+          </div>
+          <div className="block extraLast">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Color</strong>: Color to remove from the layer.
+              </div>
+              <div>
+                <strong>Threshold</strong>: Tolerance % in color variations. 0 =
+                remove ONLY that color -&gt; 1 = remove everything.
               </div>
             </div>
           </div>

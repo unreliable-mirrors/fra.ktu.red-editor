@@ -10,7 +10,7 @@ const texts: Record<string, string> = {
   add_vlines_shader_button: "vLines",
   add_hlines_shader_button: "hLines",
   add_grid_shader_button: "Grid",
-  add_noblack_shader_button: "Chroma Key",
+  add_chroma_shader_button: "Chroma Key",
 
   export_state: "Save File",
   import_state: "Import File",
