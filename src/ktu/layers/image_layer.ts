@@ -40,18 +40,7 @@ export class ImageLayer extends ContainerLayer {
       field: "imageSource",
       type: "file",
       onchange: (value) => {
-        if (value.startsWith("data:")) {
-          console.log("STARTS WITH DATA");
-          const hash = cacheAsset(value);
-          this.state.imageHash = hash;
-          this.repaint();
-        } else {
-          this.urlContentToDataUri(value).then((url: string) => {
-            const hash = cacheAsset(url);
-            this.state.imageHash = hash;
-            this.repaint();
-          });
-        }
+        this.loadImage(value);
       },
     },
     {
@@ -233,5 +222,20 @@ export class ImageLayer extends ContainerLayer {
     this.sprite.x = this.state.panX;
     this.sprite.y = this.state.panY;
     this.sprite.alpha = this.state.alpha;
+  }
+
+  loadImage(value: string) {
+    if (value.startsWith("data:")) {
+      console.log("STARTS WITH DATA");
+      const hash = cacheAsset(value);
+      this.state.imageHash = hash;
+      this.repaint();
+    } else {
+      this.urlContentToDataUri(value).then((url: string) => {
+        const hash = cacheAsset(url);
+        this.state.imageHash = hash;
+        this.repaint();
+      });
+    }
   }
 }

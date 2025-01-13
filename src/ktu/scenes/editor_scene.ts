@@ -19,6 +19,7 @@ import { ASSETS_MAP, rebuildAssets } from "../helpers/assets";
 import { getLayerByName } from "../helpers/layers";
 import { IEditorLayer } from "../layers/ieditor_layer";
 import { listenKeyboardEvents } from "../helpers/keyboard_manager";
+import { ILayer } from "../../engine/ilayer";
 
 export type EditorSceneState = {
   layers: ContainerLayerState[];
@@ -399,10 +400,10 @@ export class EditorScene extends BaseScene {
             fr.onload = (e) => {
               const payload: string = e.target!.result as string;
               console.log("URL", payload);
-              this.addGenericLayer(ImageLayer.LAYER_NAME, {
+              const layer = this.addGenericLayer(ImageLayer.LAYER_NAME, {
                 ...ImageLayer.DEFAULT_STATE(),
-                imageUrl: payload,
-              });
+              }) as ImageLayer;
+              layer.loadImage(payload);
             };
             if (file.size < 104857600) {
               console.log("READ");
@@ -684,9 +685,13 @@ export class EditorScene extends BaseScene {
       this.deactivateLayer();
     }
   }
-  addGenericLayer(layerName: string, state?: ContainerLayerState) {
+  addGenericLayer(
+    layerName: string,
+    state?: ContainerLayerState
+  ): IEditorLayer {
     const layer = getLayerByName(layerName, state);
     this.addLayer(layer!);
+    return layer!;
   }
   addGenericShader(shaderName: string, state?: ShaderState) {
     const layer = getShaderByName(shaderName, state);
