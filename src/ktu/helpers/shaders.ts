@@ -5,10 +5,7 @@ import {
 import { BnwShader, BnwShaderState } from "../shaders/bnw/bnw_shader";
 import { DotsShader, DotsShaderState } from "../shaders/dots/dots_shader";
 import { GridShader, GridShaderState } from "../shaders/grid/grid_shader";
-import {
-  HLinesShader,
-  HLinesShaderState,
-} from "../shaders/hlines/hlines_shader";
+import { HLinesShader, HLinesShaderState } from "../shaders/hines/hines_shader";
 import {
   MontecarloSampleShader,
   MontecarloSampleShaderState,
@@ -26,14 +23,11 @@ import {
   PosterizeShaderState,
 } from "../shaders/posterize/posterize_shader";
 import { ShaderLayer, ShaderState } from "../shaders/shader_layer";
+import { VLinesShader, VLinesShaderState } from "../shaders/vines/vines_shader";
 import {
   VintageShader,
   VintageShaderState,
 } from "../shaders/vintage/vintage_shader";
-import {
-  VLinesShader,
-  VLinesShaderState,
-} from "../shaders/vlines/vlines_shader";
 
 export type ShaderClass = {
   SHADER_NAME: string;

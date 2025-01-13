@@ -31,9 +31,9 @@ import { ShapeLayer } from "../../layers/shape_layer";
 import { AnaglyphShader } from "../../shaders/anaglyph/anaglyph_shader";
 import { PosterizeShader } from "../../shaders/posterize/posterize_shader";
 import { DotsShader } from "../../shaders/dots/dots_shader";
-import { VLinesShader } from "../../shaders/vlines/vlines_shader";
-import { HLinesShader } from "../../shaders/hlines/hlines_shader";
 import { GridShader } from "../../shaders/grid/grid_shader";
+import { VLinesShader } from "../../shaders/vines/vines_shader";
+import { HLinesShader } from "../../shaders/hines/hines_shader";
 
 export class HintPanel extends KTUComponent {
   render(): Element {

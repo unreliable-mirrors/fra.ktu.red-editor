@@ -1,7 +1,7 @@
 import { Container, Point, UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
-import fragment from "./hlines_shader.frag?raw";
+import fragment from "./hines_shader.frag?raw";
 import { ILayer } from "../../../engine/ilayer";
 
 export type HLinesShaderState = ShaderState & {
