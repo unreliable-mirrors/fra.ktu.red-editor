@@ -11,6 +11,7 @@ const texts: Record<string, string> = {
   add_hlines_shader_button: "hLines",
   add_grid_shader_button: "Grid",
   add_chroma_shader_button: "Chroma Key",
+  add_scramble_shader_button: "Scramble",
 
   export_state: "Save File",
   import_state: "Import File",

@@ -54,7 +54,7 @@ export class MontecarloSampleShader extends ShaderLayer {
         value: new Point(window.innerWidth, window.innerHeight),
         type: "vec2<f32>",
       },
-      uTime: { value: 1, type: "f32" },
+      uTime: { value: Math.random(), type: "f32" },
     });
   }
 

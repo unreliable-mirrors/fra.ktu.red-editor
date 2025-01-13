@@ -28,6 +28,10 @@ import {
   VintageShader,
   VintageShaderState,
 } from "../shaders/vintage/vintage_shader";
+import {
+  ScrambleShader,
+  ScrambleShaderState,
+} from "../shaders/scramble/scramble_shader";
 
 export type ShaderClass = {
   SHADER_NAME: string;
@@ -44,6 +48,7 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   HLinesShader,
   GridShader,
   ChromaShader,
+  ScrambleShader,
 ];
 
 export const AVAILABLE_SHADERS_MAP: Record<string, ShaderClass> =
@@ -81,6 +86,8 @@ export const getShaderByName = (
     return new GridShader(state as GridShaderState);
   } else if (shaderName === ChromaShader.SHADER_NAME) {
     return new ChromaShader(state as ChromaShaderState);
+  } else if (shaderName === ScrambleShader.SHADER_NAME) {
+    return new ScrambleShader(state as ScrambleShaderState);
   }
   return null;
 };

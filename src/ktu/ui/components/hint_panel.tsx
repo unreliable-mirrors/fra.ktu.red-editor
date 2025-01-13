@@ -35,6 +35,7 @@ import { GridShader } from "../../shaders/grid/grid_shader";
 import { VLinesShader } from "../../shaders/vines/vines_shader";
 import { HLinesShader } from "../../shaders/hines/hines_shader";
 import { ChromaShader } from "../../shaders/chroma/chroma_shader";
+import { ScrambleShader } from "../../shaders/scramble/scramble_shader";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -527,7 +528,37 @@ export class HintPanel extends KTUComponent {
               </div>
               <div>
                 <strong>Threshold</strong>: Tolerance % in color variations. 0 =
-                remove ONLY that color -&gt; 1 = remove everything.
+                remove ONLY that color. 1 = remove everything. (0-1) = Somewhere
+                in the middle...
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == ScrambleShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>Scramble Shader</h3>
+            <div className="tip">
+              Picks Pixels nearby instead of the right one. It kind of
+              disintegrates stuff.
+            </div>
+          </div>
+          <div className="block extraLast">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Range</strong>: How far will it go fetch.
+              </div>
+              <div>
+                <strong>Refresh Chance</strong>: How often do you want it to
+                refresh. 1 = Updates every frame. 0 = Never updates. (0-1) =
+                Somewhere in the middle...
               </div>
             </div>
           </div>
