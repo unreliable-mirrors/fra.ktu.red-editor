@@ -1,8 +1,7 @@
-import { Color, Container, Point, UniformGroup } from "pixi.js";
+import { Color, Container, UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import fragment from "./noblack_shader.frag?raw";
-import { ILayer } from "../../../engine/ilayer";
 
 export type NoBlackShaderState = ShaderState & {
   color: string;
