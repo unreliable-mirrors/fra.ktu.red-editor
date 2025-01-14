@@ -210,11 +210,10 @@ export class HintPanel extends KTUComponent {
           <div className="block extraLast">
             <h3>Tips</h3>
             <div className="tip">
-              <div>Default Drawing Mode is weird on purpose.</div>
-            </div>
-            <div className="tip">
-              <div>Use Grid Size to sort of "zoom".</div>
-              <div>Increase Grid Size to draw details, decrease later.</div>
+              <div>
+                Default Drawing Mode is weird on purpose. Use Normal Mode to
+                draw like a normal person.
+              </div>
             </div>
           </div>
         </>
