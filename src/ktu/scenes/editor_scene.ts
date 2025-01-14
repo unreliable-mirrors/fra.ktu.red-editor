@@ -44,11 +44,10 @@ export class EditorScene extends BaseScene {
     super();
     this.layers = [];
     this.shaders = [];
-    this.container = new Sprite();
     this.container.eventMode = "static";
     this.graphics = new Graphics();
     this.container.addChild(this.graphics);
-    this.camera = new Camera(this.container as Sprite);
+    this.camera = new Camera(this.container);
 
     this.frameSize = new Point(window.innerWidth, window.innerHeight);
 

@@ -1,15 +1,15 @@
-import { Point, Sprite } from "pixi.js";
+import { Container, Point } from "pixi.js";
 import { KeyboardManager } from "../helpers/keyboard_manager";
 
 export class Camera {
-  container: Sprite;
+  container: Container;
   clickStart?: Point;
   panStart?: Point;
   offset: Point;
   scaleOffset: number;
   moving: boolean;
 
-  constructor(container: Sprite) {
+  constructor(container: Container) {
     this.container = container;
     this.offset = new Point(0, 0);
     this.scaleOffset = 1;
@@ -60,6 +60,7 @@ export class Camera {
   }
 
   reposition() {
+    this.scaleOffset = Math.max(0.1, this.scaleOffset);
     this.container.x =
       this.offset.x +
       (window.innerWidth - window.innerWidth * this.scaleOffset) / 2;

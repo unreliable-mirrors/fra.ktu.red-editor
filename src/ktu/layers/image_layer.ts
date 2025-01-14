@@ -106,8 +106,8 @@ export class ImageLayer extends ContainerLayer {
     return {
       ...ImageLayer.DEFAULT_STATE(),
       ...super.defaultState(),
-      panX: Math.floor(Math.random() * 0.7 * window.innerWidth),
-      panY: Math.floor(Math.random() * 0.7 * window.innerHeight),
+      panX: 100,
+      panY: 100,
     };
   }
 
