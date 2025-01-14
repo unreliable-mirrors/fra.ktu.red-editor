@@ -3,10 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://unreliable-mirrors.github.io/fra.ktu.red-editor/",
+  "homepage": "https://fra.ktu.red/",
   "scripts": {
     "dev": "vite",
-    "build-gh": "tsc && vite build -c vite.config.gh.js",
+    "build-gh": "tsc && vite build -c vite.config.web.js",
     "build-web": "tsc && vite build -c vite.config.web.js",
     "preview": "vite preview"
   },
