@@ -1,4 +1,4 @@
-import { Filter, Graphics, Point, Rectangle, Sprite, Ticker } from "pixi.js";
+import { Filter, Graphics, Point, Rectangle, Ticker } from "pixi.js";
 import DataStore from "../ui/core/data_store";
 import EventDispatcher from "../ui/core/event_dispatcher";
 import { BaseScene } from "../../engine/scenes/base_scene";

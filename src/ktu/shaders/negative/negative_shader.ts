@@ -1,4 +1,4 @@
-import { Container, Ticker, UniformGroup } from "pixi.js";
+import { Container, UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import fragment from "./negative_shader.frag?raw";
