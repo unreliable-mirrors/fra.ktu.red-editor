@@ -39,6 +39,9 @@ button {
   font-weight: 400;
   font-style: normal;
 }
+input {
+  accent-color: #66ff66;
+}
 .hidden {
   display: none !important;
 }

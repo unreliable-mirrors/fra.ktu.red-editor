@@ -66,11 +66,11 @@ export class LayerComponent extends KTUComponent {
             <div>
               <span>{setting.field}: </span>
               <input
-                type="number"
+                type="range"
                 value={this.layer.state[setting.field]}
                 min="0"
                 max="1"
-                step="0.01"
+                step="0.001"
                 spellcheck="false"
                 autocomplete="off"
                 aria-autocomplete="none"

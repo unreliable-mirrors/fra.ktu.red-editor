@@ -199,7 +199,6 @@ export class TextLayer extends ContainerLayer {
     fontWeight: TextStyleFontWeight;
     fontStyle: TextStyleFontStyle;
   } {
-    console.log("FONT", this.state.font);
     if (this.state.font === "Orbitron") {
       return { fontFamily: "Orbitron", fontWeight: "400", fontStyle: "normal" };
     } else if (this.state.font === "Permanent Marker") {
@@ -239,7 +238,6 @@ export class TextLayer extends ContainerLayer {
         fontStyle: "normal",
       };
     }
-    console.log("ARIALING");
     return { fontFamily: "Arial", fontWeight: "400", fontStyle: "normal" };
   }
 }
