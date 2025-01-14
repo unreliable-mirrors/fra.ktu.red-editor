@@ -1,11 +1,4 @@
-import {
-  FederatedPointerEvent,
-  Filter,
-  Graphics,
-  Point,
-  Rectangle,
-  Ticker,
-} from "pixi.js";
+import { Filter, Graphics, Point, Rectangle, Sprite, Ticker } from "pixi.js";
 import DataStore from "../ui/core/data_store";
 import EventDispatcher from "../ui/core/event_dispatcher";
 import { BaseScene } from "../../engine/scenes/base_scene";
@@ -18,7 +11,8 @@ import { getShaderByName } from "../helpers/shaders";
 import { ASSETS_MAP, rebuildAssets } from "../helpers/assets";
 import { getLayerByName } from "../helpers/layers";
 import { IEditorLayer } from "../layers/ieditor_layer";
-import { listenKeyboardEvents } from "../helpers/keyboard_manager";
+import { Camera } from "./camera";
+import { KeyboardManager } from "../helpers/keyboard_manager";
 
 export type EditorSceneState = {
   layers: ContainerLayerState[];
@@ -42,17 +36,21 @@ export class EditorScene extends BaseScene {
   history: EditorSceneHistoryEntry[];
   lastSize: Point;
   graphics: Graphics;
+  camera: Camera;
 
   public constructor() {
     super();
     this.layers = [];
     this.shaders = [];
+    this.container = new Sprite();
     this.container.eventMode = "static";
     this.graphics = new Graphics();
     this.container.addChild(this.graphics);
+    this.camera = new Camera(this.container as Sprite);
+
     this.setupContainer();
 
-    listenKeyboardEvents();
+    KeyboardManager.listenKeyboardEvents();
 
     this.metadata = { name: getStartingName(), timestamp: Date.now() };
     DataStore.getInstance().setStore("metadata", this.metadata);
@@ -114,22 +112,6 @@ export class EditorScene extends BaseScene {
       for (const shader of this.shaders) {
         shader.tick(time);
       }
-    });
-
-    this.container.on("pointerdown", (event: FederatedPointerEvent) => {
-      if (this.activeLayer?.absorbingLayer) {
-        this.activeLayer?.pointerDown(event);
-      }
-    });
-
-    this.container.on("pointerup", (event: FederatedPointerEvent) => {
-      this.activeLayer?.pointerUp(event);
-    });
-    this.container.on("pointerupoutside", (event: FederatedPointerEvent) => {
-      this.activeLayer?.pointerUp(event);
-    });
-    this.container.on("pointermove", (event: FederatedPointerEvent) => {
-      this.activeLayer?.pointerMove(event);
     });
 
     EventDispatcher.getInstance().addEventListener(
@@ -268,23 +250,25 @@ export class EditorScene extends BaseScene {
     EventDispatcher.getInstance().addEventListener(
       "scene",
       "clickLayer",
-      (payload: { event: FederatedPointerEvent; layer: IEditorLayer }) => {
-        if (this.activeLayer === payload.layer) {
-          if (!this.activeLayer?.absorbingLayer) {
-            this.activeLayer.pointerDown(payload.event);
-          }
-        } else if (
-          !this.activeLayer?.absorbingLayer &&
-          !payload.event.ctrlKey
-        ) {
-          if (!payload.layer.absorbingLayer || payload.event.ctrlKey) {
-            this.activateLayer(payload.layer);
+      (payload: { event: PointerEvent; layer: IEditorLayer }) => {
+        if (!KeyboardManager.spacePressed) {
+          if (this.activeLayer === payload.layer) {
             if (!this.activeLayer?.absorbingLayer) {
-              this.activeLayer?.pointerDown(payload.event);
+              this.activeLayer.pointerDown(payload.event);
             }
+          } else if (
+            !this.activeLayer?.absorbingLayer &&
+            !payload.event.ctrlKey
+          ) {
+            if (!payload.layer.absorbingLayer || payload.event.ctrlKey) {
+              this.activateLayer(payload.layer);
+              if (!this.activeLayer?.absorbingLayer) {
+                this.activeLayer?.pointerDown(payload.event);
+              }
+            }
+          } else {
+            this.activeLayer?.pointerDown(payload.event);
           }
-        } else {
-          this.activeLayer?.pointerDown(payload.event);
         }
       }
     );
@@ -373,9 +357,17 @@ export class EditorScene extends BaseScene {
       "setName",
       (name: string) => {
         this.metadata.name = name;
-        //DataStore.getInstance().touch("metadata");
       }
     );
+    EventDispatcher.getInstance().addEventListener("scene", "resetZoom", () => {
+      this.camera.reset();
+    });
+    EventDispatcher.getInstance().addEventListener("scene", "zoomIn", () => {
+      this.camera.zoomIn();
+    });
+    EventDispatcher.getInstance().addEventListener("scene", "zoomOut", () => {
+      this.camera.zoomOut();
+    });
     document.addEventListener(
       "contextmenu",
       (e) => {
@@ -386,26 +378,21 @@ export class EditorScene extends BaseScene {
       false
     );
     document.addEventListener("paste", async (e: ClipboardEvent) => {
-      console.log("PASTE", e.clipboardData?.files);
       if (e.clipboardData) {
         for (const file of e.clipboardData.files) {
-          console.log("FILE", file.type);
           if (
             file.type.indexOf("image/") === 0 ||
             file.type.indexOf("video/") === 0
           ) {
-            console.log("IMAGE");
             const fr: FileReader = new FileReader();
             fr.onload = (e) => {
               const payload: string = e.target!.result as string;
-              console.log("URL", payload);
               const layer = this.addGenericLayer(ImageLayer.LAYER_NAME, {
                 ...ImageLayer.DEFAULT_STATE(),
               }) as ImageLayer;
               layer.loadImage(payload);
             };
             if (file.size < 104857600) {
-              console.log("READ");
               fr.readAsDataURL(file);
             } else {
               //TODO: Implement an alert system for this
@@ -695,5 +682,30 @@ export class EditorScene extends BaseScene {
   addGenericShader(shaderName: string, state?: ShaderState) {
     const layer = getShaderByName(shaderName, state);
     this.addShader(layer!);
+  }
+
+  pointerDown(event: PointerEvent) {
+    if (this.activeLayer?.absorbingLayer && !KeyboardManager.spacePressed) {
+      this.activeLayer?.pointerDown(event);
+    }
+    this.camera.pointerDown(event);
+  }
+
+  pointerUp(event: PointerEvent) {
+    if (!KeyboardManager.spacePressed) {
+      this.activeLayer?.pointerUp(event);
+    }
+    this.camera.pointerUp();
+  }
+
+  pointerMove(event: PointerEvent) {
+    if (!KeyboardManager.spacePressed) {
+      this.activeLayer?.pointerMove(event);
+    }
+    this.camera.pointerMove(event);
+  }
+
+  scroll(event: WheelEvent) {
+    this.camera.scroll(event);
   }
 }

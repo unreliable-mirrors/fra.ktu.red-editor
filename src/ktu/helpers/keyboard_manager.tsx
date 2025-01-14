@@ -392,6 +392,75 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
       },
     ],
   },
+  {
+    meta: {
+      keyHint: `${ctrlKey()} + 0`,
+      globalHint: "Reset Zoom",
+      command: "resetZoom",
+    },
+    shortcuts: [
+      {
+        key: "0",
+        ctrlKey: true,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+      {
+        key: "0",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: true,
+      },
+    ],
+  },
+  {
+    meta: {
+      keyHint: `${ctrlKey()} + +`,
+      globalHint: "Zoom In",
+      command: "zoomIn",
+    },
+    shortcuts: [
+      {
+        key: "+",
+        ctrlKey: true,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+      {
+        key: "+",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: true,
+      },
+    ],
+  },
+  {
+    meta: {
+      keyHint: `${ctrlKey()} + -`,
+      globalHint: "Zoom Out",
+      command: "zoomOut",
+    },
+    shortcuts: [
+      {
+        key: "-",
+        ctrlKey: true,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+      {
+        key: "-",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: true,
+      },
+    ],
+  },
 ];
 
 export const INVERTED_SHORTCUTS: {
@@ -408,63 +477,73 @@ for (const shortcutSetting of SHORTCUTS) {
   }
 }
 
-export const getShortcutText = (command: string): Element => {
-  return (
-    <>
-      <strong>{SHORTCUTS_DICTIONARY[command].meta.keyHint}</strong>:{" "}
-      {SHORTCUTS_DICTIONARY[command].meta.globalHint}
-    </>
-  );
-};
+export class KeyboardManager {
+  static spacePressed: boolean = false;
 
-export const listenKeyboardEvents = () => {
-  document.addEventListener("keydown", (e: KeyboardEvent) => {
-    if (!(e.target instanceof HTMLInputElement)) {
-      for (const is of INVERTED_SHORTCUTS) {
-        if (
-          is.shortcut.key === e.key &&
-          is.shortcut.ctrlKey === e.ctrlKey &&
-          is.shortcut.shiftKey === e.shiftKey &&
-          is.shortcut.altKey === e.altKey &&
-          is.shortcut.metaKey === e.metaKey
-        ) {
-          e.preventDefault();
+  static getShortcutText(command: string): Element {
+    return (
+      <>
+        <strong>{SHORTCUTS_DICTIONARY[command].meta.keyHint}</strong>:{" "}
+        {SHORTCUTS_DICTIONARY[command].meta.globalHint}
+      </>
+    );
+  }
+
+  static listenKeyboardEvents() {
+    document.addEventListener("keydown", (e: KeyboardEvent) => {
+      if (!(e.target instanceof HTMLInputElement)) {
+        if (e.key == " ") {
+          KeyboardManager.spacePressed = true;
+        }
+        for (const is of INVERTED_SHORTCUTS) {
+          if (
+            is.shortcut.key === e.key &&
+            is.shortcut.ctrlKey === e.ctrlKey &&
+            is.shortcut.shiftKey === e.shiftKey &&
+            is.shortcut.altKey === e.altKey &&
+            is.shortcut.metaKey === e.metaKey
+          ) {
+            e.preventDefault();
+          }
         }
       }
-    }
-  });
+    });
 
-  document.addEventListener("keyup", (e: KeyboardEvent) => {
-    if (!(e.target instanceof HTMLInputElement)) {
-      for (const is of INVERTED_SHORTCUTS) {
-        if (
-          is.shortcut.key === e.key &&
-          is.shortcut.ctrlKey === e.ctrlKey &&
-          is.shortcut.shiftKey === e.shiftKey &&
-          is.shortcut.altKey === e.altKey &&
-          is.shortcut.metaKey === e.metaKey
-        ) {
-          EventDispatcher.getInstance().dispatchEvent(
-            "scene",
-            is.meta.command,
-            is.meta.payload ? is.meta.payload() : undefined
-          );
+    document.addEventListener("keyup", (e: KeyboardEvent) => {
+      if (!(e.target instanceof HTMLInputElement)) {
+        if (e.key == " ") {
+          KeyboardManager.spacePressed = false;
+        }
+        for (const is of INVERTED_SHORTCUTS) {
+          if (
+            is.shortcut.key === e.key &&
+            is.shortcut.ctrlKey === e.ctrlKey &&
+            is.shortcut.shiftKey === e.shiftKey &&
+            is.shortcut.altKey === e.altKey &&
+            is.shortcut.metaKey === e.metaKey
+          ) {
+            EventDispatcher.getInstance().dispatchEvent(
+              "scene",
+              is.meta.command,
+              is.meta.payload ? is.meta.payload() : undefined
+            );
+          }
         }
       }
-    }
-  });
-};
+    });
+  }
 
-export const keyboardExists = (): boolean => {
-  return !(
-    [
-      "iPad Simulator",
-      "iPhone Simulator",
-      "iPod Simulator",
-      "iPad",
-      "iPhone",
-      "iPod",
-    ].includes(navigator.platform) ||
-    navigator.userAgent.toLowerCase().indexOf("android") > -1
-  );
-};
+  static keyboardExists(): boolean {
+    return !(
+      [
+        "iPad Simulator",
+        "iPhone Simulator",
+        "iPod Simulator",
+        "iPad",
+        "iPhone",
+        "iPod",
+      ].includes(navigator.platform) ||
+      navigator.userAgent.toLowerCase().indexOf("android") > -1
+    );
+  }
+}

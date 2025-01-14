@@ -1,6 +1,5 @@
 import {
   Container,
-  FederatedPointerEvent,
   Point,
   Text,
   TextStyleFontStyle,
@@ -144,21 +143,28 @@ export class TextLayer extends ContainerLayer {
     };
   }
 
-  pointerDown(event: FederatedPointerEvent): void {
+  pointerDown(event: PointerEvent): void {
     this.clicking = true;
     this.panning = true;
     this.panStart = new Point(this.state.panX, this.state.panY);
-    this.clickStart = new Point(event.globalX, event.globalY);
+    this.clickStart = this.container.toLocal<Point>({
+      x: event.clientX,
+      y: event.clientY,
+    });
   }
   pointerUp(): void {
     this.clicking = false;
     this.panning = false;
     this.panStart = null;
   }
-  pointerMove(event: FederatedPointerEvent): void {
+  pointerMove(event: PointerEvent): void {
     if (this.panning) {
-      this.state.panX = this.panStart!.x + (event.globalX - this.clickStart!.x);
-      this.state.panY = this.panStart!.y + (event.globalY - this.clickStart!.y);
+      const localPoint: Point = this.container.toLocal({
+        x: event.clientX,
+        y: event.clientY,
+      });
+      this.state.panX = this.panStart!.x + (localPoint.x - this.clickStart!.x);
+      this.state.panY = this.panStart!.y + (localPoint.y - this.clickStart!.y);
       this.repaint();
       DataStore.getInstance().touch("layers");
     }

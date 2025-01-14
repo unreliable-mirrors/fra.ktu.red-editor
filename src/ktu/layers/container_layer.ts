@@ -314,9 +314,9 @@ export abstract class ContainerLayer implements IEditorLayer {
   }
 
   //@ts-ignore
-  pointerDown(event: FederatedPointerEvent): void {}
+  pointerDown(event: PointerEvent): void {}
   //@ts-ignore
-  pointerUp(event: FederatedPointerEvent): void {}
+  pointerUp(event: PointerEvent): void {}
   //@ts-ignore
-  pointerMove(event: FederatedPointerEvent): void {}
+  pointerMove(event: PointerEvent): void {}
 }

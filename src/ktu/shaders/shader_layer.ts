@@ -1,10 +1,4 @@
-import {
-  Container,
-  FederatedPointerEvent,
-  Filter,
-  Ticker,
-  UniformGroup,
-} from "pixi.js";
+import { Container, Filter, Ticker, UniformGroup } from "pixi.js";
 
 import {
   EditorLayerSetting,
@@ -92,10 +86,10 @@ export abstract class ShaderLayer implements IEditorLayer {
   tick(time: Ticker): void {}
 
   //@ts-ignore
-  pointerDown(event: FederatedPointerEvent): void {}
+  pointerDown(event: PointerEvent): void {}
 
   //@ts-ignore
-  pointerUp(event: FederatedPointerEvent): void {}
+  pointerUp(event: PointerEvent): void {}
   //@ts-ignore
-  pointerMove(event: FederatedPointerEvent): void {}
+  pointerMove(event: PointerEvent): void {}
 }

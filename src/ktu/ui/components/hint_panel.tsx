@@ -22,11 +22,7 @@ import { VintageShader } from "../../shaders/vintage/vintage_shader";
 import { PixelateShader } from "../../shaders/pixelate/pixelate_shader";
 import { MontecarloSampleShader } from "../../shaders/montecarlo_sample/montecarlo_sample";
 import EventDispatcher from "../core/event_dispatcher";
-import {
-  ctrlKey,
-  getShortcutText,
-  keyboardExists,
-} from "../../helpers/keyboard_manager";
+import { ctrlKey, KeyboardManager } from "../../helpers/keyboard_manager";
 import { ShapeLayer } from "../../layers/shape_layer";
 import { AnaglyphShader } from "../../shaders/anaglyph/anaglyph_shader";
 import { PosterizeShader } from "../../shaders/posterize/posterize_shader";
@@ -53,7 +49,8 @@ export class HintPanel extends KTUComponent {
                 )
               }
             >
-              {IconBackground()} {`Background ${keyboardExists() ? "(1)" : ""}`}
+              {IconBackground()}{" "}
+              {`Background ${KeyboardManager.keyboardExists() ? "(1)" : ""}`}
             </div>
             <div
               onclick={() =>
@@ -64,7 +61,8 @@ export class HintPanel extends KTUComponent {
                 )
               }
             >
-              {IconImage()} {`Image/Video ${keyboardExists() ? "(3)" : ""}`}
+              {IconImage()}{" "}
+              {`Image/Video ${KeyboardManager.keyboardExists() ? "(3)" : ""}`}
             </div>
             <div
               onclick={() =>
@@ -75,7 +73,8 @@ export class HintPanel extends KTUComponent {
                 )
               }
             >
-              {IconShape()} {`Shape ${keyboardExists() ? "(5)" : ""}`}
+              {IconShape()}{" "}
+              {`Shape ${KeyboardManager.keyboardExists() ? "(5)" : ""}`}
             </div>
           </div>
           <div className="tip">
@@ -88,7 +87,8 @@ export class HintPanel extends KTUComponent {
                 )
               }
             >
-              {IconDraw()} {`Draw ${keyboardExists() ? "(2)" : ""}`}
+              {IconDraw()}{" "}
+              {`Draw ${KeyboardManager.keyboardExists() ? "(2)" : ""}`}
             </div>
             <div
               onclick={() =>
@@ -99,7 +99,8 @@ export class HintPanel extends KTUComponent {
                 )
               }
             >
-              {IconText()} {`Text ${keyboardExists() ? " (4)" : ""}`}
+              {IconText()}{" "}
+              {`Text ${KeyboardManager.keyboardExists() ? " (4)" : ""}`}
             </div>
           </div>
         </div>
@@ -114,14 +115,14 @@ export class HintPanel extends KTUComponent {
             <div>{IconClose()} Remove Layer</div>
           </div>
         </div>
-        {keyboardExists() ? (
+        {KeyboardManager.keyboardExists() ? (
           <div className="block">
             <h3>Shortcuts</h3>
             <div className="tip">
-              <div>{getShortcutText("toggleHints")}</div>
-              <div>{getShortcutText("toggleUI")}</div>
-              <div>{getShortcutText("PASTEIMAGE")}</div>
-              <div>{getShortcutText("DRAGLAYER")}</div>
+              <div>{KeyboardManager.getShortcutText("toggleHints")}</div>
+              <div>{KeyboardManager.getShortcutText("toggleUI")}</div>
+              <div>{KeyboardManager.getShortcutText("PASTEIMAGE")}</div>
+              <div>{KeyboardManager.getShortcutText("DRAGLAYER")}</div>
             </div>
           </div>
         ) : (
@@ -166,7 +167,7 @@ export class HintPanel extends KTUComponent {
             <h3>Draw Layer</h3>
             <div className="tip">Draw cool stuff on Pixel style.</div>
           </div>
-          {keyboardExists() ? (
+          {KeyboardManager.keyboardExists() ? (
             <div className="block">
               <h3>Shortcuts</h3>
               <div className="tip">
@@ -576,7 +577,7 @@ export class HintPanel extends KTUComponent {
                 this.helpClick();
               }}
             >
-              {`HIDE${keyboardExists() ? " (H)" : ""}`}
+              {`HIDE${KeyboardManager.keyboardExists() ? " (H)" : ""}`}
             </div>
             <div className="hintPanel">
               {extraContent}
@@ -588,7 +589,7 @@ export class HintPanel extends KTUComponent {
     } else {
       return (
         <div className="panel helpTooltip" onclick={() => this.helpClick()}>
-          {`HELP${keyboardExists() ? " (H)" : ""}`}
+          {`HELP${KeyboardManager.keyboardExists() ? " (H)" : ""}`}
         </div>
       );
     }

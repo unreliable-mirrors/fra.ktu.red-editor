@@ -1,4 +1,3 @@
-import { FederatedPointerEvent } from "pixi.js";
 import { ILayer } from "../../engine/ilayer";
 
 export type EditorLayerState = {
@@ -20,7 +19,7 @@ export interface IEditorLayer extends ILayer {
   state: EditorLayerState;
   settings: EditorLayerSetting[];
   absorbingLayer: boolean;
-  pointerDown(event: FederatedPointerEvent): void;
-  pointerUp(event: FederatedPointerEvent): void;
-  pointerMove(event: FederatedPointerEvent): void;
+  pointerDown(event: PointerEvent): void;
+  pointerUp(event: PointerEvent): void;
+  pointerMove(event: PointerEvent): void;
 }

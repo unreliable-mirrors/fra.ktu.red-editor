@@ -1,7 +1,7 @@
 import jsx from "texsaur";
 import { KTUComponent } from "../core/ktu_component";
 import EventDispatcher from "../core/event_dispatcher";
-import { keyboardExists } from "../../helpers/keyboard_manager";
+import { KeyboardManager } from "../../helpers/keyboard_manager";
 
 export class LayersPanel extends KTUComponent {
   render(): Element {
@@ -21,7 +21,7 @@ export class LayersPanel extends KTUComponent {
         <div className="panel right">
           <div>
             <h3 onclick={() => this.click()}>{`Layers/Tools ${
-              keyboardExists() ? " (L)" : ""
+              KeyboardManager.keyboardExists() ? " (L)" : ""
             }`}</h3>
 
             {layersContent}

@@ -6,7 +6,7 @@ import { ShaderLayer } from "../../../shaders/shader_layer";
 import { AVAILABLE_SHADERS_NAMES } from "../../../helpers/shaders";
 import { AddShaderButtonComponent } from "./add_shader_button";
 import EventDispatcher from "../../core/event_dispatcher";
-import { keyboardExists } from "../../../helpers/keyboard_manager";
+import { KeyboardManager } from "../../../helpers/keyboard_manager";
 
 export class ShadersList extends KTUComponent {
   render(): Element {
@@ -32,7 +32,7 @@ export class ShadersList extends KTUComponent {
     return (
       <div>
         <h3 onclick={() => this.click()}>{`Global Shaders ${
-          keyboardExists() ? " (S)" : ""
+          KeyboardManager.keyboardExists() ? " (S)" : ""
         }`}</h3>
         {content}
       </div>

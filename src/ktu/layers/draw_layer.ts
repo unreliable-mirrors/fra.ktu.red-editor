@@ -1,4 +1,4 @@
-import { FederatedPointerEvent, Graphics, Point } from "pixi.js";
+import { Graphics, Point } from "pixi.js";
 
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import DataStore from "../ui/core/data_store";
@@ -149,7 +149,7 @@ export class DrawLayer extends ContainerLayer {
     };
   }
 
-  pointerDown(event: FederatedPointerEvent): void {
+  pointerDown(event: PointerEvent): void {
     console.log("NUMBER", event, this.state);
     this.clicking = true;
     if (event.button === 2) {
@@ -159,7 +159,10 @@ export class DrawLayer extends ContainerLayer {
     } else if (event.ctrlKey || event.metaKey) {
       this.panning = true;
       this.panStart = new Point(this.state.panX, this.state.panY);
-      this.clickStart = new Point(event.globalX, event.globalY);
+      this.clickStart = this.container.toLocal<Point>({
+        x: event.clientX,
+        y: event.clientY,
+      });
     }
     if (!this.panning) {
       this.stroke = {};
@@ -173,25 +176,33 @@ export class DrawLayer extends ContainerLayer {
     this.panning = false;
     this.panStart = null;
   }
-  pointerMove(event: FederatedPointerEvent): void {
+  pointerMove(event: PointerEvent): void {
     if (!this.panning) {
       this.metapaint(event);
     } else {
-      this.state.panX = this.panStart!.x + (event.globalX - this.clickStart!.x);
-      this.state.panY = this.panStart!.y + (event.globalY - this.clickStart!.y);
+      const localPoint: Point = this.container.toLocal({
+        x: event.clientX,
+        y: event.clientY,
+      });
+      this.state.panX = this.panStart!.x + (localPoint.x - this.clickStart!.x);
+      this.state.panY = this.panStart!.y + (localPoint.y - this.clickStart!.y);
       this.repaint();
       DataStore.getInstance().touch("layers");
     }
   }
 
-  metapaint(event: FederatedPointerEvent) {
+  metapaint(event: PointerEvent) {
     if (this.clicking) {
+      const localPoint: Point = this.container.toLocal({
+        x: event.clientX,
+        y: event.clientY,
+      });
       const x = Math.floor(
-        (event.globalX + this.state.gridSize / 2 - this.state.panX) /
+        (localPoint.x + this.state.gridSize / 2 - this.state.panX) /
           this.state.gridSize
       );
       const y = Math.floor(
-        (event.globalY + this.state.gridSize / 2 - this.state.panY) /
+        (localPoint.y + this.state.gridSize / 2 - this.state.panY) /
           this.state.gridSize
       );
       if (!this.stroke[`${x}X${y}`]) {
