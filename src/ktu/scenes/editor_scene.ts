@@ -37,6 +37,8 @@ export class EditorScene extends BaseScene {
   lastSize: Point;
   graphics: Graphics;
   camera: Camera;
+  frameSize: Point;
+  frameOverride: boolean = false;
 
   public constructor() {
     super();
@@ -47,6 +49,8 @@ export class EditorScene extends BaseScene {
     this.graphics = new Graphics();
     this.container.addChild(this.graphics);
     this.camera = new Camera(this.container as Sprite);
+
+    this.frameSize = new Point(window.innerWidth, window.innerHeight);
 
     this.setupContainer();
 
@@ -236,6 +240,26 @@ export class EditorScene extends BaseScene {
           .renderer.extract.base64({
             target: this.container,
             frame: new Rectangle(0, 0, window.innerWidth, innerHeight),
+          });
+        downloadContent(filename, content);
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "exportViewport",
+      async () => {
+        const filename = this.metadata.name + ".png";
+        console.log("CAMX", this.camera.offset);
+        const content = await DataStore.getInstance()
+          .getStore("app")
+          .renderer.extract.base64({
+            target: this.container,
+            frame: new Rectangle(
+              -this.camera.offset.x,
+              -this.camera.offset.y,
+              window.innerWidth,
+              window.innerHeight
+            ),
           });
         downloadContent(filename, content);
       }

@@ -24,6 +24,9 @@ export class FileInfoPanel extends KTUComponent {
           ></input>
         </div>
         <span className="separator"></span>
+        <export-canvas-button></export-canvas-button>
+        <export-viewport-button></export-viewport-button>
+        <span className="separator"></span>
         <h3>History</h3>
         <div>
           {this.bindingData["history"].map(

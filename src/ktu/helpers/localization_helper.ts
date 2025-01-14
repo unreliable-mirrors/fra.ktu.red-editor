@@ -19,6 +19,7 @@ const texts: Record<string, string> = {
   new_state: "New File",
   change: "Change",
   export_canvas: "Download as PNG",
+  export_viewport: "Download Viewport",
 };
 
 export const getText = (key: string): string => {
