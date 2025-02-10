@@ -289,8 +289,6 @@ export class EditorScene extends BaseScene {
                 this.activeLayer?.pointerDown(payload.event);
               }
             }
-          } else {
-            this.activeLayer?.pointerDown(payload.event);
           }
         }
       }
