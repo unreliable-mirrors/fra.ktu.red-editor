@@ -114,7 +114,6 @@ export abstract class ContainerLayer implements IEditorLayer {
     this.shaders.push(shader);
     shader.bind(this.container, this);
     this.state.shaders.push(shader.state);
-
     let filters: Filter[] = [];
     if (this.container.filters) {
       if (this.container.filters instanceof Array) {

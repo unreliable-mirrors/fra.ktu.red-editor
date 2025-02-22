@@ -13,6 +13,7 @@ const texts: Record<string, string> = {
   add_chroma_shader_button: "Chroma Key",
   add_scramble_shader_button: "Scramble",
   add_negative_shader_button: "Negative",
+  add_crosses_shader_button: "Crosses",
 
   export_state: "Save File",
   import_state: "Import File",

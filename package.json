@@ -13,7 +13,7 @@
   "devDependencies": {
     "texsaur": "^1.0.2",
     "typescript": "~5.6.2",
-    "vite": "^6.0.9"
+    "vite": "^6.1.1"
   },
   "dependencies": {
     "@pixi/gif": "^3.0.1",

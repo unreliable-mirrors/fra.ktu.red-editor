@@ -36,6 +36,10 @@ import {
   NegativeShader,
   NegativeShaderState,
 } from "../shaders/negative/negative_shader";
+import {
+  CrossesShader,
+  CrossesShaderState,
+} from "../shaders/crosses/crosses_shader";
 
 export type ShaderClass = {
   SHADER_NAME: string;
@@ -54,6 +58,7 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   ChromaShader,
   ScrambleShader,
   NegativeShader,
+  CrossesShader,
 ];
 
 export const AVAILABLE_SHADERS_MAP: Record<string, ShaderClass> =
@@ -95,6 +100,8 @@ export const getShaderByName = (
     return new ScrambleShader(state as ScrambleShaderState);
   } else if (shaderName === NegativeShader.SHADER_NAME) {
     return new NegativeShader(state as NegativeShaderState);
+  } else if (shaderName === CrossesShader.SHADER_NAME) {
+    return new CrossesShader(state as CrossesShaderState);
   }
   return null;
 };
