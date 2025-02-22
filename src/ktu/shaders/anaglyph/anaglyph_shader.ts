@@ -1,8 +1,7 @@
-import { Container, Point, UniformGroup } from "pixi.js";
+import { UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import fragment from "./anaglyph_shader.frag?raw";
-import { ILayer } from "../../../engine/ilayer";
 
 export type AnaglyphShaderState = ShaderState & {
   strength: number;
@@ -42,22 +41,7 @@ export class AnaglyphShader extends ShaderLayer {
     }
     this.uniforms = new UniformGroup({
       uStrength: { value: this.state.strength, type: "f32" },
-      uSize: {
-        value: new Point(1, 1),
-        type: "vec2<f32>",
-      },
     });
-  }
-
-  bind(container: Container, layer?: ILayer) {
-    super.bind(container, layer);
-    this.uniforms.uniforms.uSize = new Point(container.width, container.height);
-    console.log("UNIFORMS", this.uniforms.uniforms.uSize);
-  }
-
-  resize(container: Container) {
-    this.uniforms.uniforms.uSize = new Point(container.width, container.height);
-    console.log("UNIFORMS", this.uniforms.uniforms.uSize);
   }
 
   shaderName(): string {

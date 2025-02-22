@@ -10,7 +10,7 @@ export type ScrambleShaderState = ShaderState & {
 
 export type ScrambleShaderSetting = {
   field: "range" | "refreshChance";
-  type: "float";
+  type: "integer" | "float";
   onchange: (value: string) => void;
 };
 
@@ -22,7 +22,7 @@ export class ScrambleShader extends ShaderLayer {
   settings: ScrambleShaderSetting[] = [
     {
       field: "range",
-      type: "float",
+      type: "integer",
       onchange: (value) => {
         this.state.range = parseFloat(value);
         this.uniforms.uniforms.uRange = this.state.range;
@@ -61,7 +61,7 @@ export class ScrambleShader extends ShaderLayer {
   defaultState(): ScrambleShaderState {
     return {
       ...super.defaultState(),
-      range: 0.1,
+      range: 10,
       refreshChance: 1,
     };
   }
