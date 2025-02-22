@@ -1,25 +1,25 @@
 import { Container, Point, UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
-import fragment from "./pixelate_shader.frag?raw";
+import fragment from "./crosses_shader.frag?raw";
 import { ILayer } from "../../../engine/ilayer";
 
-export type PixelateShaderState = ShaderState & {
+export type CrossesShaderState = ShaderState & {
   pixelSize: number;
 };
 
-export type PixelateShaderSetting = {
+export type CrossesShaderSetting = {
   field: "pixelSize";
   type: "integer";
   onchange: (value: string) => void;
 };
 
-export class PixelateShader extends ShaderLayer {
-  static SHADER_NAME: string = "pixelate_shader";
-  declare state: PixelateShaderState;
+export class CrossesShader extends ShaderLayer {
+  static SHADER_NAME: string = "crosses_shader";
+  declare state: CrossesShaderState;
   fragment: string = fragment;
   container!: Container;
-  settings: PixelateShaderSetting[] = [
+  settings: CrossesShaderSetting[] = [
     {
       field: "pixelSize",
       type: "integer",
@@ -32,7 +32,7 @@ export class PixelateShader extends ShaderLayer {
   ];
   uniforms: UniformGroup;
 
-  constructor(state?: PixelateShaderState) {
+  constructor(state?: CrossesShaderState) {
     super();
     console.log("CONSTRUCTOR", state, this.state);
     if (state) {
@@ -53,10 +53,10 @@ export class PixelateShader extends ShaderLayer {
   }
 
   shaderName(): string {
-    return PixelateShader.SHADER_NAME;
+    return CrossesShader.SHADER_NAME;
   }
 
-  defaultState(): PixelateShaderState {
+  defaultState(): CrossesShaderState {
     return {
       ...super.defaultState(),
       pixelSize: 15,
