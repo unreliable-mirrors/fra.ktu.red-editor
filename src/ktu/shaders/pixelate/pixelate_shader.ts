@@ -1,4 +1,4 @@
-import { Container, Point, UniformGroup } from "pixi.js";
+import { Container, UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import fragment from "./pixelate_shader.frag?raw";
