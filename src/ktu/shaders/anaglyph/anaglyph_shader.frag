@@ -1,17 +1,33 @@
+precision highp float;
 in vec2 vTextureCoord;
 
 uniform sampler2D uTexture;
-uniform sampler2D uSampler;
+uniform vec4 uInputSize;
+
 uniform float uStrength;
-uniform vec2 uSize;
+
+vec2 mapCoord( vec2 coord )
+{
+    coord *= uInputSize.xy;
+    coord += uInputSize.zw;
+
+    return coord;
+}
+
+vec2 unmapCoord( vec2 coord )
+{
+    coord -= uInputSize.zw;
+    coord /= uInputSize.xy;
+
+    return coord;
+}
 
 void main(){
-    //highp ivec2    size = textureSize(uSampler,1);
-    float offset = (uStrength - 0.5) /uSize.x;
-    float offset2 = (uStrength + 0.5) /uSize.x;
+    vec2 pixelCoord = mapCoord(vTextureCoord);
+
     vec4 tex = texture2D(uTexture, vTextureCoord);
-    vec4 texR = texture2D(uTexture, vec2(vTextureCoord.x+offset,vTextureCoord.y));
-    vec4 texL = texture2D(uTexture, vec2(vTextureCoord.x-offset2,vTextureCoord.y));
+    vec4 texR = texture2D(uTexture, unmapCoord(pixelCoord + vec2(uStrength, 0)));
+    vec4 texL = texture2D(uTexture, unmapCoord(pixelCoord - vec2(uStrength, 0)));
     gl_FragColor = vec4(texL.r, tex.g, texR.b, tex.a);
     
 }

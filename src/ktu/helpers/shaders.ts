@@ -3,8 +3,6 @@ import {
   AnaglyphShaderState,
 } from "../shaders/anaglyph/anaglyph_shader";
 import { BnwShader, BnwShaderState } from "../shaders/bnw/bnw_shader";
-import { DotsShader, DotsShaderState } from "../shaders/dots/dots_shader";
-import { GridShader, GridShaderState } from "../shaders/grid/grid_shader";
 import { HLinesShader, HLinesShaderState } from "../shaders/hines/hines_shader";
 import {
   MontecarloSampleShader,
@@ -51,10 +49,8 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   MontecarloSampleShader,
   AnaglyphShader,
   PosterizeShader,
-  //DotsShader,
   VLinesShader,
   HLinesShader,
-  GridShader,
   ChromaShader,
   ScrambleShader,
   NegativeShader,
@@ -86,14 +82,10 @@ export const getShaderByName = (
     return new AnaglyphShader(state as AnaglyphShaderState);
   } else if (shaderName === PosterizeShader.SHADER_NAME) {
     return new PosterizeShader(state as PosterizeShaderState);
-  } else if (shaderName === DotsShader.SHADER_NAME) {
-    return new DotsShader(state as DotsShaderState);
   } else if (shaderName === VLinesShader.SHADER_NAME) {
     return new VLinesShader(state as VLinesShaderState);
   } else if (shaderName === HLinesShader.SHADER_NAME) {
     return new HLinesShader(state as HLinesShaderState);
-  } else if (shaderName === GridShader.SHADER_NAME) {
-    return new GridShader(state as GridShaderState);
   } else if (shaderName === ChromaShader.SHADER_NAME) {
     return new ChromaShader(state as ChromaShaderState);
   } else if (shaderName === ScrambleShader.SHADER_NAME) {

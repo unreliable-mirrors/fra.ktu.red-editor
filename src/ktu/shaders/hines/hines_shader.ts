@@ -1,8 +1,7 @@
-import { Container, Point, UniformGroup } from "pixi.js";
+import { UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import fragment from "./hines_shader.frag?raw";
-import { ILayer } from "../../../engine/ilayer";
 
 export type HLinesShaderState = ShaderState & {
   size: number;
@@ -18,15 +17,13 @@ export class HLinesShader extends ShaderLayer {
   static SHADER_NAME: string = "hlines_shader";
   declare state: HLinesShaderState;
   fragment: string = fragment;
-  container!: Container;
   settings: HLinesShaderSetting[] = [
     {
       field: "size",
       type: "integer",
       onchange: (value) => {
         this.state.size = parseInt(value);
-        this.uniforms.uniforms.uPixelSize = this.state.size;
-        this.refreshSize();
+        this.uniforms.uniforms.uGridSize = this.state.size;
       },
     },
   ];
@@ -44,11 +41,7 @@ export class HLinesShader extends ShaderLayer {
       };
     }
     this.uniforms = new UniformGroup({
-      uPixelSize: { value: this.state.size, type: "f32" },
-      uSize: {
-        value: new Point(window.innerWidth, window.innerHeight),
-        type: "vec2<f32>",
-      },
+      uGridSize: { value: this.state.size, type: "f32" },
     });
   }
 
@@ -61,24 +54,5 @@ export class HLinesShader extends ShaderLayer {
       ...super.defaultState(),
       size: 15,
     };
-  }
-
-  bind(container: Container, layer?: ILayer): void {
-    super.bind(container, layer);
-    this.container = container;
-    this.refreshSize();
-  }
-
-  resize() {
-    this.refreshSize();
-  }
-
-  refreshSize() {
-    if (this.container.width > 0) {
-      this.uniforms.uniforms.uSize = new Point(
-        this.container.width,
-        this.container.height
-      );
-    }
   }
 }

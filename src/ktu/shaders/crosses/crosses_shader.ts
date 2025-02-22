@@ -1,15 +1,15 @@
-import { Container, Point, UniformGroup } from "pixi.js";
+import { UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import fragment from "./crosses_shader.frag?raw";
-import { ILayer } from "../../../engine/ilayer";
 
 export type CrossesShaderState = ShaderState & {
-  pixelSize: number;
+  gridSize: number;
+  crossSize: number;
 };
 
 export type CrossesShaderSetting = {
-  field: "pixelSize";
+  field: "gridSize" | "crossSize";
   type: "integer";
   onchange: (value: string) => void;
 };
@@ -18,15 +18,21 @@ export class CrossesShader extends ShaderLayer {
   static SHADER_NAME: string = "crosses_shader";
   declare state: CrossesShaderState;
   fragment: string = fragment;
-  container!: Container;
   settings: CrossesShaderSetting[] = [
     {
-      field: "pixelSize",
+      field: "gridSize",
       type: "integer",
       onchange: (value) => {
-        this.state.pixelSize = parseInt(value);
-        this.uniforms.uniforms.uPixelSize = this.state.pixelSize;
-        this.refreshSize();
+        this.state.gridSize = parseInt(value);
+        this.uniforms.uniforms.uGridSize = this.state.gridSize;
+      },
+    },
+    {
+      field: "crossSize",
+      type: "integer",
+      onchange: (value) => {
+        this.state.crossSize = parseInt(value);
+        this.uniforms.uniforms.uCrossSize = this.state.crossSize / 2;
       },
     },
   ];
@@ -38,17 +44,14 @@ export class CrossesShader extends ShaderLayer {
     if (state) {
       this.state = {
         ...this.state,
-        pixelSize: state.pixelSize,
+        gridSize: state.gridSize,
         missProbability: state.missProbability,
         seed: state.seed,
       };
     }
     this.uniforms = new UniformGroup({
-      uPixelSize: { value: this.state.pixelSize, type: "f32" },
-      uSize: {
-        value: new Point(window.innerWidth, window.innerHeight),
-        type: "vec2<f32>",
-      },
+      uGridSize: { value: this.state.gridSize, type: "f32" },
+      uCrossSize: { value: this.state.crossSize / 2, type: "f32" },
     });
   }
 
@@ -59,40 +62,8 @@ export class CrossesShader extends ShaderLayer {
   defaultState(): CrossesShaderState {
     return {
       ...super.defaultState(),
-      pixelSize: 15,
+      gridSize: 15,
+      crossSize: 9,
     };
-  }
-
-  bind(container: Container, layer?: ILayer): void {
-    super.bind(container, layer);
-    this.container = container;
-    this.refreshSize();
-  }
-
-  resize() {
-    this.refreshSize();
-  }
-
-  refreshSize() {
-    console.log("RESIZE");
-    if (this.container.width > 0) {
-      let width, height;
-      if (this.bindedLayer) {
-        width = this.container.width;
-        height = this.container.height;
-      } else {
-        width =
-          this.container.width > window.innerWidth
-            ? this.container.width
-            : window.innerWidth;
-        height =
-          this.container.height > window.innerHeight
-            ? this.container.height
-            : window.innerHeight;
-        height = width;
-      }
-      console.log("RESIZE TRUE", width, height);
-      this.uniforms.uniforms.uSize = new Point(width, height);
-    }
   }
 }

@@ -25,7 +25,7 @@ export class VLinesShader extends ShaderLayer {
       type: "integer",
       onchange: (value) => {
         this.state.size = parseInt(value);
-        this.uniforms.uniforms.uPixelSize = this.state.size;
+        this.uniforms.uniforms.uGridSize = this.state.size;
         this.refreshSize();
       },
     },
@@ -44,7 +44,7 @@ export class VLinesShader extends ShaderLayer {
       };
     }
     this.uniforms = new UniformGroup({
-      uPixelSize: { value: this.state.size, type: "f32" },
+      uGridSize: { value: this.state.size, type: "f32" },
       uSize: {
         value: new Point(window.innerWidth, window.innerHeight),
         type: "vec2<f32>",

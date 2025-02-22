@@ -26,7 +26,6 @@ export class PixelateShader extends ShaderLayer {
       onchange: (value) => {
         this.state.pixelSize = parseInt(value);
         this.uniforms.uniforms.uPixelSize = this.state.pixelSize;
-        this.refreshSize();
       },
     },
   ];
@@ -45,10 +44,6 @@ export class PixelateShader extends ShaderLayer {
     }
     this.uniforms = new UniformGroup({
       uPixelSize: { value: this.state.pixelSize, type: "f32" },
-      uSize: {
-        value: new Point(window.innerWidth, window.innerHeight),
-        type: "vec2<f32>",
-      },
     });
   }
 
@@ -66,33 +61,7 @@ export class PixelateShader extends ShaderLayer {
   bind(container: Container, layer?: ILayer): void {
     super.bind(container, layer);
     this.container = container;
-    this.refreshSize();
   }
 
-  resize() {
-    this.refreshSize();
-  }
-
-  refreshSize() {
-    console.log("RESIZE");
-    if (this.container.width > 0) {
-      let width, height;
-      if (this.bindedLayer) {
-        width = this.container.width;
-        height = this.container.height;
-      } else {
-        width =
-          this.container.width > window.innerWidth
-            ? this.container.width
-            : window.innerWidth;
-        height =
-          this.container.height > window.innerHeight
-            ? this.container.height
-            : window.innerHeight;
-        height = width;
-      }
-      console.log("RESIZE TRUE", width, height);
-      this.uniforms.uniforms.uSize = new Point(width, height);
-    }
-  }
+  resize() {}
 }

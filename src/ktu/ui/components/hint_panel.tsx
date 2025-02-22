@@ -26,12 +26,12 @@ import { ctrlKey, KeyboardManager } from "../../helpers/keyboard_manager";
 import { ShapeLayer } from "../../layers/shape_layer";
 import { AnaglyphShader } from "../../shaders/anaglyph/anaglyph_shader";
 import { PosterizeShader } from "../../shaders/posterize/posterize_shader";
-import { DotsShader } from "../../shaders/dots/dots_shader";
-import { GridShader } from "../../shaders/grid/grid_shader";
 import { VLinesShader } from "../../shaders/vines/vines_shader";
 import { HLinesShader } from "../../shaders/hines/hines_shader";
 import { ChromaShader } from "../../shaders/chroma/chroma_shader";
 import { ScrambleShader } from "../../shaders/scramble/scramble_shader";
+import { NegativeShader } from "../../shaders/negative/negative_shader";
+import { CrossesShader } from "../../shaders/crosses/crosses_shader";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -415,29 +415,6 @@ export class HintPanel extends KTUComponent {
       );
     } else if (
       this.bindingData["activeLayer"] instanceof ShaderLayer &&
-      this.bindingData["activeLayer"].shaderName() == DotsShader.SHADER_NAME
-    ) {
-      extraContent = (
-        <>
-          <div className="block">
-            <h3>Dots Shader</h3>
-            <div className="tip">
-              Allows only a small grid of dots to pass through.
-            </div>
-          </div>
-          <div className="block extraLast">
-            <h3>Attributes</h3>
-
-            <div className="tip">
-              <div>
-                <strong>Size</strong>: Distance between the dots.
-              </div>
-            </div>
-          </div>
-        </>
-      );
-    } else if (
-      this.bindingData["activeLayer"] instanceof ShaderLayer &&
       this.bindingData["activeLayer"].shaderName() == VLinesShader.SHADER_NAME
     ) {
       extraContent = (
@@ -469,30 +446,6 @@ export class HintPanel extends KTUComponent {
             <h3>hLines Shader</h3>
             <div className="tip">
               Allows only a bunch of horizontal lines to pass through.
-            </div>
-          </div>
-          <div className="block extraLast">
-            <h3>Attributes</h3>
-
-            <div className="tip">
-              <div>
-                <strong>Size</strong>: Distance between the lines.
-              </div>
-            </div>
-          </div>
-        </>
-      );
-    } else if (
-      this.bindingData["activeLayer"] instanceof ShaderLayer &&
-      this.bindingData["activeLayer"].shaderName() == GridShader.SHADER_NAME
-    ) {
-      extraContent = (
-        <>
-          <div className="block">
-            <h3>Grid Shader</h3>
-            <div className="tip">
-              Allows only a bunch of vertical AND horizontal lines to pass
-              through.
             </div>
           </div>
           <div className="block extraLast">
@@ -560,6 +513,61 @@ export class HintPanel extends KTUComponent {
                 refresh. 1 = Updates every frame. 0 = Never updates. (0-1) =
                 Somewhere in the middle...
               </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == NegativeShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>Negative Shader</h3>
+            <div className="tip">Make Colours Negative.</div>
+          </div>
+          <div className="block extraLast">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Strength</strong>: How intense will be the negativity.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == CrossesShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>Crosses Shader</h3>
+            <div className="tip">
+              Allows only cool pixelated crosses to pass through.
+            </div>
+          </div>
+          <div className="block">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Grid Size</strong>: How far each cross will be.
+              </div>
+              <div>
+                <strong>Cross Size</strong>: How long the branches of the cross
+                will be.
+              </div>
+            </div>
+          </div>
+          <div className="block extraLast">
+            <h3>Tips</h3>
+            <div className="tip">Cross Size=1, makes a cool dot matrix</div>
+            <div className="tip">
+              A HUGE Cross Size, makes a cool grid rendering
             </div>
           </div>
         </>
