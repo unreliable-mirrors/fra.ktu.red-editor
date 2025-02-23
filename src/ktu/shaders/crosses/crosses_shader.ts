@@ -54,8 +54,8 @@ export class CrossesShader extends ShaderLayer {
       this.state = {
         ...this.state,
         gridSize: state.gridSize,
-        missProbability: state.missProbability,
-        seed: state.seed,
+        crossSize: state.crossSize,
+        lineThickness: state.lineThickness,
       };
     }
     this.uniforms = new UniformGroup({
