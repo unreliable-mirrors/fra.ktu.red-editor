@@ -25,7 +25,7 @@ vec2 unmapCoord( vec2 coord )
 
 vec2 pixelate(vec2 coord, float uPixelSize)
 {
-	return floor( coord / vec2(uPixelSize,uPixelSize) ) * vec2(uPixelSize,uPixelSize);
+	return (floor( coord / vec2(uPixelSize,uPixelSize) ) * vec2(uPixelSize,uPixelSize)) + (uPixelSize / 2.0);
 }
 
 void main(){
