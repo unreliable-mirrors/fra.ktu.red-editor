@@ -5,10 +5,11 @@ import fragment from "./hines_shader.frag?raw";
 
 export type HLinesShaderState = ShaderState & {
   size: number;
+  lineThickness: number;
 };
 
 export type HLinesShaderSetting = {
-  field: "size";
+  field: "size" | "lineThickness";
   type: "integer";
   onchange: (value: string) => void;
 };
@@ -24,6 +25,14 @@ export class HLinesShader extends ShaderLayer {
       onchange: (value) => {
         this.state.size = parseInt(value);
         this.uniforms.uniforms.uGridSize = this.state.size;
+      },
+    },
+    {
+      field: "lineThickness",
+      type: "integer",
+      onchange: (value) => {
+        this.state.lineThickness = parseInt(value);
+        this.uniforms.uniforms.uLineThickness = this.state.lineThickness;
       },
     },
   ];
@@ -42,6 +51,7 @@ export class HLinesShader extends ShaderLayer {
     }
     this.uniforms = new UniformGroup({
       uGridSize: { value: this.state.size, type: "f32" },
+      uLineThickness: { value: this.state.lineThickness, type: "f32" },
     });
   }
 
@@ -53,6 +63,7 @@ export class HLinesShader extends ShaderLayer {
     return {
       ...super.defaultState(),
       size: 15,
+      lineThickness: 1,
     };
   }
 }

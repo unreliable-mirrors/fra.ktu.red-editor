@@ -6,10 +6,11 @@ import fragment from "./crosses_shader.frag?raw";
 export type CrossesShaderState = ShaderState & {
   gridSize: number;
   crossSize: number;
+  lineThickness: number;
 };
 
 export type CrossesShaderSetting = {
-  field: "gridSize" | "crossSize";
+  field: "gridSize" | "crossSize" | "lineThickness";
   type: "integer";
   onchange: (value: string) => void;
 };
@@ -35,6 +36,14 @@ export class CrossesShader extends ShaderLayer {
         this.uniforms.uniforms.uCrossSize = this.state.crossSize / 2;
       },
     },
+    {
+      field: "lineThickness",
+      type: "integer",
+      onchange: (value) => {
+        this.state.lineThickness = parseInt(value);
+        this.uniforms.uniforms.uLineThickness = this.state.lineThickness;
+      },
+    },
   ];
   uniforms: UniformGroup;
 
@@ -52,6 +61,7 @@ export class CrossesShader extends ShaderLayer {
     this.uniforms = new UniformGroup({
       uGridSize: { value: this.state.gridSize, type: "f32" },
       uCrossSize: { value: this.state.crossSize / 2, type: "f32" },
+      uLineThickness: { value: this.state.lineThickness, type: "f32" },
     });
   }
 
@@ -64,6 +74,7 @@ export class CrossesShader extends ShaderLayer {
       ...super.defaultState(),
       gridSize: 15,
       crossSize: 9,
+      lineThickness: 1,
     };
   }
 }

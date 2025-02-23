@@ -1,15 +1,15 @@
-import { Container, Point, UniformGroup } from "pixi.js";
+import { UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import fragment from "./vines_shader.frag?raw";
-import { ILayer } from "../../../engine/ilayer";
 
 export type VLinesShaderState = ShaderState & {
   size: number;
+  lineThickness: number;
 };
 
 export type VLinesShaderSetting = {
-  field: "size";
+  field: "size" | "lineThickness";
   type: "integer";
   onchange: (value: string) => void;
 };
@@ -18,7 +18,6 @@ export class VLinesShader extends ShaderLayer {
   static SHADER_NAME: string = "vlines_shader";
   declare state: VLinesShaderState;
   fragment: string = fragment;
-  container!: Container;
   settings: VLinesShaderSetting[] = [
     {
       field: "size",
@@ -26,7 +25,14 @@ export class VLinesShader extends ShaderLayer {
       onchange: (value) => {
         this.state.size = parseInt(value);
         this.uniforms.uniforms.uGridSize = this.state.size;
-        this.refreshSize();
+      },
+    },
+    {
+      field: "lineThickness",
+      type: "integer",
+      onchange: (value) => {
+        this.state.lineThickness = parseInt(value);
+        this.uniforms.uniforms.uLineThickness = this.state.lineThickness;
       },
     },
   ];
@@ -45,10 +51,7 @@ export class VLinesShader extends ShaderLayer {
     }
     this.uniforms = new UniformGroup({
       uGridSize: { value: this.state.size, type: "f32" },
-      uSize: {
-        value: new Point(window.innerWidth, window.innerHeight),
-        type: "vec2<f32>",
-      },
+      uLineThickness: { value: this.state.lineThickness, type: "f32" },
     });
   }
 
@@ -60,25 +63,7 @@ export class VLinesShader extends ShaderLayer {
     return {
       ...super.defaultState(),
       size: 15,
+      lineThickness: 1,
     };
-  }
-
-  bind(container: Container, layer?: ILayer): void {
-    super.bind(container, layer);
-    this.container = container;
-    this.refreshSize();
-  }
-
-  resize() {
-    this.refreshSize();
-  }
-
-  refreshSize() {
-    if (this.container.width > 0) {
-      this.uniforms.uniforms.uSize = new Point(
-        this.container.width,
-        this.container.height
-      );
-    }
   }
 }
