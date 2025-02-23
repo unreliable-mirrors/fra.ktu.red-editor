@@ -5,6 +5,7 @@ uniform sampler2D uTexture;
 uniform vec4 uInputSize;
 
 uniform float uGridSize;
+uniform float uLineThickness;
 
 vec2 mapCoord( vec2 coord )
 {
@@ -31,7 +32,7 @@ void main(){
     vec2 pixelCoord = mapCoord(vTextureCoord);
     vec2 newCoords = pixelate(pixelCoord, uGridSize);
     vec4 tex = texture(uTexture, vTextureCoord);
-    if(pixelCoord.y > newCoords.y-0.5 && pixelCoord.y < newCoords.y+0.5){
+    if(pixelCoord.y > newCoords.y-(uLineThickness/2.0) && pixelCoord.y < newCoords.y+(uLineThickness/2.0)){
         gl_FragColor = vec4(tex.r, tex.g, tex.b, tex.a);
     }else{
         gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);

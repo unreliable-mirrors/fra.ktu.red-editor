@@ -432,6 +432,9 @@ export class HintPanel extends KTUComponent {
               <div>
                 <strong>Size</strong>: Distance between the lines.
               </div>
+              <div>
+                <strong>Line Thickness</strong>: How thick the lines are.
+              </div>
             </div>
           </div>
         </>
@@ -454,6 +457,9 @@ export class HintPanel extends KTUComponent {
             <div className="tip">
               <div>
                 <strong>Size</strong>: Distance between the lines.
+              </div>
+              <div>
+                <strong>Line Thickness</strong>: How thick the lines are.
               </div>
             </div>
           </div>
@@ -560,6 +566,9 @@ export class HintPanel extends KTUComponent {
               <div>
                 <strong>Cross Size</strong>: How long the branches of the cross
                 will be.
+              </div>
+              <div>
+                <strong>Line Thickness</strong>: How thick the lines are.
               </div>
             </div>
           </div>

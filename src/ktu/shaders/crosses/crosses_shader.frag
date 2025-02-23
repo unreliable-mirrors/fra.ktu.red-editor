@@ -6,6 +6,7 @@ uniform vec4 uInputSize;
 
 uniform float uGridSize;
 uniform float uCrossSize;
+uniform float uLineThickness;
 
 vec2 mapCoord( vec2 coord )
 {
@@ -33,9 +34,9 @@ void main(){
     vec2 newCoords = pixelate(pixelCoord, uGridSize);
     vec4 tex = texture(uTexture, unmapCoord(newCoords));
     
-    if((pixelCoord.x >= newCoords.x-uCrossSize && pixelCoord.x <= newCoords.x+uCrossSize && pixelCoord.y > newCoords.y-0.5 && pixelCoord.y < newCoords.y+0.5) 
+    if((pixelCoord.x >= newCoords.x-uCrossSize && pixelCoord.x <= newCoords.x+uCrossSize && pixelCoord.y > newCoords.y-(uLineThickness/2.0) && pixelCoord.y < newCoords.y+(uLineThickness/2.0)) 
     || 
-    (pixelCoord.y >= newCoords.y-uCrossSize && pixelCoord.y <= newCoords.y+uCrossSize && pixelCoord.x > newCoords.x-0.5 && pixelCoord.x < newCoords.x+0.5)){
+    (pixelCoord.y >= newCoords.y-uCrossSize && pixelCoord.y <= newCoords.y+uCrossSize && pixelCoord.x > newCoords.x-(uLineThickness/2.0) && pixelCoord.x < newCoords.x+(uLineThickness/2.0))){
         gl_FragColor = vec4(tex.r, tex.g, tex.b, tex.a);
     }else{
         gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
