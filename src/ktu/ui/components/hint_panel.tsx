@@ -32,6 +32,7 @@ import { ChromaShader } from "../../shaders/chroma/chroma_shader";
 import { ScrambleShader } from "../../shaders/scramble/scramble_shader";
 import { NegativeShader } from "../../shaders/negative/negative_shader";
 import { CrossesShader } from "../../shaders/crosses/crosses_shader";
+import { RecolourShader } from "../../shaders/recolour/recolour_shader";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -577,6 +578,35 @@ export class HintPanel extends KTUComponent {
             <div className="tip">Cross Size=1, makes a cool dot matrix</div>
             <div className="tip">
               A HUGE Cross Size, makes a cool grid rendering
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == RecolourShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>Recolour Shader</h3>
+            <div className="tip">Replace one colour with another.</div>
+          </div>
+          <div className="block">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>From Color</strong>: Colour to be replaced.
+              </div>
+              <div>
+                <strong>To Color</strong>: Colort to be placed instead.
+              </div>
+              <div>
+                <strong>Threshold</strong>: Tolerance % in color variations. 0 =
+                replace ONLY that color. 1 = replace everything. (0-1) =
+                Somewhere in the middle...
+              </div>
             </div>
           </div>
         </>

@@ -14,6 +14,7 @@ const texts: Record<string, string> = {
   add_scramble_shader_button: "Scramble",
   add_negative_shader_button: "Negative",
   add_crosses_shader_button: "Crosses",
+  add_recolour_shader_button: "Recolour",
 
   export_state: "Save File",
   import_state: "Import File",
