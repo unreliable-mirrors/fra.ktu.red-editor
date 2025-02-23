@@ -45,8 +45,7 @@ export class HLinesShader extends ShaderLayer {
       this.state = {
         ...this.state,
         size: state.size,
-        missProbability: state.missProbability,
-        seed: state.seed,
+        lineThickness: state.lineThickness,
       };
     }
     this.uniforms = new UniformGroup({
