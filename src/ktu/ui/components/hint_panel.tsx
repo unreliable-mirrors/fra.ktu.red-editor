@@ -33,6 +33,7 @@ import { ScrambleShader } from "../../shaders/scramble/scramble_shader";
 import { NegativeShader } from "../../shaders/negative/negative_shader";
 import { CrossesShader } from "../../shaders/crosses/crosses_shader";
 import { RecolourShader } from "../../shaders/recolour/recolour_shader";
+import { HNoiseLinesShader } from "../../shaders/hnoise_lines/hnoise_lines_shader";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -491,6 +492,10 @@ export class HintPanel extends KTUComponent {
                 remove ONLY that color. 1 = remove everything. (0-1) = Somewhere
                 in the middle...
               </div>
+              <div>
+                <strong>Not</strong>: Invert the behavior. Remove EVERYTHING
+                except that color.
+              </div>
             </div>
           </div>
         </>
@@ -592,7 +597,7 @@ export class HintPanel extends KTUComponent {
             <h3>Recolour Shader</h3>
             <div className="tip">Replace one colour with another.</div>
           </div>
-          <div className="block">
+          <div className="block extraLast">
             <h3>Attributes</h3>
 
             <div className="tip">
@@ -606,6 +611,39 @@ export class HintPanel extends KTUComponent {
                 <strong>Threshold</strong>: Tolerance % in color variations. 0 =
                 replace ONLY that color. 1 = replace everything. (0-1) =
                 Somewhere in the middle...
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() ==
+        HNoiseLinesShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>hNoise Lines Shader</h3>
+            <div className="tip">Scramble the images using lines</div>
+          </div>
+          <div className="block extraLast">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Noise Size</strong>: How long the lines can be.
+              </div>
+              <div>
+                <strong>Line Thickness</strong>: How thick the lines will be.
+              </div>
+              <div>
+                <strong>Strength</strong>: Percentage of the screen that will
+                get scrambled.
+              </div>
+              <div>
+                <strong>Negative</strong>: Scramble using the opposite color of
+                the one sampled.
               </div>
             </div>
           </div>

@@ -42,6 +42,10 @@ import {
   RecolourShader,
   RecolourShaderState,
 } from "../shaders/recolour/recolour_shader";
+import {
+  HNoiseLinesShader,
+  HNoiseLinesShaderState,
+} from "../shaders/hnoise_lines/hnoise_lines_shader";
 
 export type ShaderClass = {
   SHADER_NAME: string;
@@ -60,6 +64,7 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   NegativeShader,
   CrossesShader,
   RecolourShader,
+  HNoiseLinesShader,
 ];
 
 export const AVAILABLE_SHADERS_MAP: Record<string, ShaderClass> =
@@ -101,6 +106,8 @@ export const getShaderByName = (
     return new CrossesShader(state as CrossesShaderState);
   } else if (shaderName === RecolourShader.SHADER_NAME) {
     return new RecolourShader(state as RecolourShaderState);
+  } else if (shaderName === HNoiseLinesShader.SHADER_NAME) {
+    return new HNoiseLinesShader(state as HNoiseLinesShaderState);
   }
   return null;
 };

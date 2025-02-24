@@ -1,8 +1,7 @@
-import { Container, UniformGroup } from "pixi.js";
+import { UniformGroup } from "pixi.js";
 import { ShaderLayer, ShaderState } from "../shader_layer";
 
 import fragment from "./pixelate_shader.frag?raw";
-import { ILayer } from "../../../engine/ilayer";
 
 export type PixelateShaderState = ShaderState & {
   pixelSize: number;
@@ -18,7 +17,6 @@ export class PixelateShader extends ShaderLayer {
   static SHADER_NAME: string = "pixelate_shader";
   declare state: PixelateShaderState;
   fragment: string = fragment;
-  container!: Container;
   settings: PixelateShaderSetting[] = [
     {
       field: "pixelSize",
@@ -38,8 +36,6 @@ export class PixelateShader extends ShaderLayer {
       this.state = {
         ...this.state,
         pixelSize: state.pixelSize,
-        missProbability: state.missProbability,
-        seed: state.seed,
       };
     }
     this.uniforms = new UniformGroup({
@@ -57,11 +53,4 @@ export class PixelateShader extends ShaderLayer {
       pixelSize: 15,
     };
   }
-
-  bind(container: Container, layer?: ILayer): void {
-    super.bind(container, layer);
-    this.container = container;
-  }
-
-  resize() {}
 }

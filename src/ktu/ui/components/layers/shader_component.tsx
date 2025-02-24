@@ -85,6 +85,7 @@ export class ShaderComponent extends KTUComponent {
               <input
                 type="checkbox"
                 value="true"
+                defaultChecked={this.shader.state[setting.field]}
                 oninput={(e) => {
                   setting.onchange(
                     (e.target as HTMLInputElement).checked ? "true" : "false"
