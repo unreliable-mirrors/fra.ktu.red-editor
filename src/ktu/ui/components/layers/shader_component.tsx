@@ -78,6 +78,21 @@ export class ShaderComponent extends KTUComponent {
               ></input>
             </div>
           );
+        } else if (setting.type === "boolean") {
+          settings.push(
+            <div>
+              <span>{setting.field}: </span>
+              <input
+                type="checkbox"
+                value="true"
+                oninput={(e) => {
+                  setting.onchange(
+                    (e.target as HTMLInputElement).checked ? "true" : "false"
+                  );
+                }}
+              ></input>
+            </div>
+          );
         }
       }
     }
