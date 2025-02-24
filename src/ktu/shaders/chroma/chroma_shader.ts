@@ -6,11 +6,12 @@ import fragment from "./chroma_shader.frag?raw";
 export type ChromaShaderState = ShaderState & {
   color: string;
   threshold: number;
+  not: boolean;
 };
 
 export type ChromaShaderSetting = {
-  field: "color" | "threshold";
-  type: "color" | "float";
+  field: "color" | "threshold" | "not";
+  type: "color" | "float" | "boolean";
   onchange: (value: string) => void;
 };
 
@@ -40,6 +41,15 @@ export class ChromaShader extends ShaderLayer {
         this.uniforms.uniforms.uThreshold = this.state.threshold;
       },
     },
+    {
+      field: "not",
+      type: "boolean",
+      onchange: (value) => {
+        console.log("VALUE", value);
+        this.state.not = "true" === value;
+        this.uniforms.uniforms.uNot = this.state.not ? 1 : 0;
+      },
+    },
   ];
   uniforms: UniformGroup;
 
@@ -51,6 +61,7 @@ export class ChromaShader extends ShaderLayer {
         ...this.state,
         color: state.color,
         threshold: state.threshold,
+        not: state.not,
       };
     }
     this.uniforms = new UniformGroup({
@@ -58,6 +69,7 @@ export class ChromaShader extends ShaderLayer {
       uG: { value: new Color(this.state.color).green, type: "f32" },
       uB: { value: new Color(this.state.color).blue, type: "f32" },
       uThreshold: { value: this.state.threshold, type: "f32" },
+      uNot: { value: this.state.not ? 1 : 0, type: "i32" },
     });
   }
 
@@ -70,6 +82,7 @@ export class ChromaShader extends ShaderLayer {
       ...super.defaultState(),
       color: "#000000",
       threshold: 0.1,
+      not: false,
     };
   }
 }
