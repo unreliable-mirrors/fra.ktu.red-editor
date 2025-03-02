@@ -23,6 +23,7 @@ h3 {
   font-weight: 400;
   font-style: normal;
   margin-top: 0px;
+  min-height: 1em;
 }
 h4 {
   font-family: "Orbitron", serif;

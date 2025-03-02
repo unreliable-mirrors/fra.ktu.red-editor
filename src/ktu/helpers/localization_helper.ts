@@ -16,6 +16,7 @@ const texts: Record<string, string> = {
   add_crosses_shader_button: "Crosses",
   add_recolour_shader_button: "Recolour",
   add_hnoise_lines_shader_button: "hNoise Lines",
+  add_light_split_shader_button: "Light Split",
 
   export_state: "Save File",
   import_state: "Import File",
