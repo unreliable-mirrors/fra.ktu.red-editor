@@ -74,7 +74,10 @@ export class CrossesShader extends ShaderLayer {
       uGridSize: { value: this.state.gridSize, type: "f32" },
       uCrossSize: { value: this.state.crossSize / 2, type: "f32" },
       uLineThickness: { value: this.state.lineThickness, type: "f32" },
-      uVariableCrossSize: { value: this.state.variableCrossSize, type: "f32" },
+      uVariableCrossSize: {
+        value: this.state.variableCrossSize ? 1 : 0,
+        type: "f32",
+      },
     });
   }
 
@@ -88,7 +91,7 @@ export class CrossesShader extends ShaderLayer {
       gridSize: 15,
       crossSize: 9,
       lineThickness: 1,
-      variableCrossSize: false,
+      variableCrossSize: true,
     };
   }
 }

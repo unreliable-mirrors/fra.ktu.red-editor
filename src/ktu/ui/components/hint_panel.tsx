@@ -34,6 +34,7 @@ import { NegativeShader } from "../../shaders/negative/negative_shader";
 import { CrossesShader } from "../../shaders/crosses/crosses_shader";
 import { RecolourShader } from "../../shaders/recolour/recolour_shader";
 import { HNoiseLinesShader } from "../../shaders/hnoise_lines/hnoise_lines_shader";
+import { LightSplitShader } from "../../shaders/light_split/light_split_shader";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -665,6 +666,63 @@ export class HintPanel extends KTUComponent {
               <div>
                 <strong>Negative</strong>: Scramble using the opposite color of
                 the one sampled.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() ==
+        LightSplitShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>Light Split Shader</h3>
+            <div className="tip">
+              Increase or Decrease Light on Dark or Bright areas without
+              destroying Hue information
+            </div>
+          </div>
+          <div className="block">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Light Threshold</strong>: Brightness on where to split
+                the effect.
+              </div>
+              <div>
+                <strong>Power</strong>: Intensity of the Light Amplification.
+              </div>
+              <div>
+                <strong>Darken</strong>: It will amplify the Darkness of the
+                colors below the Threshold.
+              </div>
+            </div>
+          </div>
+          <div className="block">
+            <h3></h3>
+
+            <div className="tip">
+              <div>
+                <strong>Lighten</strong>: It will amplify the Lightness of the
+                colors above the Threshold.
+              </div>
+              <div>
+                <strong>Inverse</strong>: Reverse the Threshold behaviour. Dark
+                shades get lightened, Light shades get darkened.
+              </div>
+            </div>
+          </div>
+          <div className="block extraLast">
+            <h3>Tips</h3>
+
+            <div className="tip">
+              <div>
+                Light gets lighter, dark gets darker. Unless you use
+                <strong>Inverse</strong>
               </div>
             </div>
           </div>
