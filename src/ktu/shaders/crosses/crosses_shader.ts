@@ -7,11 +7,12 @@ export type CrossesShaderState = ShaderState & {
   gridSize: number;
   crossSize: number;
   lineThickness: number;
+  variableCrossSize: boolean;
 };
 
 export type CrossesShaderSetting = {
-  field: "gridSize" | "crossSize" | "lineThickness";
-  type: "integer";
+  field: "gridSize" | "crossSize" | "lineThickness" | "variableCrossSize";
+  type: "integer" | "boolean";
   onchange: (value: string) => void;
 };
 
@@ -44,6 +45,16 @@ export class CrossesShader extends ShaderLayer {
         this.uniforms.uniforms.uLineThickness = this.state.lineThickness;
       },
     },
+    {
+      field: "variableCrossSize",
+      type: "boolean",
+      onchange: (value) => {
+        this.state.variableCrossSize = "true" === value;
+        this.uniforms.uniforms.uVariableCrossSize = this.state.variableCrossSize
+          ? 1
+          : 0;
+      },
+    },
   ];
   uniforms: UniformGroup;
 
@@ -56,12 +67,14 @@ export class CrossesShader extends ShaderLayer {
         gridSize: state.gridSize,
         crossSize: state.crossSize,
         lineThickness: state.lineThickness,
+        variableCrossSize: state.variableCrossSize,
       };
     }
     this.uniforms = new UniformGroup({
       uGridSize: { value: this.state.gridSize, type: "f32" },
       uCrossSize: { value: this.state.crossSize / 2, type: "f32" },
       uLineThickness: { value: this.state.lineThickness, type: "f32" },
+      uVariableCrossSize: { value: this.state.variableCrossSize, type: "f32" },
     });
   }
 
@@ -75,6 +88,7 @@ export class CrossesShader extends ShaderLayer {
       gridSize: 15,
       crossSize: 9,
       lineThickness: 1,
+      variableCrossSize: false,
     };
   }
 }
