@@ -480,7 +480,7 @@ export class HintPanel extends KTUComponent {
               Green Screen in the movies!
             </div>
           </div>
-          <div className="block extraLast">
+          <div className="block">
             <h3>Attributes</h3>
 
             <div className="tip">
@@ -492,6 +492,12 @@ export class HintPanel extends KTUComponent {
                 remove ONLY that color. 1 = remove everything. (0-1) = Somewhere
                 in the middle...
               </div>
+            </div>
+          </div>
+          <div className="block extraLast">
+            <h3></h3>
+
+            <div className="tip">
               <div>
                 <strong>Not</strong>: Invert the behavior. Remove EVERYTHING
                 except that color.
@@ -578,6 +584,15 @@ export class HintPanel extends KTUComponent {
               </div>
             </div>
           </div>
+          <div className="block">
+            <h3></h3>
+            <div className="tip">
+              <div>
+                <strong>Variable Cross Size</strong>: Cross Size is proportional
+                to the Brightness of the original color.
+              </div>
+            </div>
+          </div>
           <div className="block extraLast">
             <h3>Tips</h3>
             <div className="tip">Cross Size=1, makes a cool dot matrix</div>
@@ -595,7 +610,7 @@ export class HintPanel extends KTUComponent {
         <>
           <div className="block">
             <h3>Recolour Shader</h3>
-            <div className="tip">Replace one colour with another.</div>
+            <div className="tip">Replace one color with another.</div>
           </div>
           <div className="block extraLast">
             <h3>Attributes</h3>
@@ -627,7 +642,7 @@ export class HintPanel extends KTUComponent {
             <h3>hNoise Lines Shader</h3>
             <div className="tip">Scramble the images using lines</div>
           </div>
-          <div className="block extraLast">
+          <div className="block">
             <h3>Attributes</h3>
 
             <div className="tip">
@@ -641,6 +656,12 @@ export class HintPanel extends KTUComponent {
                 <strong>Strength</strong>: Percentage of the screen that will
                 get scrambled.
               </div>
+            </div>
+          </div>
+          <div className="block extraLast">
+            <h3></h3>
+
+            <div className="tip">
               <div>
                 <strong>Negative</strong>: Scramble using the opposite color of
                 the one sampled.
