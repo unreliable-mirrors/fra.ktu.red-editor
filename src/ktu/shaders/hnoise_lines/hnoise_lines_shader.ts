@@ -65,6 +65,7 @@ export class HNoiseLinesShader extends ShaderLayer {
         noiseSize: state.noiseSize,
         strength: state.strength,
         negative: state.negative,
+        lineThickness: state.lineThickness,
       };
     }
     this.uniforms = new UniformGroup({
