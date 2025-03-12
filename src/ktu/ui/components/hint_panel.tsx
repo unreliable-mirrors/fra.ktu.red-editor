@@ -613,7 +613,7 @@ export class HintPanel extends KTUComponent {
             <h3>Recolour Shader</h3>
             <div className="tip">Replace one color with another.</div>
           </div>
-          <div className="block extraLast">
+          <div className="block">
             <h3>Attributes</h3>
 
             <div className="tip">
@@ -627,6 +627,30 @@ export class HintPanel extends KTUComponent {
                 <strong>Threshold</strong>: Tolerance % in color variations. 0 =
                 replace ONLY that color. 1 = replace everything. (0-1) =
                 Somewhere in the middle...
+              </div>
+            </div>
+          </div>
+          <div className="block">
+            <h3></h3>
+
+            <div className="tip">
+              <div>
+                <strong>onlyHue</strong>: Tint images respecting original
+                saturation and light.
+              </div>
+              <div>
+                <strong>onlySaturation</strong>: Saturate images respecting
+                original hue and light.
+              </div>
+            </div>
+          </div>
+          <div className="block extraLast">
+            <h3></h3>
+
+            <div className="tip">
+              <div>
+                <strong>onlyLightness</strong>: Illuminate images respecting
+                original hue and saturation.
               </div>
             </div>
           </div>
