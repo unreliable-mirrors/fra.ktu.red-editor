@@ -7,11 +7,20 @@ export type RecolourShaderState = ShaderState & {
   fromColor: string;
   toColor: string;
   threshold: number;
+  onlyHue: boolean;
+  onlySaturation: boolean;
+  onlyLightness: boolean;
 };
 
 export type RecolourShaderSetting = {
-  field: "fromColor" | "toColor" | "threshold";
-  type: "color" | "float";
+  field:
+    | "fromColor"
+    | "toColor"
+    | "threshold"
+    | "onlyHue"
+    | "onlySaturation"
+    | "onlyLightness";
+  type: "color" | "float" | "boolean";
   onchange: (value: string) => void;
 };
 
@@ -51,6 +60,34 @@ export class RecolourShader extends ShaderLayer {
         this.uniforms.uniforms.uThreshold = this.state.threshold;
       },
     },
+    {
+      field: "onlyHue",
+      type: "boolean",
+      onchange: (value) => {
+        this.state.onlyHue = "true" === value;
+        this.uniforms.uniforms.uOnlyHue = this.state.onlyHue ? 1 : 0;
+      },
+    },
+    {
+      field: "onlySaturation",
+      type: "boolean",
+      onchange: (value) => {
+        this.state.onlySaturation = "true" === value;
+        this.uniforms.uniforms.uOnlySaturation = this.state.onlySaturation
+          ? 1
+          : 0;
+      },
+    },
+    {
+      field: "onlyLightness",
+      type: "boolean",
+      onchange: (value) => {
+        this.state.onlyLightness = "true" === value;
+        this.uniforms.uniforms.uOnlyLightness = this.state.onlyLightness
+          ? 1
+          : 0;
+      },
+    },
   ];
   uniforms: UniformGroup;
 
@@ -63,6 +100,9 @@ export class RecolourShader extends ShaderLayer {
         fromColor: state.fromColor,
         toColor: state.toColor,
         threshold: state.threshold,
+        onlyHue: state.onlyHue,
+        onlySaturation: state.onlySaturation,
+        onlyLightness: state.onlyLightness,
       };
     }
     this.uniforms = new UniformGroup({
@@ -73,6 +113,12 @@ export class RecolourShader extends ShaderLayer {
       uToG: { value: new Color(this.state.toColor).green, type: "f32" },
       uToB: { value: new Color(this.state.toColor).blue, type: "f32" },
       uThreshold: { value: this.state.threshold, type: "f32" },
+      uOnlyHue: { value: this.state.onlyHue ? 1 : 0, type: "i32" },
+      uOnlySaturation: {
+        value: this.state.onlySaturation ? 1 : 0,
+        type: "i32",
+      },
+      uOnlyLightness: { value: this.state.onlyLightness ? 1 : 0, type: "i32" },
     });
   }
 
@@ -86,6 +132,9 @@ export class RecolourShader extends ShaderLayer {
       fromColor: "#000000",
       toColor: "#FF0000",
       threshold: 0.1,
+      onlyHue: false,
+      onlySaturation: false,
+      onlyLightness: false,
     };
   }
 }
