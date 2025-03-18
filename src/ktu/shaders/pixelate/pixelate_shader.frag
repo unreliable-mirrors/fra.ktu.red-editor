@@ -6,6 +6,15 @@ uniform vec4 uInputSize;
 
 uniform float uPixelSize;
 
+uniform float uTime;
+uniform float uStrength;
+uniform int uOnlyPixels;
+
+float PHI = 1.61803398874989484820459;  // Φ = Golden Ratio   
+
+float gold_noise(vec2 xy, float seed){
+    return fract(tan(distance(xy*PHI, xy)*seed)*xy.x);
+}
 
 vec2 mapCoord( vec2 coord )
 {
@@ -31,8 +40,16 @@ vec2 pixelate(vec2 coord, float uPixelSize)
 void main(){
     vec2 pixelCoord = mapCoord(vTextureCoord);
     vec2 newCoord = pixelate(pixelCoord, uPixelSize);
-    newCoord = unmapCoord(newCoord);
-    vec4 tex = texture(uTexture, newCoord);
+    float elegible = gold_noise(newCoord, uTime+1.0);
+
+    vec2 coord = vTextureCoord;
+    if(elegible < uStrength){
+        coord = unmapCoord(newCoord);
+    }else if(uOnlyPixels == 1){
+        coord = vec2(99.0,99.0);
+    }
+
+    vec4 tex = texture(uTexture, coord);
     
     gl_FragColor = vec4(tex.r, tex.g, tex.b, tex.a);
 }
