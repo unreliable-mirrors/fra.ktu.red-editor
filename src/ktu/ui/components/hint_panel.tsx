@@ -22,7 +22,11 @@ import { VintageShader } from "../../shaders/vintage/vintage_shader";
 import { PixelateShader } from "../../shaders/pixelate/pixelate_shader";
 import { MontecarloSampleShader } from "../../shaders/montecarlo_sample/montecarlo_sample";
 import EventDispatcher from "../core/event_dispatcher";
-import { ctrlKey, KeyboardManager } from "../../helpers/keyboard_manager";
+import {
+  altKey,
+  ctrlKey,
+  KeyboardManager,
+} from "../../helpers/keyboard_manager";
 import { ShapeLayer } from "../../layers/shape_layer";
 import { AnaglyphShader } from "../../shaders/anaglyph/anaglyph_shader";
 import { PosterizeShader } from "../../shaders/posterize/posterize_shader";
@@ -225,6 +229,9 @@ export class HintPanel extends KTUComponent {
                 <div>
                   <strong>SHIFT + CLICK</strong>: Draw in{" "}
                   <strong>Normal Mode</strong>
+                </div>
+                <div>
+                  <strong>{altKey()} + CLICK</strong>: Draw in Bucket Mode
                 </div>
                 <div>
                   <strong>{ctrlKey()} + CLICK</strong>: Drag/Pan Layer
