@@ -105,7 +105,7 @@ export class TextLayer extends ContainerLayer {
   ];
 
   constructor(state?: TextLayerState) {
-    super();
+    super(state);
     this.text = new Text();
     this.container.addChild(this.text);
 

@@ -31,7 +31,7 @@ export class PosterizeShader extends ShaderLayer {
   uniforms: UniformGroup;
 
   constructor(state?: PosterizeShaderState) {
-    super();
+    super(state);
 
     if (state) {
       this.state = {

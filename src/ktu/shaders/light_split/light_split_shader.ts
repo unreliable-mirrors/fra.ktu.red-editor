@@ -66,7 +66,7 @@ export class LightSplitShader extends ShaderLayer {
   uniforms: UniformGroup;
 
   constructor(state?: LightSplitShaderState) {
-    super();
+    super(state);
     console.log("CONSTRUCTOR", state, this.state);
     if (state) {
       this.state = {

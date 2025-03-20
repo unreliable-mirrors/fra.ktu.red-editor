@@ -57,7 +57,7 @@ export class HNoiseLinesShader extends ShaderLayer {
   uniforms: UniformGroup;
 
   constructor(state?: HNoiseLinesShaderState) {
-    super();
+    super(state);
     console.log("CONSTRUCTOR", state, this.state);
     if (state) {
       this.state = {

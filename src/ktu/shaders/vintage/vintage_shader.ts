@@ -30,7 +30,7 @@ export class VintageShader extends ShaderLayer {
   uniforms: UniformGroup;
 
   constructor(state?: VintageShaderState) {
-    super();
+    super(state);
 
     if (state) {
       this.state = {

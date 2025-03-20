@@ -31,7 +31,7 @@ export class BnwShader extends ShaderLayer {
   uniforms: UniformGroup;
 
   constructor(state?: BnwShaderState) {
-    super();
+    super(state);
 
     if (state) {
       this.state = {

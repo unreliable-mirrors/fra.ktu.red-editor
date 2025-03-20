@@ -48,7 +48,7 @@ export class PixelateShader extends ShaderLayer {
   uniforms: UniformGroup;
 
   constructor(state?: PixelateShaderState) {
-    super();
+    super(state);
     console.log("CONSTRUCTOR", state, this.state);
     if (state) {
       this.state = {

@@ -39,13 +39,16 @@ export class BackgroundLayer extends ContainerLayer {
   ];
 
   constructor(state?: BackgroundLayerState) {
-    super();
+    super(state);
     this.graphics = new Graphics();
     this.container.addChild(this.graphics);
     this.backgroundSize = new Point(window.innerWidth, window.innerHeight);
 
     if (state) {
+      console.log("VISIBLE", JSON.stringify(state.visible));
+      console.log("THIS STATEA", JSON.stringify(this.state));
       this.state = { ...this.state, color: state.color, alpha: state.alpha };
+      console.log("THIS STATEB", JSON.stringify(this.state));
       for (var shader of state.shaders) {
         this.addShaderFromState(shader.name, shader);
       }

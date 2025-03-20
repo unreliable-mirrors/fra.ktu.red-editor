@@ -39,7 +39,7 @@ export class HLinesShader extends ShaderLayer {
   uniforms: UniformGroup;
 
   constructor(state?: HLinesShaderState) {
-    super();
+    super(state);
     console.log("CONSTRUCTOR", state, this.state);
     if (state) {
       this.state = {

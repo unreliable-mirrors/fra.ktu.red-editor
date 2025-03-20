@@ -39,7 +39,7 @@ export class MontecarloSampleShader extends ShaderLayer {
   uniforms: UniformGroup;
 
   constructor(state?: MontecarloSampleShaderState) {
-    super();
+    super(state);
 
     if (state) {
       this.state = {
