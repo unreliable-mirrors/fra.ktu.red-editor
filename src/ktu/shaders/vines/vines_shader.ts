@@ -39,7 +39,7 @@ export class VLinesShader extends ShaderLayer {
   uniforms: UniformGroup;
 
   constructor(state?: VLinesShaderState) {
-    super();
+    super(state);
     console.log("CONSTRUCTOR", state, this.state);
     if (state) {
       this.state = {

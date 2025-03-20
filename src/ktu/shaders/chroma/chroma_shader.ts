@@ -54,7 +54,7 @@ export class ChromaShader extends ShaderLayer {
   uniforms: UniformGroup;
 
   constructor(state?: ChromaShaderState) {
-    super();
+    super(state);
 
     if (state) {
       this.state = {

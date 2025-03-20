@@ -42,6 +42,7 @@ export abstract class ContainerLayer implements IEditorLayer {
       this.onClick(event)
     );
 
+    console.log("STATE-1", JSON.stringify(state));
     if (state) {
       this.state = {
         name: state.name,
@@ -49,6 +50,7 @@ export abstract class ContainerLayer implements IEditorLayer {
         visible: state.visible,
         shaders: [],
       };
+      console.log("STATE0", JSON.stringify(this.state));
       /*
       for (var shader of state.shaders) {
         this.addShaderFromState(shader.name, shader);
@@ -58,6 +60,7 @@ export abstract class ContainerLayer implements IEditorLayer {
       this.state = this.defaultState();
       console.log("CONST STATE", this.state);
     }
+    this.visible = this.state.visible;
     this.lastSize = new Point(0, 0);
   }
 

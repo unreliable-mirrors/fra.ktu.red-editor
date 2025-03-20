@@ -31,7 +31,7 @@ export class AnaglyphShader extends ShaderLayer {
   uniforms: UniformGroup;
 
   constructor(state?: AnaglyphShaderState) {
-    super();
+    super(state);
 
     if (state) {
       this.state = {

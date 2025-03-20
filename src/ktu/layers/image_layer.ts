@@ -77,7 +77,7 @@ export class ImageLayer extends ContainerLayer {
   ];
 
   constructor(state?: ImageLayerState) {
-    super();
+    super(state);
     console.log("LAYER_ID", this.layerId);
     this.sprite = new Sprite();
     this.container.addChild(this.sprite);

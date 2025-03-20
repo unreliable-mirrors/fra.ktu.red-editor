@@ -95,7 +95,7 @@ export class ShapeLayer extends ContainerLayer {
   ];
 
   constructor(state?: ShapeLayerState) {
-    super();
+    super(state);
     this.graphics = new Graphics();
     this.container.addChild(this.graphics);
     if (state) {

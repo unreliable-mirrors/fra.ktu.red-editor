@@ -103,7 +103,7 @@ export class DrawLayer extends ContainerLayer {
   ];
 
   constructor(state?: DrawLayerState) {
-    super();
+    super(state);
     this.graphics = new Graphics();
     this.container.addChild(this.graphics);
     this.stroke = {};

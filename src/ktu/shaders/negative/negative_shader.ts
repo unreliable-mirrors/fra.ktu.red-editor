@@ -31,7 +31,7 @@ export class NegativeShader extends ShaderLayer {
   uniforms: UniformGroup;
 
   constructor(state?: NegativeShaderState) {
-    super();
+    super(state);
 
     if (state) {
       this.state = {

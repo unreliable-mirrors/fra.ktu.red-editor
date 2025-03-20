@@ -92,7 +92,7 @@ export class RecolourShader extends ShaderLayer {
   uniforms: UniformGroup;
 
   constructor(state?: RecolourShaderState) {
-    super();
+    super(state);
 
     if (state) {
       this.state = {

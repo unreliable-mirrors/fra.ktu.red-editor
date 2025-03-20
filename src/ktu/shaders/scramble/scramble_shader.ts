@@ -39,7 +39,7 @@ export class ScrambleShader extends ShaderLayer {
   uniforms: UniformGroup;
 
   constructor(state?: ScrambleShaderState) {
-    super();
+    super(state);
 
     if (state) {
       this.state = {
