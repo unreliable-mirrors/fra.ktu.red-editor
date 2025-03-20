@@ -34,6 +34,7 @@ export class DrawLayer extends ContainerLayer {
   clicking: boolean = false;
   erasing: boolean = false;
   hardPainting: boolean = false;
+  bucketPainting: boolean = false;
   panning: boolean = false;
   panStart?: Point | null;
   clickStart?: Point | null;
@@ -154,8 +155,6 @@ export class DrawLayer extends ContainerLayer {
     this.clicking = true;
     if (event.button === 2) {
       this.erasing = true;
-    } else if (event.shiftKey) {
-      this.hardPainting = true;
     } else if (event.ctrlKey || event.metaKey) {
       this.panning = true;
       this.panStart = new Point(this.state.panX, this.state.panY);
@@ -163,6 +162,11 @@ export class DrawLayer extends ContainerLayer {
         x: event.clientX,
         y: event.clientY,
       });
+    } else if (event.altKey) {
+      this.bucketPainting = true;
+    }
+    if (event.shiftKey) {
+      this.hardPainting = true;
     }
     if (!this.panning) {
       this.stroke = {};
@@ -174,6 +178,7 @@ export class DrawLayer extends ContainerLayer {
     this.erasing = false;
     this.hardPainting = false;
     this.panning = false;
+    this.bucketPainting = false;
     this.panStart = null;
   }
   pointerMove(event: PointerEvent): void {
@@ -207,7 +212,24 @@ export class DrawLayer extends ContainerLayer {
       );
       if (!this.stroke[`${x}X${y}`]) {
         this.stroke[`${x}X${y}`] = true;
-        if (!this.erasing) {
+        if (this.bucketPainting) {
+          let newX = x;
+          while (
+            newX >= 0 &&
+            (!this.state.points[`${newX}X${y}`] || !this.hardPainting)
+          ) {
+            this.paint(newX, y);
+            newX--;
+          }
+          newX = x + 1;
+          while (
+            newX <= window.innerWidth / this.state.gridSize &&
+            (!this.state.points[`${newX}X${y}`] || !this.hardPainting)
+          ) {
+            this.paint(newX, y);
+            newX++;
+          }
+        } else if (!this.erasing) {
           this.paint(x, y);
         } else {
           this.erase(x, y);

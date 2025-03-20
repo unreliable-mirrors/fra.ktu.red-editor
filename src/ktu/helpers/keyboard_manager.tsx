@@ -37,6 +37,17 @@ export const ctrlKey = (): string => {
   }
 };
 
+export const altKey = (): string => {
+  if (
+    navigator.platform.indexOf("Mac") === 0 ||
+    navigator.platform === "iPhone"
+  ) {
+    return "Option";
+  } else {
+    return "ALT";
+  }
+};
+
 export const SHORTCUTS: ShortcutConfigSetting[] = [
   {
     meta: {
