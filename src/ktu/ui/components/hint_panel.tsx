@@ -35,6 +35,7 @@ import { CrossesShader } from "../../shaders/crosses/crosses_shader";
 import { RecolourShader } from "../../shaders/recolour/recolour_shader";
 import { HNoiseLinesShader } from "../../shaders/hnoise_lines/hnoise_lines_shader";
 import { LightSplitShader } from "../../shaders/light_split/light_split_shader";
+import DataStore from "../core/data_store";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -110,12 +111,52 @@ export class HintPanel extends KTUComponent {
         <div className="block">
           <h3>Layer Actions</h3>
           <div className="tip">
-            <div>{IconUp()} Move Layer Up</div>
-            <div>{IconDown()} Move Layer Down</div>
+            <div
+              onclick={() =>
+                EventDispatcher.getInstance().dispatchEvent(
+                  "scene",
+                  "moveUp",
+                  DataStore.getInstance().getStore("activeLayer")
+                )
+              }
+            >
+              {IconUp()} Move Layer Up
+            </div>
+            <div
+              onclick={() =>
+                EventDispatcher.getInstance().dispatchEvent(
+                  "scene",
+                  "moveDown",
+                  DataStore.getInstance().getStore("activeLayer")
+                )
+              }
+            >
+              {IconDown()} Move Layer Down
+            </div>
           </div>
           <div className="tip">
-            <div>{IconDuplicate()} Duplicate Layer</div>
-            <div>{IconClose()} Remove Layer</div>
+            <div
+              onclick={() =>
+                EventDispatcher.getInstance().dispatchEvent(
+                  "scene",
+                  "duplicate",
+                  DataStore.getInstance().getStore("activeLayer")
+                )
+              }
+            >
+              {IconDuplicate()} Duplicate Layer
+            </div>
+            <div
+              onclick={() =>
+                EventDispatcher.getInstance().dispatchEvent(
+                  "scene",
+                  "removeLayer",
+                  DataStore.getInstance().getStore("activeLayer")
+                )
+              }
+            >
+              {IconClose()} Remove Layer
+            </div>
           </div>
         </div>
         {KeyboardManager.keyboardExists() ? (
