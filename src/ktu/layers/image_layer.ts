@@ -13,7 +13,6 @@ import { AnimatedGIF } from "@pixi/gif";
 import { cacheAsset, freeAsset, getAsset } from "../helpers/assets";
 
 export type ImageLayerState = ContainerLayerState & {
-  alpha: number;
   panX: number;
   panY: number;
   scale: number;
@@ -21,7 +20,7 @@ export type ImageLayerState = ContainerLayerState & {
 };
 
 export type ImageLayerSetting = {
-  field: "imageSource" | "alpha" | "panX" | "panY" | "scale";
+  field: "imageSource" | "panX" | "panY" | "scale";
   type: "file" | "float" | "integer";
   onchange: (value: string) => void;
 };
@@ -66,14 +65,6 @@ export class ImageLayer extends ContainerLayer {
         this.reposition();
       },
     },
-    {
-      field: "alpha",
-      type: "float",
-      onchange: (value) => {
-        this.state.alpha = parseFloat(value);
-        this.reposition();
-      },
-    },
   ];
 
   constructor(state?: ImageLayerState) {
@@ -85,7 +76,6 @@ export class ImageLayer extends ContainerLayer {
     if (state) {
       this.state = {
         ...this.state,
-        alpha: state.alpha,
         panX: state.panX,
         panY: state.panY,
         scale: state.scale,
@@ -115,7 +105,6 @@ export class ImageLayer extends ContainerLayer {
     return {
       ...ContainerLayer.DEFAULT_STATE(),
       name: ImageLayer.LAYER_NAME,
-      alpha: 1,
       panX: 0,
       panY: 0,
       scale: 100,
@@ -227,7 +216,6 @@ export class ImageLayer extends ContainerLayer {
     this.sprite.scale = this.state.scale / 100;
     this.sprite.x = this.state.panX;
     this.sprite.y = this.state.panY;
-    this.sprite.alpha = this.state.alpha;
   }
 
   loadImage(value: string) {

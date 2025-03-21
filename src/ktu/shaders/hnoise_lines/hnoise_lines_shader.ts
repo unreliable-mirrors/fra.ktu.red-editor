@@ -8,6 +8,7 @@ export type HNoiseLinesShaderState = ShaderState & {
   strength: number;
   lineThickness: number;
   negative: boolean;
+  refreshChance: number;
 };
 
 export type HNoiseLinesShaderSetting = {
@@ -86,6 +87,7 @@ export class HNoiseLinesShader extends ShaderLayer {
       strength: 0.1,
       lineThickness: 1,
       negative: false,
+      refreshChance: 1,
     };
   }
 

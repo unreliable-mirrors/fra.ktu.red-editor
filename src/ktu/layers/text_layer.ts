@@ -16,11 +16,10 @@ export type TextLayerState = ContainerLayerState & {
   color: string;
   panX: number;
   panY: number;
-  alpha: number;
 };
 
 export type TextLayerSetting = {
-  field: "font" | "text" | "fontSize" | "color" | "panX" | "panY" | "alpha";
+  field: "font" | "text" | "fontSize" | "color" | "panX" | "panY";
   type: "text" | "integer" | "color" | "float" | "options";
   values?: string[];
   onchange: (value: string) => void;
@@ -94,14 +93,6 @@ export class TextLayer extends ContainerLayer {
         this.repaint();
       },
     },
-    {
-      field: "alpha",
-      type: "float",
-      onchange: (value) => {
-        this.state.alpha = parseFloat(value);
-        this.repaint();
-      },
-    },
   ];
 
   constructor(state?: TextLayerState) {
@@ -118,7 +109,6 @@ export class TextLayer extends ContainerLayer {
         color: state.color,
         panX: state.panX,
         panY: state.panY,
-        alpha: state.alpha,
       };
       for (var shader of state.shaders) {
         this.addShaderFromState(shader.name, shader);
@@ -139,7 +129,6 @@ export class TextLayer extends ContainerLayer {
       color: "#FFFFFF",
       panX: Math.floor((Math.random() * 0.8 + 0.1) * window.innerWidth),
       panY: Math.floor((Math.random() * 0.8 + 0.1) * window.innerHeight),
-      alpha: 1,
     };
   }
 
@@ -189,7 +178,6 @@ export class TextLayer extends ContainerLayer {
     });
     this.text.x = this.state.panX;
     this.text.y = this.state.panY;
-    this.text.alpha = this.state.alpha;
     this.text.anchor.set(0.5, 0.5);
     this.container.addChild(this.text);
   }

@@ -50,6 +50,7 @@ import {
   LightSplitShader,
   LightSplitShaderState,
 } from "../shaders/light_split/light_split_shader";
+import { AlphaShader, AlphaShaderState } from "../shaders/alpha/alpha_shader";
 
 export type ShaderClass = {
   SHADER_NAME: string;
@@ -70,6 +71,7 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   RecolourShader,
   HNoiseLinesShader,
   LightSplitShader,
+  AlphaShader,
 ];
 
 export const AVAILABLE_SHADERS_MAP: Record<string, ShaderClass> =
@@ -115,6 +117,8 @@ export const getShaderByName = (
     return new HNoiseLinesShader(state as HNoiseLinesShaderState);
   } else if (shaderName === LightSplitShader.SHADER_NAME) {
     return new LightSplitShader(state as LightSplitShaderState);
+  } else if (shaderName === AlphaShader.SHADER_NAME) {
+    return new AlphaShader(state as AlphaShaderState);
   }
   return null;
 };

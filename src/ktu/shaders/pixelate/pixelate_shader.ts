@@ -7,6 +7,7 @@ export type PixelateShaderState = ShaderState & {
   pixelSize: number;
   strength: number;
   onlyPixels: boolean;
+  refreshChance: number;
 };
 
 export type PixelateShaderSetting = {
@@ -70,6 +71,7 @@ export class PixelateShader extends ShaderLayer {
       pixelSize: 15,
       strength: 1,
       onlyPixels: false,
+      refreshChance: 1,
     };
   }
 

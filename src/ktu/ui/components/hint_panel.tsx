@@ -40,6 +40,7 @@ import { RecolourShader } from "../../shaders/recolour/recolour_shader";
 import { HNoiseLinesShader } from "../../shaders/hnoise_lines/hnoise_lines_shader";
 import { LightSplitShader } from "../../shaders/light_split/light_split_shader";
 import DataStore from "../core/data_store";
+import { AlphaShader } from "../../shaders/alpha/alpha_shader";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -795,6 +796,27 @@ export class HintPanel extends KTUComponent {
               <div>
                 Light gets lighter, dark gets darker. Unless you use
                 <strong>Inverse</strong>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == AlphaShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>Alpha Shader</h3>
+            <div className="tip">Make the thing transparent</div>
+          </div>
+          <div className="block extraLast">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Alpha</strong>: The lower, the more transparent.
               </div>
             </div>
           </div>

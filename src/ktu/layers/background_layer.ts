@@ -4,11 +4,10 @@ import { getFunColor } from "../helpers/sparkle";
 
 export type BackgroundLayerState = ContainerLayerState & {
   color: string;
-  alpha: number;
 };
 
 export type BackgroundLayerSetting = {
-  field: "color" | "alpha";
+  field: "color";
   type: "color" | "float";
   onchange: (value: string) => void;
 };
@@ -28,14 +27,6 @@ export class BackgroundLayer extends ContainerLayer {
         this.repaint();
       },
     },
-    {
-      field: "alpha",
-      type: "float",
-      onchange: (value) => {
-        this.state.alpha = parseFloat(value);
-        this.repaint();
-      },
-    },
   ];
 
   constructor(state?: BackgroundLayerState) {
@@ -47,19 +38,12 @@ export class BackgroundLayer extends ContainerLayer {
     if (state) {
       console.log("VISIBLE", JSON.stringify(state.visible));
       console.log("THIS STATEA", JSON.stringify(this.state));
-      this.state = { ...this.state, color: state.color, alpha: state.alpha };
+      this.state = { ...this.state, color: state.color };
       console.log("THIS STATEB", JSON.stringify(this.state));
       for (var shader of state.shaders) {
         this.addShaderFromState(shader.name, shader);
       }
     }
-
-    console.log(
-      "CONSTRUCT",
-      state,
-      this.state.shaders.length,
-      this.state.shaders
-    );
   }
 
   layerName(): string {
@@ -70,7 +54,6 @@ export class BackgroundLayer extends ContainerLayer {
     return {
       ...super.defaultState(),
       color: getFunColor(),
-      alpha: 1,
     };
   }
 
@@ -94,6 +77,6 @@ export class BackgroundLayer extends ContainerLayer {
     this.graphics.clear();
     this.graphics
       .rect(0, 0, window.innerWidth, window.innerHeight)
-      .fill({ color: this.state.color, alpha: this.state.alpha });
+      .fill({ color: this.state.color });
   }
 }
