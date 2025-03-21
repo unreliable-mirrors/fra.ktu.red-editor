@@ -361,6 +361,23 @@ export class EditorScene extends BaseScene {
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
+      "removeLayerShader",
+      (payload: ContainerLayer | ShaderLayer) => {
+        console.log("SHADELAYER", payload);
+        if (payload instanceof ContainerLayer) {
+          console.log("Container");
+          this.removeLayer(payload);
+        } else {
+          if (payload.bindedLayer) {
+            (payload.bindedLayer as ContainerLayer).removeShader(payload);
+          } else {
+            this.removeShader(payload);
+          }
+        }
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
       "removeLayer",
       (payload: ContainerLayer) => {
         this.removeLayer(payload);
