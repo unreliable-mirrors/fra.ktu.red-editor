@@ -368,6 +368,30 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
   },
   {
     meta: {
+      keyHint: `DELETE`,
+      globalHint: "Remove Layer",
+      command: "removeLayerShader",
+      payload: () => DataStore.getInstance().getStore("activeLayer"),
+    },
+    shortcuts: [
+      {
+        key: "Delete",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+      {
+        key: "Backspace",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+    ],
+  },
+  {
+    meta: {
       keyHint: `${ctrlKey()} + N`,
       globalHint: "New File",
       command: "newState",
