@@ -94,6 +94,22 @@ export class ShaderComponent extends KTUComponent {
               ></input>
             </div>
           );
+        } else if (setting.type === "floatRange") {
+          settings.push(
+            <div>
+              <span>{setting.field}: </span>
+              <input
+                type="range"
+                value={this.shader.state[setting.field]}
+                min="0"
+                max="1"
+                step="0.01"
+                oninput={(e) => {
+                  setting.onchange((e.target as HTMLInputElement).value);
+                }}
+              ></input>
+            </div>
+          );
         }
       }
     }

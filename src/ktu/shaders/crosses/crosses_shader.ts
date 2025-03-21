@@ -1,5 +1,5 @@
-import { UniformGroup } from "pixi.js";
-import { ShaderLayer, ShaderState } from "../shader_layer";
+import { UniformData } from "pixi.js";
+import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./crosses_shader.frag?raw";
 
@@ -11,8 +11,13 @@ export type CrossesShaderState = ShaderState & {
 };
 
 export type CrossesShaderSetting = {
-  field: "gridSize" | "crossSize" | "lineThickness" | "variableCrossSize";
-  type: "integer" | "boolean";
+  field:
+    | ShaderSetting["field"]
+    | "gridSize"
+    | "crossSize"
+    | "lineThickness"
+    | "variableCrossSize";
+  type: ShaderSetting["type"] | "integer" | "boolean";
   onchange: (value: string) => void;
 };
 
@@ -55,8 +60,8 @@ export class CrossesShader extends ShaderLayer {
           : 0;
       },
     },
+    ...this.defaultSettings(),
   ];
-  uniforms: UniformGroup;
 
   constructor(state?: CrossesShaderState) {
     super(state);
@@ -70,15 +75,6 @@ export class CrossesShader extends ShaderLayer {
         variableCrossSize: state.variableCrossSize,
       };
     }
-    this.uniforms = new UniformGroup({
-      uGridSize: { value: this.state.gridSize, type: "f32" },
-      uCrossSize: { value: this.state.crossSize / 2, type: "f32" },
-      uLineThickness: { value: this.state.lineThickness, type: "f32" },
-      uVariableCrossSize: {
-        value: this.state.variableCrossSize ? 1 : 0,
-        type: "f32",
-      },
-    });
   }
 
   shaderName(): string {
@@ -92,6 +88,17 @@ export class CrossesShader extends ShaderLayer {
       crossSize: 9,
       lineThickness: 1,
       variableCrossSize: true,
+    };
+  }
+  setupUniformValues(): { [key: string]: UniformData } {
+    return {
+      uGridSize: { value: this.state.gridSize, type: "f32" },
+      uCrossSize: { value: this.state.crossSize / 2, type: "f32" },
+      uLineThickness: { value: this.state.lineThickness, type: "f32" },
+      uVariableCrossSize: {
+        value: this.state.variableCrossSize ? 1 : 0,
+        type: "f32",
+      },
     };
   }
 }

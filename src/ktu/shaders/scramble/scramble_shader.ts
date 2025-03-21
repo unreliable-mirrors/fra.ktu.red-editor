@@ -1,5 +1,5 @@
-import { Container, Ticker, UniformGroup } from "pixi.js";
-import { ShaderLayer, ShaderState } from "../shader_layer";
+import { Container, Ticker, UniformData } from "pixi.js";
+import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./scramble_shader.frag?raw";
 
@@ -9,8 +9,8 @@ export type ScrambleShaderState = ShaderState & {
 };
 
 export type ScrambleShaderSetting = {
-  field: "range" | "refreshChance";
-  type: "integer" | "float";
+  field: ShaderSetting["field"] | "range" | "refreshChance";
+  type: ShaderSetting["type"] | "integer" | "float";
   onchange: (value: string) => void;
 };
 
@@ -35,8 +35,8 @@ export class ScrambleShader extends ShaderLayer {
         this.state.refreshChance = parseFloat(value);
       },
     },
+    ...this.defaultSettings(),
   ];
-  uniforms: UniformGroup;
 
   constructor(state?: ScrambleShaderState) {
     super(state);
@@ -48,10 +48,6 @@ export class ScrambleShader extends ShaderLayer {
         refreshChance: state.refreshChance,
       };
     }
-    this.uniforms = new UniformGroup({
-      uRange: { value: this.state.range, type: "f32" },
-      uTime: { value: Math.random(), type: "f32" },
-    });
   }
 
   shaderName(): string {
@@ -77,5 +73,11 @@ export class ScrambleShader extends ShaderLayer {
       this.uniforms.uniforms.uTime =
         (this.uniforms.uniforms.uTime as number) + time.elapsedMS / 1000;
     }
+  }
+  setupUniformValues(): { [key: string]: UniformData } {
+    return {
+      uRange: { value: this.state.range, type: "f32" },
+      uTime: { value: Math.random(), type: "f32" },
+    };
   }
 }

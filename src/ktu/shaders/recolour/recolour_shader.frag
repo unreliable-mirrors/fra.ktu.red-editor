@@ -12,6 +12,7 @@ uniform float uThreshold;
 uniform int uOnlyHue;
 uniform int uOnlySaturation;
 uniform int uOnlyLightness;
+uniform float uDryWet;
 
 vec3 rgb2hsv(vec3 c)
 {
@@ -59,4 +60,7 @@ void main(){
     }else{
         gl_FragColor = vec4(tex.r, tex.g, tex.b, tex.a);
     }   
+    
+    //DRY/WET
+    gl_FragColor = ((1.0-uDryWet)*tex) + (uDryWet * gl_FragColor);
 }

@@ -1,4 +1,4 @@
-import { Container, Filter, Ticker, UniformGroup } from "pixi.js";
+import { Container, Filter, Ticker, UniformData, UniformGroup } from "pixi.js";
 
 import {
   EditorLayerSetting,
@@ -10,7 +10,15 @@ import { getSecureIndex } from "../../engine/helpers/secure_index_helper";
 import vertex from "./defaultFilter.vert?raw";
 import { ILayer } from "../../engine/ilayer";
 
-export type ShaderState = EditorLayerState;
+export type ShaderState = EditorLayerState & {
+  dryWet: number;
+};
+
+export type ShaderSetting = {
+  field: "dryWet";
+  type: "float";
+  onchange: (value: string) => void;
+};
 
 export abstract class ShaderLayer implements IEditorLayer {
   layerId: number;
@@ -19,7 +27,7 @@ export abstract class ShaderLayer implements IEditorLayer {
   active: boolean;
   shader!: Filter;
   abstract fragment: string;
-  abstract uniforms: UniformGroup;
+  uniforms: UniformGroup;
   bindedLayer?: ILayer;
   absorbingLayer: boolean = false;
 
@@ -32,10 +40,16 @@ export abstract class ShaderLayer implements IEditorLayer {
         name: state.name,
         layerId: this.layerId,
         visible: state.visible,
+        dryWet: state.dryWet,
       };
     } else {
       this.state = this.defaultState();
     }
+
+    this.uniforms = new UniformGroup({
+      ...this.defaultUniforms(),
+      ...this.setupUniformValues(),
+    });
   }
 
   abstract shaderName(): string;
@@ -45,8 +59,32 @@ export abstract class ShaderLayer implements IEditorLayer {
       name: this.shaderName(),
       layerId: this.layerId,
       visible: true,
+      dryWet: 1,
     };
   }
+
+  defaultUniforms(): {
+    [key: string]: UniformData;
+  } {
+    return { uDryWet: { value: this.state.dryWet, type: "f32" } };
+  }
+
+  defaultSettings(): ShaderSetting[] {
+    return [
+      {
+        field: "dryWet",
+        type: "float",
+        onchange: (value) => {
+          this.state.dryWet = parseFloat(value);
+          this.uniforms.uniforms.uDryWet = this.state.dryWet;
+        },
+      },
+    ];
+  }
+
+  abstract setupUniformValues(): {
+    [key: string]: UniformData;
+  };
 
   buildShader() {
     const uniforms = this.uniforms;

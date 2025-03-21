@@ -7,6 +7,7 @@ uniform float uG;
 uniform float uB;
 uniform float uThreshold;
 uniform int uNot;
+uniform float uDryWet;
 
 void main(){
     vec4 tex = texture2D(uTexture, vTextureCoord);
@@ -25,5 +26,8 @@ void main(){
             gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
         }
         
-    }   
+    }
+
+    //DRY/WET
+    gl_FragColor = ((1.0-uDryWet)*tex) + (uDryWet * gl_FragColor);
 }

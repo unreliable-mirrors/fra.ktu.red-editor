@@ -18,7 +18,7 @@ import DataStore from "../ui/core/data_store";
 import { getShaderByName } from "../helpers/shaders";
 
 export type ContainerLayerState = EditorLayerState & {
-  shaders: EditorLayerState[];
+  shaders: ShaderState[];
 };
 
 export abstract class ContainerLayer implements IEditorLayer {

@@ -1,5 +1,5 @@
-import { Ticker, UniformGroup } from "pixi.js";
-import { ShaderLayer, ShaderState } from "../shader_layer";
+import { Ticker, UniformData } from "pixi.js";
+import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./hnoise_lines_shader.frag?raw";
 
@@ -11,8 +11,13 @@ export type HNoiseLinesShaderState = ShaderState & {
 };
 
 export type HNoiseLinesShaderSetting = {
-  field: "strength" | "noiseSize" | "lineThickness" | "negative";
-  type: "integer" | "float" | "boolean";
+  field:
+    | ShaderSetting["field"]
+    | "strength"
+    | "noiseSize"
+    | "lineThickness"
+    | "negative";
+  type: ShaderSetting["type"] | "integer" | "float" | "boolean";
   onchange: (value: string) => void;
 };
 
@@ -53,8 +58,8 @@ export class HNoiseLinesShader extends ShaderLayer {
         this.uniforms.uniforms.uNegative = this.state.negative ? 1 : 0;
       },
     },
+    ...this.defaultSettings(),
   ];
-  uniforms: UniformGroup;
 
   constructor(state?: HNoiseLinesShaderState) {
     super(state);
@@ -68,13 +73,6 @@ export class HNoiseLinesShader extends ShaderLayer {
         lineThickness: state.lineThickness,
       };
     }
-    this.uniforms = new UniformGroup({
-      uNoiseSize: { value: this.state.noiseSize, type: "f32" },
-      uLineThickness: { value: this.state.lineThickness, type: "f32" },
-      uStrength: { value: this.state.strength, type: "f32" },
-      uNegative: { value: this.state.negative ? 1 : 0, type: "i32" },
-      uTime: { value: Math.random(), type: "f32" },
-    });
   }
 
   shaderName(): string {
@@ -103,5 +101,15 @@ export class HNoiseLinesShader extends ShaderLayer {
       this.uniforms.uniforms.uTime =
         (this.uniforms.uniforms.uTime as number) + time.elapsedMS / 1000;
     }
+  }
+
+  setupUniformValues(): { [key: string]: UniformData } {
+    return {
+      uNoiseSize: { value: this.state.noiseSize, type: "f32" },
+      uLineThickness: { value: this.state.lineThickness, type: "f32" },
+      uStrength: { value: this.state.strength, type: "f32" },
+      uNegative: { value: this.state.negative ? 1 : 0, type: "i32" },
+      uTime: { value: Math.random(), type: "f32" },
+    };
   }
 }

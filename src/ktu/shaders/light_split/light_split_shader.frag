@@ -7,6 +7,7 @@ uniform float uPower;
 uniform float uDarken;
 uniform float uLighten;
 uniform float uInverse;
+uniform float uDryWet;
 
 
 vec3 rgb2hsv(vec3 c)
@@ -47,4 +48,7 @@ void main(){
     vec3 tex3 = hsv2rgb(hsv);
 
     gl_FragColor = vec4(tex3.r, tex3.g, tex3.b, tex.a);
+    
+    //DRY/WET
+    gl_FragColor = ((1.0-uDryWet)*tex) + (uDryWet * gl_FragColor);
 }

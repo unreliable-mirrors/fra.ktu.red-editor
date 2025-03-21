@@ -8,6 +8,7 @@ uniform float uGridSize;
 uniform float uCrossSize;
 uniform float uLineThickness;
 uniform float uVariableCrossSize;
+uniform float uDryWet;
 
 vec2 mapCoord( vec2 coord )
 {
@@ -49,6 +50,8 @@ vec3 hsv2rgb(vec3 c)
 }
 
 void main(){
+    vec4 oTex = texture(uTexture, vTextureCoord);
+    
     vec2 pixelCoord = mapCoord(vTextureCoord);
     vec2 newCoords = pixelate(pixelCoord, uGridSize);
     vec4 tex = texture(uTexture, unmapCoord(newCoords));
@@ -65,4 +68,7 @@ void main(){
     }else{
         gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
     }
+    
+    //DRY/WET
+    gl_FragColor = ((1.0-uDryWet)*oTex) + (uDryWet * gl_FragColor);
 }
