@@ -4,7 +4,6 @@ export type EditorLayerState = {
   name: string;
   layerId: number;
   visible: boolean;
-  [key: string]: any;
 };
 
 export type EditorLayerSetting = {

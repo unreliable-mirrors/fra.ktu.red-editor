@@ -36,7 +36,9 @@ export class ShaderComponent extends KTUComponent {
                 spellcheck="false"
                 autocomplete="off"
                 aria-autocomplete="none"
-                value={this.shader.state[setting.field]}
+                value={
+                  (this.shader.state as { [key: string]: any })[setting.field]
+                }
                 oninput={(e) => {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
@@ -52,7 +54,9 @@ export class ShaderComponent extends KTUComponent {
                 spellcheck="false"
                 autocomplete="off"
                 aria-autocomplete="none"
-                value={this.shader.state[setting.field]}
+                value={
+                  (this.shader.state as { [key: string]: any })[setting.field]
+                }
                 oninput={(e) => {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
@@ -68,7 +72,9 @@ export class ShaderComponent extends KTUComponent {
                 spellcheck="false"
                 autocomplete="off"
                 aria-autocomplete="none"
-                value={this.shader.state[setting.field]}
+                value={
+                  (this.shader.state as { [key: string]: any })[setting.field]
+                }
                 min="0"
                 max="1"
                 step="0.01"
@@ -85,7 +91,9 @@ export class ShaderComponent extends KTUComponent {
               <input
                 type="checkbox"
                 value="true"
-                defaultChecked={this.shader.state[setting.field]}
+                defaultChecked={
+                  (this.shader.state as { [key: string]: any })[setting.field]
+                }
                 oninput={(e) => {
                   setting.onchange(
                     (e.target as HTMLInputElement).checked ? "true" : "false"
@@ -100,7 +108,9 @@ export class ShaderComponent extends KTUComponent {
               <span>{setting.field}: </span>
               <input
                 type="range"
-                value={this.shader.state[setting.field]}
+                value={
+                  (this.shader.state as { [key: string]: any })[setting.field]
+                }
                 min="0"
                 max="1"
                 step="0.01"

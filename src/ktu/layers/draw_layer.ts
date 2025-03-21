@@ -9,20 +9,12 @@ export type DrawLayerState = ContainerLayerState & {
   brushSize: number;
   gridSize: number;
   color: string;
-  alpha: number;
   panX: number;
   panY: number;
 };
 
 export type DrawLayerSetting = {
-  field:
-    | "brush"
-    | "brushSize"
-    | "gridSize"
-    | "color"
-    | "alpha"
-    | "panX"
-    | "panY";
+  field: "brush" | "brushSize" | "gridSize" | "color" | "panX" | "panY";
   type: "options" | "color" | "integer" | "float";
   values?: string[];
   onchange: (value: string) => void;
@@ -78,14 +70,6 @@ export class DrawLayer extends ContainerLayer {
       },
     },
     {
-      field: "alpha",
-      type: "float",
-      onchange: (value: string) => {
-        this.state.alpha = parseFloat(value);
-        this.repaint();
-      },
-    },
-    {
       field: "panX",
       type: "integer",
       onchange: (value: string) => {
@@ -117,7 +101,6 @@ export class DrawLayer extends ContainerLayer {
         brushSize: state.brushSize,
         gridSize: state.gridSize,
         color: state.color,
-        alpha: state.alpha,
         panX: state.panX,
         panY: state.panY,
       };
@@ -144,7 +127,6 @@ export class DrawLayer extends ContainerLayer {
       brushSize: 15,
       gridSize: 15,
       color: "#FFFFFF",
-      alpha: 1,
       panX: 0,
       panY: 0,
     };
@@ -265,7 +247,7 @@ export class DrawLayer extends ContainerLayer {
           this.state.brushSize,
           this.state.brushSize
         )
-        .fill({ color: this.state.color, alpha: this.state.alpha });
+        .fill({ color: this.state.color });
     } else if (this.state.brush === "ellipse") {
       this.graphics
         .ellipse(
@@ -274,7 +256,7 @@ export class DrawLayer extends ContainerLayer {
           this.state.brushSize / 2,
           this.state.brushSize / 2
         )
-        .fill({ color: this.state.color, alpha: this.state.alpha });
+        .fill({ color: this.state.color });
     } else if (this.state.brush === "cross") {
       this.graphics
         .moveTo(

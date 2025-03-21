@@ -1,10 +1,4 @@
-import {
-  Container,
-  Graphics,
-  Point,
-  TextStyleFontStyle,
-  TextStyleFontWeight,
-} from "pixi.js";
+import { Container, Graphics, Point } from "pixi.js";
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import DataStore from "../ui/core/data_store";
 
@@ -15,11 +9,10 @@ export type ShapeLayerState = ContainerLayerState & {
   panX: number;
   panY: number;
   rotation: number;
-  alpha: number;
 };
 
 export type ShapeLayerSetting = {
-  field: "shape" | "size" | "color" | "panX" | "panY" | "rotation" | "alpha";
+  field: "shape" | "size" | "color" | "panX" | "panY" | "rotation";
   type: "options" | "integer" | "color" | "float";
   values?: string[];
   onchange: (value: string) => void;
@@ -84,14 +77,6 @@ export class ShapeLayer extends ContainerLayer {
         this.repaint();
       },
     },
-    {
-      field: "alpha",
-      type: "float",
-      onchange: (value) => {
-        this.state.alpha = parseFloat(value);
-        this.repaint();
-      },
-    },
   ];
 
   constructor(state?: ShapeLayerState) {
@@ -107,7 +92,6 @@ export class ShapeLayer extends ContainerLayer {
         panX: state.panX,
         panY: state.panY,
         rotation: state.rotation,
-        alpha: state.alpha,
       };
       for (var shader of state.shaders) {
         this.addShaderFromState(shader.name, shader);
@@ -129,7 +113,6 @@ export class ShapeLayer extends ContainerLayer {
       panX: Math.floor((Math.random() * 0.8 + 0.1) * window.innerWidth),
       panY: Math.floor((Math.random() * 0.8 + 0.1) * window.innerHeight),
       rotation: 0,
-      alpha: 1,
     };
   }
 
@@ -193,56 +176,6 @@ export class ShapeLayer extends ContainerLayer {
     this.graphics.x = this.state.panX;
     this.graphics.y = this.state.panY;
     this.graphics.angle = this.state.rotation;
-    this.graphics.alpha = this.state.alpha;
     console.log("WHAT SHAPE", this.state);
-  }
-
-  getFontData(): {
-    fontFamily: string;
-    fontWeight: TextStyleFontWeight;
-    fontStyle: TextStyleFontStyle;
-  } {
-    console.log("FONT", this.state.font);
-    if (this.state.font === "Orbitron") {
-      return { fontFamily: "Orbitron", fontWeight: "400", fontStyle: "normal" };
-    } else if (this.state.font === "Permanent Marker") {
-      return {
-        fontFamily: "Permanent Marker",
-        fontWeight: "400",
-        fontStyle: "normal",
-      };
-    } else if (this.state.font === "Montserrat") {
-      return {
-        fontFamily: "Montserrat",
-        fontWeight: "100",
-        fontStyle: "normal",
-      };
-    } else if (this.state.font === "Noto") {
-      return {
-        fontFamily: "Noto Sans JP",
-        fontWeight: "400",
-        fontStyle: "normal",
-      };
-    } else if (this.state.font === "Caveat") {
-      return {
-        fontFamily: "Caveat",
-        fontWeight: "400",
-        fontStyle: "normal",
-      };
-    } else if (this.state.font === "NewNord") {
-      return {
-        fontFamily: "newnord",
-        fontWeight: "700",
-        fontStyle: "italic",
-      };
-    } else if (this.state.font === "Press Start") {
-      return {
-        fontFamily: "Press Start 2P",
-        fontWeight: "400",
-        fontStyle: "normal",
-      };
-    }
-    console.log("ARIALING");
-    return { fontFamily: "Arial", fontWeight: "400", fontStyle: "normal" };
   }
 }

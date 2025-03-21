@@ -269,6 +269,7 @@ button {
   border-left: 0;
   border-top: 0;
   border-bottom: 0;
+  min-height: 115px;
 }
 
 .filePanel {
