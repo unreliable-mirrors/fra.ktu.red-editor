@@ -1,10 +1,13 @@
 in vec2 vTextureCoord;
 
 uniform sampler2D uTexture;
-uniform float uStrength;
+uniform float uDryWet;
 
 void main(){
     vec4 tex = texture(uTexture, vTextureCoord);
     
-    gl_FragColor = vec4(tex.r, (tex.g*tex.g)+(tex.g-(tex.g*tex.g))*(1.0-uStrength), (tex.b*tex.b)+(tex.b-(tex.b*tex.b))*(1.0-uStrength), tex.a);
+    gl_FragColor = vec4(tex.r, (tex.g*tex.g), (tex.b*tex.b), tex.a);
+    
+    //DRY/WET
+    gl_FragColor = ((1.0-uDryWet)*tex) + (uDryWet * gl_FragColor);
 }

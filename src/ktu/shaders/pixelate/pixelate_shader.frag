@@ -9,6 +9,7 @@ uniform float uPixelSize;
 uniform float uTime;
 uniform float uStrength;
 uniform int uOnlyPixels;
+uniform float uDryWet;
 
 float PHI = 1.61803398874989484820459;  // Φ = Golden Ratio   
 
@@ -38,6 +39,8 @@ vec2 pixelate(vec2 coord, float uPixelSize)
 }
 
 void main(){
+    vec4 oTex = texture(uTexture, vTextureCoord);
+
     vec2 pixelCoord = mapCoord(vTextureCoord);
     vec2 newCoord = pixelate(pixelCoord, uPixelSize);
     float elegible = gold_noise(newCoord, uTime+1.0);
@@ -52,4 +55,8 @@ void main(){
     vec4 tex = texture(uTexture, coord);
     
     gl_FragColor = vec4(tex.r, tex.g, tex.b, tex.a);
+
+    
+    //DRY/WET
+    gl_FragColor = ((1.0-uDryWet)*oTex) + (uDryWet * gl_FragColor);
 }

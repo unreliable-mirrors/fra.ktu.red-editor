@@ -1,5 +1,5 @@
-import { Color, Container, UniformGroup } from "pixi.js";
-import { ShaderLayer, ShaderState } from "../shader_layer";
+import { Color, Container, UniformData } from "pixi.js";
+import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./chroma_shader.frag?raw";
 
@@ -10,8 +10,8 @@ export type ChromaShaderState = ShaderState & {
 };
 
 export type ChromaShaderSetting = {
-  field: "color" | "threshold" | "not";
-  type: "color" | "float" | "boolean";
+  field: ShaderSetting["field"] | "color" | "threshold" | "not";
+  type: ShaderSetting["type"] | "color" | "float" | "boolean";
   onchange: (value: string) => void;
 };
 
@@ -50,8 +50,8 @@ export class ChromaShader extends ShaderLayer {
         this.uniforms.uniforms.uNot = this.state.not ? 1 : 0;
       },
     },
+    ...this.defaultSettings(),
   ];
-  uniforms: UniformGroup;
 
   constructor(state?: ChromaShaderState) {
     super(state);
@@ -64,13 +64,6 @@ export class ChromaShader extends ShaderLayer {
         not: state.not,
       };
     }
-    this.uniforms = new UniformGroup({
-      uR: { value: new Color(this.state.color).red, type: "f32" },
-      uG: { value: new Color(this.state.color).green, type: "f32" },
-      uB: { value: new Color(this.state.color).blue, type: "f32" },
-      uThreshold: { value: this.state.threshold, type: "f32" },
-      uNot: { value: this.state.not ? 1 : 0, type: "i32" },
-    });
   }
 
   shaderName(): string {
@@ -83,6 +76,16 @@ export class ChromaShader extends ShaderLayer {
       color: "#000000",
       threshold: 0.1,
       not: false,
+    };
+  }
+
+  setupUniformValues(): { [key: string]: UniformData } {
+    return {
+      uR: { value: new Color(this.state.color).red, type: "f32" },
+      uG: { value: new Color(this.state.color).green, type: "f32" },
+      uB: { value: new Color(this.state.color).blue, type: "f32" },
+      uThreshold: { value: this.state.threshold, type: "f32" },
+      uNot: { value: this.state.not ? 1 : 0, type: "i32" },
     };
   }
 }

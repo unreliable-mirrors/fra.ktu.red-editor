@@ -6,6 +6,7 @@ uniform vec4 uInputSize;
 
 uniform float uGridSize;
 uniform float uLineThickness;
+uniform float uDryWet;
 
 vec2 mapCoord( vec2 coord )
 {
@@ -36,6 +37,8 @@ void main(){
         gl_FragColor = vec4(tex.r, tex.g, tex.b, tex.a);
     }else{
         gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
-
     }
+    
+    //DRY/WET
+    gl_FragColor = ((1.0-uDryWet)*tex) + (uDryWet * gl_FragColor);
 }

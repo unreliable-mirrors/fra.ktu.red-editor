@@ -1,5 +1,5 @@
-import { UniformGroup } from "pixi.js";
-import { ShaderLayer, ShaderState } from "../shader_layer";
+import { UniformData } from "pixi.js";
+import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./posterize_shader.frag?raw";
 
@@ -8,8 +8,8 @@ export type PosterizeShaderState = ShaderState & {
 };
 
 export type PosterizeShaderSetting = {
-  field: "threshold";
-  type: "float";
+  field: ShaderSetting["field"] | "threshold";
+  type: ShaderSetting["type"] | "float";
   onchange: (value: string) => void;
 };
 
@@ -27,8 +27,8 @@ export class PosterizeShader extends ShaderLayer {
         this.uniforms.uniforms.uThreshold = this.state.threshold;
       },
     },
+    ...this.defaultSettings(),
   ];
-  uniforms: UniformGroup;
 
   constructor(state?: PosterizeShaderState) {
     super(state);
@@ -39,9 +39,6 @@ export class PosterizeShader extends ShaderLayer {
         threshold: state.threshold,
       };
     }
-    this.uniforms = new UniformGroup({
-      uThreshold: { value: this.state.threshold, type: "f32" },
-    });
   }
 
   shaderName(): string {
@@ -50,5 +47,10 @@ export class PosterizeShader extends ShaderLayer {
 
   defaultState(): PosterizeShaderState {
     return { ...super.defaultState(), threshold: 0.3 };
+  }
+  setupUniformValues(): { [key: string]: UniformData } {
+    return {
+      uThreshold: { value: this.state.threshold, type: "f32" },
+    };
   }
 }

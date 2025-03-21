@@ -1,5 +1,5 @@
-import { UniformGroup } from "pixi.js";
-import { ShaderLayer, ShaderState } from "../shader_layer";
+import { UniformData } from "pixi.js";
+import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./anaglyph_shader.frag?raw";
 
@@ -8,8 +8,8 @@ export type AnaglyphShaderState = ShaderState & {
 };
 
 export type AnaglyphShaderSetting = {
-  field: "strength";
-  type: "integer";
+  field: ShaderSetting["field"] | "strength";
+  type: ShaderSetting["type"] | "integer";
   onchange: (value: string) => void;
 };
 
@@ -27,8 +27,8 @@ export class AnaglyphShader extends ShaderLayer {
         this.uniforms.uniforms.uStrength = this.state.strength;
       },
     },
+    ...this.defaultSettings(),
   ];
-  uniforms: UniformGroup;
 
   constructor(state?: AnaglyphShaderState) {
     super(state);
@@ -39,9 +39,6 @@ export class AnaglyphShader extends ShaderLayer {
         strength: state.strength,
       };
     }
-    this.uniforms = new UniformGroup({
-      uStrength: { value: this.state.strength, type: "f32" },
-    });
   }
 
   shaderName(): string {
@@ -50,5 +47,11 @@ export class AnaglyphShader extends ShaderLayer {
 
   defaultState(): AnaglyphShaderState {
     return { ...super.defaultState(), strength: 1 };
+  }
+
+  setupUniformValues(): { [key: string]: UniformData } {
+    return {
+      uStrength: { value: this.state.strength, type: "f32" },
+    };
   }
 }

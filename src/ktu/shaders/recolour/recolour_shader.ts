@@ -1,5 +1,5 @@
-import { Color, Container, UniformGroup } from "pixi.js";
-import { ShaderLayer, ShaderState } from "../shader_layer";
+import { Color, Container, UniformData } from "pixi.js";
+import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./recolour_shader.frag?raw";
 
@@ -14,13 +14,14 @@ export type RecolourShaderState = ShaderState & {
 
 export type RecolourShaderSetting = {
   field:
+    | ShaderSetting["field"]
     | "fromColor"
     | "toColor"
     | "threshold"
     | "onlyHue"
     | "onlySaturation"
     | "onlyLightness";
-  type: "color" | "float" | "boolean";
+  type: ShaderSetting["type"] | "color" | "float" | "boolean";
   onchange: (value: string) => void;
 };
 
@@ -88,8 +89,8 @@ export class RecolourShader extends ShaderLayer {
           : 0;
       },
     },
+    ...this.defaultSettings(),
   ];
-  uniforms: UniformGroup;
 
   constructor(state?: RecolourShaderState) {
     super(state);
@@ -105,21 +106,6 @@ export class RecolourShader extends ShaderLayer {
         onlyLightness: state.onlyLightness,
       };
     }
-    this.uniforms = new UniformGroup({
-      uFromR: { value: new Color(this.state.fromColor).red, type: "f32" },
-      uFromG: { value: new Color(this.state.fromColor).green, type: "f32" },
-      uFromB: { value: new Color(this.state.fromColor).blue, type: "f32" },
-      uToR: { value: new Color(this.state.toColor).red, type: "f32" },
-      uToG: { value: new Color(this.state.toColor).green, type: "f32" },
-      uToB: { value: new Color(this.state.toColor).blue, type: "f32" },
-      uThreshold: { value: this.state.threshold, type: "f32" },
-      uOnlyHue: { value: this.state.onlyHue ? 1 : 0, type: "i32" },
-      uOnlySaturation: {
-        value: this.state.onlySaturation ? 1 : 0,
-        type: "i32",
-      },
-      uOnlyLightness: { value: this.state.onlyLightness ? 1 : 0, type: "i32" },
-    });
   }
 
   shaderName(): string {
@@ -135,6 +121,23 @@ export class RecolourShader extends ShaderLayer {
       onlyHue: false,
       onlySaturation: false,
       onlyLightness: false,
+    };
+  }
+  setupUniformValues(): { [key: string]: UniformData } {
+    return {
+      uFromR: { value: new Color(this.state.fromColor).red, type: "f32" },
+      uFromG: { value: new Color(this.state.fromColor).green, type: "f32" },
+      uFromB: { value: new Color(this.state.fromColor).blue, type: "f32" },
+      uToR: { value: new Color(this.state.toColor).red, type: "f32" },
+      uToG: { value: new Color(this.state.toColor).green, type: "f32" },
+      uToB: { value: new Color(this.state.toColor).blue, type: "f32" },
+      uThreshold: { value: this.state.threshold, type: "f32" },
+      uOnlyHue: { value: this.state.onlyHue ? 1 : 0, type: "i32" },
+      uOnlySaturation: {
+        value: this.state.onlySaturation ? 1 : 0,
+        type: "i32",
+      },
+      uOnlyLightness: { value: this.state.onlyLightness ? 1 : 0, type: "i32" },
     };
   }
 }

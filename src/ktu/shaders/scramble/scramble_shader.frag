@@ -6,6 +6,7 @@ uniform vec4 uInputSize;
 
 uniform float uRange;
 uniform float uTime;
+uniform float uDryWet;
 
 float PHI = 1.61803398874989484820459;  // Φ = Golden Ratio   
 
@@ -30,6 +31,7 @@ vec2 unmapCoord( vec2 coord )
 }
 
 void main(){
+    vec4 oTex = texture(uTexture, vTextureCoord);
     vec2 pixelCoord = mapCoord(vTextureCoord);
     vec2 newCoords = pixelCoord + vec2((
         gold_noise(vTextureCoord * vec2(1920,1080), uTime)*uRange-
@@ -38,4 +40,7 @@ void main(){
         uRange / 2.0));
     vec4 tex = texture2D(uTexture, unmapCoord(newCoords));
     gl_FragColor = vec4(tex.r, tex.g, tex.b, tex.a);
+    
+    //DRY/WET
+    gl_FragColor = ((1.0-uDryWet)*oTex) + (uDryWet * gl_FragColor);
 }

@@ -6,6 +6,7 @@ uniform sampler2D uTexture;
 uniform vec2 uSize;
 uniform float uTime;
 uniform float uStrength;
+uniform float uDryWet;
 
 float PHI = 1.61803398874989484820459;  // Φ = Golden Ratio   
 
@@ -21,4 +22,7 @@ void main(){
     }else{
         gl_FragColor = vec4( 0.0, 0.0, 0.0, 0.0 );
     }
+    
+    //DRY/WET
+    gl_FragColor = ((1.0-uDryWet)*tex) + (uDryWet * gl_FragColor);
 }

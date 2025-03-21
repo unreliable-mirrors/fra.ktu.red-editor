@@ -1,5 +1,5 @@
-import { UniformGroup } from "pixi.js";
-import { ShaderLayer, ShaderState } from "../shader_layer";
+import { UniformData } from "pixi.js";
+import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./light_split_shader.frag?raw";
 
@@ -12,8 +12,14 @@ export type LightSplitShaderState = ShaderState & {
 };
 
 export type LightSplitShaderSetting = {
-  field: "lightThreshold" | "power" | "darken" | "lighten" | "inverse";
-  type: "float" | "integer" | "boolean";
+  field:
+    | ShaderSetting["field"]
+    | "lightThreshold"
+    | "power"
+    | "darken"
+    | "lighten"
+    | "inverse";
+  type: ShaderSetting["type"] | "float" | "integer" | "boolean";
   onchange: (value: string) => void;
 };
 
@@ -62,12 +68,11 @@ export class LightSplitShader extends ShaderLayer {
         this.uniforms.uniforms.uInverse = this.state.inverse ? 1 : 0;
       },
     },
+    ...this.defaultSettings(),
   ];
-  uniforms: UniformGroup;
 
   constructor(state?: LightSplitShaderState) {
     super(state);
-    console.log("CONSTRUCTOR", state, this.state);
     if (state) {
       this.state = {
         ...this.state,
@@ -78,22 +83,6 @@ export class LightSplitShader extends ShaderLayer {
         inverse: state.inverse,
       };
     }
-    this.uniforms = new UniformGroup({
-      uLightThreshold: { value: this.state.lightThreshold, type: "f32" },
-      uPower: { value: this.state.power, type: "f32" },
-      uDarken: {
-        value: this.state.darken ? 1 : 0,
-        type: "f32",
-      },
-      uLighten: {
-        value: this.state.lighten ? 1 : 0,
-        type: "f32",
-      },
-      uInverse: {
-        value: this.state.inverse ? 1 : 0,
-        type: "f32",
-      },
-    });
   }
 
   shaderName(): string {
@@ -108,6 +97,24 @@ export class LightSplitShader extends ShaderLayer {
       darken: true,
       lighten: true,
       inverse: false,
+    };
+  }
+  setupUniformValues(): { [key: string]: UniformData } {
+    return {
+      uLightThreshold: { value: this.state.lightThreshold, type: "f32" },
+      uPower: { value: this.state.power, type: "f32" },
+      uDarken: {
+        value: this.state.darken ? 1 : 0,
+        type: "f32",
+      },
+      uLighten: {
+        value: this.state.lighten ? 1 : 0,
+        type: "f32",
+      },
+      uInverse: {
+        value: this.state.inverse ? 1 : 0,
+        type: "f32",
+      },
     };
   }
 }

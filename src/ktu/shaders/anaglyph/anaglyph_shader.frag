@@ -5,6 +5,7 @@ uniform sampler2D uTexture;
 uniform vec4 uInputSize;
 
 uniform float uStrength;
+uniform float uDryWet;
 
 vec2 mapCoord( vec2 coord )
 {
@@ -29,5 +30,7 @@ void main(){
     vec4 texR = texture2D(uTexture, unmapCoord(pixelCoord + vec2(uStrength, 0)));
     vec4 texL = texture2D(uTexture, unmapCoord(pixelCoord - vec2(uStrength, 0)));
     gl_FragColor = vec4(texL.r, tex.g, texR.b, tex.a);
-    
+
+    //DRY/WET
+    gl_FragColor = ((1.0-uDryWet)*tex) + (uDryWet * gl_FragColor);   
 }

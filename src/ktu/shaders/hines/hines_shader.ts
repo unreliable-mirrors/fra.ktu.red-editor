@@ -1,5 +1,5 @@
-import { UniformGroup } from "pixi.js";
-import { ShaderLayer, ShaderState } from "../shader_layer";
+import { UniformData } from "pixi.js";
+import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./hines_shader.frag?raw";
 
@@ -9,8 +9,8 @@ export type HLinesShaderState = ShaderState & {
 };
 
 export type HLinesShaderSetting = {
-  field: "size" | "lineThickness";
-  type: "integer";
+  field: ShaderSetting["field"] | "size" | "lineThickness";
+  type: ShaderSetting["type"] | "integer";
   onchange: (value: string) => void;
 };
 
@@ -35,8 +35,8 @@ export class HLinesShader extends ShaderLayer {
         this.uniforms.uniforms.uLineThickness = this.state.lineThickness;
       },
     },
+    ...this.defaultSettings(),
   ];
-  uniforms: UniformGroup;
 
   constructor(state?: HLinesShaderState) {
     super(state);
@@ -48,10 +48,6 @@ export class HLinesShader extends ShaderLayer {
         lineThickness: state.lineThickness,
       };
     }
-    this.uniforms = new UniformGroup({
-      uGridSize: { value: this.state.size, type: "f32" },
-      uLineThickness: { value: this.state.lineThickness, type: "f32" },
-    });
   }
 
   shaderName(): string {
@@ -63,6 +59,12 @@ export class HLinesShader extends ShaderLayer {
       ...super.defaultState(),
       size: 15,
       lineThickness: 1,
+    };
+  }
+  setupUniformValues(): { [key: string]: UniformData } {
+    return {
+      uGridSize: { value: this.state.size, type: "f32" },
+      uLineThickness: { value: this.state.lineThickness, type: "f32" },
     };
   }
 }
