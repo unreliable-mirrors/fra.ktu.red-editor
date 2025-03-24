@@ -38,7 +38,9 @@ export class LayerComponent extends KTUComponent {
               <span>{setting.field}: </span>
               <input
                 type="color"
-                value={this.layer.state[setting.field]}
+                value={
+                  (this.layer.state as { [key: string]: any })[setting.field]
+                }
                 oninput={(e) => {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
@@ -51,7 +53,9 @@ export class LayerComponent extends KTUComponent {
               <span>{setting.field}: </span>
               <input
                 type="number"
-                value={this.layer.state[setting.field]}
+                value={
+                  (this.layer.state as { [key: string]: any })[setting.field]
+                }
                 spellcheck="false"
                 autocomplete="off"
                 aria-autocomplete="none"
@@ -67,7 +71,9 @@ export class LayerComponent extends KTUComponent {
               <span>{setting.field}: </span>
               <input
                 type="number"
-                value={this.layer.state[setting.field]}
+                value={
+                  (this.layer.state as { [key: string]: any })[setting.field]
+                }
                 min="0"
                 max="1"
                 step="0.01"
@@ -86,7 +92,9 @@ export class LayerComponent extends KTUComponent {
               <span>{setting.field}: </span>
               <input
                 type="text"
-                value={this.layer.state[setting.field]}
+                value={
+                  (this.layer.state as { [key: string]: any })[setting.field]
+                }
                 spellcheck="false"
                 autocomplete="off"
                 aria-autocomplete="none"
