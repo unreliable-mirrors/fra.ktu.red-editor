@@ -5,7 +5,7 @@ const texts: Record<string, string> = {
   add_vintage_shader_button: "Vintage",
   add_montecarlo_sample_shader_button: "Montecarlo",
   add_anaglyph_shader_button: "Anaglyph",
-  add_posterize_shader_button: "Posterize",
+  add_posterize_shader_button: "01Posterize",
   add_dots_shader_button: "Dots",
   add_vlines_shader_button: "vLines",
   add_hlines_shader_button: "hLines",
@@ -18,6 +18,7 @@ const texts: Record<string, string> = {
   add_hnoise_lines_shader_button: "hNoise Lines",
   add_light_split_shader_button: "Light Split",
   add_alpha_shader_button: "Alpha",
+  add_multi_posterize_shader_button: "MultiPosterize",
 
   export_state: "Save File",
   import_state: "Import File",
