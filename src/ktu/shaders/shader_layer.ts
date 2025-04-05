@@ -27,7 +27,7 @@ export abstract class ShaderLayer implements IEditorLayer {
   active: boolean;
   shader!: Filter;
   abstract fragment: string;
-  uniforms: UniformGroup;
+  uniforms!: UniformGroup;
   bindedLayer?: ILayer;
   absorbingLayer: boolean = false;
 
@@ -45,11 +45,6 @@ export abstract class ShaderLayer implements IEditorLayer {
     } else {
       this.state = this.defaultState();
     }
-
-    this.uniforms = new UniformGroup({
-      ...this.defaultUniforms(),
-      ...this.setupUniformValues(),
-    });
   }
 
   abstract shaderName(): string;
@@ -86,7 +81,15 @@ export abstract class ShaderLayer implements IEditorLayer {
     [key: string]: UniformData;
   };
 
+  abstract setupUniformValues(): {
+    [key: string]: UniformData;
+  };
+
   buildShader() {
+    this.uniforms = new UniformGroup({
+      ...this.defaultUniforms(),
+      ...this.setupUniformValues(),
+    });
     const uniforms = this.uniforms;
     this.shader = Filter.from({
       gl: {
