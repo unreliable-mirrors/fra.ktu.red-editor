@@ -7,8 +7,8 @@ import { IModulator, ModulatorState } from "../../engine/imodulator";
 import { ShaderSetting } from "../shaders/shader_layer";
 
 export type ModulatorSetting = {
-  field: "factor";
-  type: "integer";
+  field: "factor" | "hz";
+  type: "integer" | "bigfloat";
   onchange: (value: string) => void;
 };
 
@@ -39,6 +39,7 @@ export abstract class Modulator implements IModulator {
         name: state.name,
         modulatorId: this.modulatorId,
         running: state.running,
+        hz: state.hz,
         factor: state.factor,
       };
     } else {
@@ -53,12 +54,20 @@ export abstract class Modulator implements IModulator {
       name: this.modulatorName(),
       modulatorId: this.modulatorId,
       running: true,
+      hz: 1,
       factor: 1,
     };
   }
 
   defaultSettings(): ModulatorSetting[] {
     return [
+      {
+        field: "hz",
+        type: "bigfloat",
+        onchange: (value) => {
+          this.state.hz = parseFloat(value);
+        },
+      },
       {
         field: "factor",
         type: "integer",

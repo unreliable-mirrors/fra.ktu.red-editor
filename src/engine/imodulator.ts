@@ -6,6 +6,7 @@ export type ModulatorState = {
   name: string;
   modulatorId: number;
   running: boolean;
+  hz: number;
   factor: number;
 };
 
