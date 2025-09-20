@@ -43,6 +43,9 @@ button {
 input {
   accent-color: #66ff66;
 }
+select {
+  width: 20px;
+}
 .hidden {
   display: none !important;
 }
@@ -164,7 +167,8 @@ button {
   overflow: auto;
 }
 .layerItem,
-.shaderItem {
+.shaderItem,
+.modulatorItem {
   background-color: #11111122;
   border-style: solid;
   border-width: 1px;
@@ -172,21 +176,24 @@ button {
   padding: 5px;
 }
 .layerItem.active,
-.shaderItem.active {
+.shaderItem.active,
+.modulatorItem.active {
   background-color: #ffffff22;
   color: #66ff66;
   border-color: #66ff66;
 }
 
 .layerItem .title,
-.shaderItem .title {
+.shaderItem .title,
+.modulatorItem .title {
   font-family: "Orbitron", serif;
   display: inline-block;
   line-height: 24px;
   float: left;
 }
 .layerItem .icons,
-.shaderItem .icons {
+.shaderItem .icons,
+.modulatorItem .icons {
   display: inline-block;
   margin-left: 5px;
 }

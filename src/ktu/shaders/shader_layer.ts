@@ -41,6 +41,7 @@ export abstract class ShaderLayer implements IEditorLayer {
         layerId: this.layerId,
         visible: state.visible,
         dryWet: state.dryWet,
+        modulators: [],
       };
     } else {
       this.state = this.defaultState();
@@ -55,6 +56,7 @@ export abstract class ShaderLayer implements IEditorLayer {
       layerId: this.layerId,
       visible: true,
       dryWet: 1,
+      modulators: [],
     };
   }
 

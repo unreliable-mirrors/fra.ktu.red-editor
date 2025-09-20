@@ -2,15 +2,18 @@ import { Container, Filter } from "pixi.js";
 import { IScene } from "../iscene";
 import { ContainerLayer } from "../../ktu/layers/container_layer";
 import { ShaderLayer } from "../../ktu/shaders/shader_layer";
+import { IModulator } from "../imodulator";
 
 export abstract class BaseScene implements IScene {
   layers: ContainerLayer[];
   shaders: ShaderLayer[];
+  modulators: IModulator[];
   container: Container;
 
   public constructor() {
     this.layers = [];
     this.shaders = [];
+    this.modulators = [];
     this.container = new Container();
     this.container.eventMode = "none";
   }
@@ -28,6 +31,18 @@ export abstract class BaseScene implements IScene {
     }
     this.container.removeChild(layer.container);
     layer.unbind();
+  }
+
+  addModulator(modulator: IModulator): void {
+    this.modulators.push(modulator);
+  }
+
+  removeModulator(modulator: IModulator): void {
+    const index = this.modulators.indexOf(modulator);
+    if (index > -1) {
+      this.modulators.splice(index, 1);
+    }
+    modulator.unbindAll();
   }
 
   addShader(shader: ShaderLayer): void {

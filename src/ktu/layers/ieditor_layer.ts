@@ -4,6 +4,7 @@ export type EditorLayerState = {
   name: string;
   layerId: number;
   visible: boolean;
+  modulators: { field: string; modulatorId: number }[];
 };
 
 export type EditorLayerSetting = {

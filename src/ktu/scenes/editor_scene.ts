@@ -10,13 +10,17 @@ import { getStartingName } from "../helpers/sparkle";
 import { getShaderByName } from "../helpers/shaders";
 import { ASSETS_MAP, rebuildAssets } from "../helpers/assets";
 import { getLayerByName } from "../helpers/layers";
-import { IEditorLayer } from "../layers/ieditor_layer";
+import { EditorLayerSetting, IEditorLayer } from "../layers/ieditor_layer";
 import { Camera } from "./camera";
 import { KeyboardManager } from "../helpers/keyboard_manager";
+import { Modulator } from "../modulators/modulator";
+import { IModulator, ModulatorState } from "../../engine/imodulator";
+import { getModulatorByName } from "../helpers/modulators";
 
 export type EditorSceneState = {
   layers: ContainerLayerState[];
   shaders: ShaderState[];
+  modulators: ModulatorState[];
   metadata: EditorSceneMetadata;
   assets: Record<string, string>;
 };
@@ -30,8 +34,10 @@ export type EditorSceneHistoryEntry = {
 
 export class EditorScene extends BaseScene {
   activeLayer?: IEditorLayer;
+  activeModulator?: IModulator;
   layers: ContainerLayer[];
   shaders: ShaderLayer[];
+  modulators: IModulator[];
   metadata: EditorSceneMetadata;
   history: EditorSceneHistoryEntry[];
   lastSize: Point;
@@ -44,6 +50,7 @@ export class EditorScene extends BaseScene {
     super();
     this.layers = [];
     this.shaders = [];
+    this.modulators = [];
     this.container.eventMode = "static";
     this.graphics = new Graphics();
     this.container.addChild(this.graphics);
@@ -68,10 +75,12 @@ export class EditorScene extends BaseScene {
     if (window.innerWidth > 1000) {
       DataStore.getInstance().setStore("layersVisibility", true);
       DataStore.getInstance().setStore("shadersVisibility", true);
+      DataStore.getInstance().setStore("modulatorsVisibility", true);
       DataStore.getInstance().setStore("filesVisibility", true);
     } else {
       DataStore.getInstance().setStore("layersVisibility", false);
       DataStore.getInstance().setStore("shadersVisibility", false);
+      DataStore.getInstance().setStore("modulatorsVisibility", false);
       DataStore.getInstance().setStore("filesVisibility", false);
     }
 
@@ -115,6 +124,9 @@ export class EditorScene extends BaseScene {
       for (const shader of this.shaders) {
         shader.tick(time);
       }
+      for (const modulator of this.modulators) {
+        modulator.tick(time);
+      }
     });
 
     EventDispatcher.getInstance().addEventListener(
@@ -157,6 +169,16 @@ export class EditorScene extends BaseScene {
         );
       }
     );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "toggleModulators",
+      () => {
+        DataStore.getInstance().setStore(
+          "modulatorsVisibility",
+          !DataStore.getInstance().getStore("modulatorsVisibility")
+        );
+      }
+    );
     EventDispatcher.getInstance().addEventListener("scene", "toggleUI", () => {
       DataStore.getInstance().setStore(
         "uiVisibility",
@@ -175,6 +197,15 @@ export class EditorScene extends BaseScene {
       "add_shader",
       (shaderName: string) => {
         this.addGenericShader(shaderName);
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "add_modulator",
+      (modulatorName: string) => {
+        console.log("ADD MODULATOR", modulatorName);
+        this.addModulator(getModulatorByName(modulatorName)!);
+        console.log("MODULATORS", this.modulators);
       }
     );
     EventDispatcher.getInstance().addEventListener("scene", "newState", () => {
@@ -212,6 +243,14 @@ export class EditorScene extends BaseScene {
             this.addGenericShader(state.name, state);
           }
         }
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "duplicateModulator",
+      (payload: IModulator) => {
+        const state = JSON.parse(JSON.stringify(payload.state));
+        this.addModulator(getModulatorByName(state.name, state)!);
       }
     );
     EventDispatcher.getInstance().addEventListener(
@@ -268,6 +307,14 @@ export class EditorScene extends BaseScene {
       "activateLayer",
       (payload: IEditorLayer) => {
         this.activateLayer(payload);
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "activateModulator",
+      (payload: IModulator) => {
+        console.log("ACTIVATE MODULATOR", payload);
+        this.activateModulator(payload);
       }
     );
     EventDispatcher.getInstance().addEventListener(
@@ -392,6 +439,13 @@ export class EditorScene extends BaseScene {
     );
     EventDispatcher.getInstance().addEventListener(
       "scene",
+      "removeModulator",
+      (payload: Modulator) => {
+        this.removeModulator(payload);
+      }
+    );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
       "setName",
       (name: string) => {
         this.metadata.name = name;
@@ -461,6 +515,7 @@ export class EditorScene extends BaseScene {
     const state = {
       layers: this.layers.map((e) => e.state),
       shaders: this.shaders.map((e) => e.state),
+      modulators: this.modulators.map((e) => e.state),
       metadata: this.metadata,
       assets: ASSETS_MAP,
     };
@@ -479,6 +534,7 @@ export class EditorScene extends BaseScene {
     for (const shader of this.shaders) {
       shader.unbind();
     }
+
     this.container.filters = [];
     this.shaders = [];
     DataStore.getInstance().setStore("shaders", this.shaders);
@@ -490,6 +546,12 @@ export class EditorScene extends BaseScene {
     this.layers = [];
     DataStore.getInstance().setStore("layers", this.layers);
 
+    for (const modulator of this.modulators) {
+      modulator.unbindAll();
+    }
+    this.modulators = [];
+    DataStore.getInstance().setStore("modulators", this.modulators);
+
     this.setupContainer();
     this.container.addChild(this.graphics);
   }
@@ -497,12 +559,41 @@ export class EditorScene extends BaseScene {
   importState(payload: EditorSceneState, importing: boolean = false) {
     rebuildAssets(payload.assets);
 
+    const importedModulators: {
+      [key: number]: { layer: IEditorLayer; setting: EditorLayerSetting }[];
+    } = {};
     for (const state of payload.layers) {
-      this.addGenericLayer(state.name, state);
+      const layer = this.addGenericLayer(state.name, state);
+      state.modulators.forEach((m) => {
+        if (!importedModulators[m.modulatorId]) {
+          importedModulators[m.modulatorId] = [];
+        }
+        importedModulators[m.modulatorId].push({
+          layer,
+          setting: layer.settings.find((s) => s.field === m.field)!,
+        });
+      });
     }
 
     for (const state of payload.shaders) {
-      this.addGenericShader(state.name, state);
+      const layer = this.addGenericShader(state.name, state);
+      state.modulators.forEach((m) => {
+        if (!importedModulators[m.modulatorId]) {
+          importedModulators[m.modulatorId] = [];
+        }
+        importedModulators[m.modulatorId].push({
+          layer,
+          setting: layer.settings.find((s) => s.field === m.field)!,
+        });
+      });
+    }
+
+    for (const state of payload.modulators) {
+      const modulator = getModulatorByName(state.name, state)!;
+      this.addModulator(modulator);
+      importedModulators[state.modulatorId]?.forEach((s) => {
+        modulator.bind(s.layer, s.setting);
+      });
     }
 
     if (!importing) {
@@ -510,7 +601,35 @@ export class EditorScene extends BaseScene {
       DataStore.getInstance().setStore("metadata", this.metadata);
     }
   }
-
+  activateModulator(modulator: IModulator) {
+    if (this.activeModulator) this.activeModulator.active = false;
+    this.activeModulator = modulator;
+    this.activeModulator.active = true;
+    DataStore.getInstance().setStore("activeModulator", this.activeModulator);
+    DataStore.getInstance().setStore("modulators", this.modulators);
+  }
+  deactivateModulator() {
+    console.log("DEACTIVATE");
+    if (this.activeModulator) this.activeModulator.active = false;
+    this.activeModulator = undefined;
+    console.log("AM", this.activeModulator);
+    DataStore.getInstance().setStore("activeModulator", this.activeModulator);
+    DataStore.getInstance().setStore("modulators", this.modulators);
+  }
+  addModulator(modulator: IModulator) {
+    super.addModulator(modulator);
+    this.activateModulator(modulator);
+    DataStore.getInstance().setStore("modulators", this.modulators);
+  }
+  removeModulator(modulator: IModulator) {
+    super.removeModulator(modulator);
+    DataStore.getInstance().setStore("modulators", this.modulators);
+    if (modulator.active && this.modulators.length > 0) {
+      this.activateModulator(this.modulators[0]);
+    } else {
+      this.deactivateModulator();
+    }
+  }
   activateLayer(layer: IEditorLayer) {
     if (this.activeLayer) this.activeLayer.active = false;
     this.activeLayer = layer;
@@ -717,9 +836,10 @@ export class EditorScene extends BaseScene {
     this.addLayer(layer!);
     return layer!;
   }
-  addGenericShader(shaderName: string, state?: ShaderState) {
+  addGenericShader(shaderName: string, state?: ShaderState): ShaderLayer {
     const layer = getShaderByName(shaderName, state);
     this.addShader(layer!);
+    return layer!;
   }
 
   pointerDown(event: PointerEvent) {

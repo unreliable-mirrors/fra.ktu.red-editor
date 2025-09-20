@@ -10,7 +10,7 @@ export class EditorUI {
     this.anchor.appendChild(
       <div>
         <left-panel binding="filesVisibility"></left-panel>
-        <layers-panel binding="layersVisibility,shadersVisibility"></layers-panel>
+        <layers-panel binding="layersVisibility,shadersVisibility,modulatorsVisibility"></layers-panel>
         <hint-panel binding="activeLayer,showGeneralTips,hintsVisibility"></hint-panel>
       </div>
     );

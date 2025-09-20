@@ -172,7 +172,7 @@ export class ImageLayer extends ContainerLayer {
         fetch(content)
           .then((res) => res.arrayBuffer())
           .then(AnimatedGIF.fromBuffer)
-          .then((image) => {
+          .then((image: AnimatedGIF) => {
             this.sprite = image;
             this.container.addChild(image);
             this.reposition();

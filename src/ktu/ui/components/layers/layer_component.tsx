@@ -17,6 +17,7 @@ import {
   IconVisible,
 } from "../../../helpers/icons";
 import { ImageLayer } from "../../../layers/image_layer";
+import { BindModulatorButton } from "../modulators/bind_modulator_button";
 
 export class LayerComponent extends KTUComponent {
   layer: ContainerLayer;
@@ -63,6 +64,7 @@ export class LayerComponent extends KTUComponent {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>
+              {new BindModulatorButton(this.layer, setting)}
             </div>
           );
         } else if (setting.type === "float") {
@@ -84,6 +86,7 @@ export class LayerComponent extends KTUComponent {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>
+              {new BindModulatorButton(this.layer, setting)}
             </div>
           );
         } else if (setting.type === "text") {
