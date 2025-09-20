@@ -2,9 +2,16 @@ import jsx from "texsaur";
 
 import EventDispatcher from "../../core/event_dispatcher";
 import { KTUComponent } from "../../core/ktu_component";
-import { IconClose, IconDuplicate } from "../../../helpers/icons";
+import {
+  IconClose,
+  IconDuplicate,
+  IconPause,
+  IconPlay,
+  IconVisible,
+} from "../../../helpers/icons";
 import { ContainerLayer } from "../../../layers/container_layer";
 import { Modulator } from "../../../modulators/modulator";
+import DataStore from "../../core/data_store";
 
 export class ModulatorComponent extends KTUComponent {
   modulator: Modulator;
@@ -91,7 +98,7 @@ export class ModulatorComponent extends KTUComponent {
         }
       }
     }
-    this.valueRenderer = <div></div>;
+    this.valueRenderer = <div>{this.modulator.value.toFixed(2)}</div>;
 
     return (
       <div className={`modulatorItem ${active}`}>
@@ -104,6 +111,9 @@ export class ModulatorComponent extends KTUComponent {
           >
             {this.modulator.state.name} - {this.modulator.state.modulatorId}
           </div>
+          <span onclick={() => this.handleVisibleClick()}>
+            {this.modulator.running ? IconPause() : IconPlay()}
+          </span>
           <div className="icons">
             <span onclick={() => this.handleDuplicateClick()}>
               {IconDuplicate()}
@@ -117,6 +127,10 @@ export class ModulatorComponent extends KTUComponent {
     );
   }
 
+  handleVisibleClick() {
+    this.modulator.running = !this.modulator.running;
+    DataStore.getInstance().touch("modulators");
+  }
   handleClick() {
     if (!this.modulator.active) {
       EventDispatcher.getInstance().dispatchEvent(

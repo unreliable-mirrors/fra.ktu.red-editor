@@ -102,11 +102,13 @@ export abstract class Modulator implements IModulator {
 
   tick(time: Ticker): void {
     this.elapsedTime += time.elapsedMS;
-    this.value = this.computeValue(time) * this.state.factor;
-    for (const setting of this.bindedSettings) {
-      setting.setting.onchange(this.value.toString());
+    if (this.running) {
+      this.value = this.computeValue(time) * this.state.factor;
+      for (const setting of this.bindedSettings) {
+        setting.setting.onchange(this.value.toString());
+      }
+      this.hook?.(this.value);
     }
-    this.hook?.(this.value);
   }
 
   abstract computeValue(time: Ticker): number;
