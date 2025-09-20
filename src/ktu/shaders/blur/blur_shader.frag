@@ -5,9 +5,10 @@ uniform highp vec4 uInputSize;
 uniform float uDryWet;
 
 const float Pi = 6.28318530718; // Pi*2
-uniform float uRedSize;
-uniform float uGreenSize;
-uniform float uBlueSize;
+uniform float uRedRadius;
+uniform float uGreenRadius;
+uniform float uBlueRadius;
+uniform int uIgnoreAlpha;
 
 // GAUSSIAN BLUR SETTINGS {{{
 const float uQuality = 8.0; // BLUR QUALITY (Default 4.0 - More is better but slower)
@@ -19,9 +20,9 @@ const float qualityStep = 1.0/uQuality;
 void main(){
    
     vec4 tex = texture2D(uTexture, vTextureCoord);
-    vec2 redRadius = uRedSize/uInputSize.xy;
-    vec2 greenRadius = uGreenSize/uInputSize.xy;
-    vec2 blueRadius = uBlueSize/uInputSize.xy;
+    vec2 redRadius = uRedRadius/uInputSize.xy;
+    vec2 greenRadius = uGreenRadius/uInputSize.xy;
+    vec2 blueRadius = uBlueRadius/uInputSize.xy;
     vec2 alphaRadius = (redRadius+greenRadius+blueRadius)/(3.0);
 
     // Pixel colour
@@ -40,12 +41,13 @@ void main(){
             Color.r += texture( uTexture, redCoord).r;
             Color.g += texture( uTexture, greenCoord).g;
 			Color.b += texture( uTexture, blueCoord).b;
-            if(alphaCoord.x<0.0 || alphaCoord.x>=0.99 || alphaCoord.y<0.0 || alphaCoord.y>=0.99){
+            if(uIgnoreAlpha == 0 && (alphaCoord.x<0.0 || alphaCoord.x>=0.99 || alphaCoord.y<0.0 || alphaCoord.y>=0.99)){
                 Color.a += tex.a;
+            } if(uIgnoreAlpha == 1){
+                Color.a += 1.0;
             }else{
                 Color.a += texture( uTexture, alphaCoord).a;
             }
-
         }
     }
     

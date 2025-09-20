@@ -4,14 +4,20 @@ import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 import fragment from "./blur_shader.frag?raw";
 
 export type BlurShaderState = ShaderState & {
-  redSize: number;
-  greenSize: number;
-  blueSize: number;
+  redRadius: number;
+  greenRadius: number;
+  blueRadius: number;
+  ignoreAlpha: boolean;
 };
 
 export type BlurShaderSetting = {
-  field: ShaderSetting["field"] | "redSize" | "greenSize" | "blueSize";
-  type: ShaderSetting["type"] | "integer";
+  field:
+    | ShaderSetting["field"]
+    | "redRadius"
+    | "greenRadius"
+    | "blueRadius"
+    | "ignoreAlpha";
+  type: ShaderSetting["type"] | "integer" | "boolean";
   onchange: (value: string) => void;
 };
 
@@ -22,27 +28,35 @@ export class BlurShader extends ShaderLayer {
 
   settings: BlurShaderSetting[] = [
     {
-      field: "redSize",
+      field: "redRadius",
       type: "integer",
       onchange: (value) => {
-        this.state.redSize = parseInt(value);
-        this.uniforms.uniforms.uRedSize = this.state.redSize;
+        this.state.redRadius = parseInt(value);
+        this.uniforms.uniforms.uRedRadius = this.state.redRadius;
       },
     },
     {
-      field: "greenSize",
+      field: "greenRadius",
       type: "integer",
       onchange: (value) => {
-        this.state.greenSize = parseInt(value);
-        this.uniforms.uniforms.uGreenSize = this.state.greenSize;
+        this.state.greenRadius = parseInt(value);
+        this.uniforms.uniforms.uGreenRadius = this.state.greenRadius;
       },
     },
     {
-      field: "blueSize",
+      field: "blueRadius",
       type: "integer",
       onchange: (value) => {
-        this.state.blueSize = parseInt(value);
-        this.uniforms.uniforms.uBlueSize = this.state.blueSize;
+        this.state.blueRadius = parseInt(value);
+        this.uniforms.uniforms.uBlueRadius = this.state.blueRadius;
+      },
+    },
+    {
+      field: "ignoreAlpha",
+      type: "boolean",
+      onchange: (value) => {
+        this.state.ignoreAlpha = value === "true";
+        this.uniforms.uniforms.uIgnoreAlpha = this.state.ignoreAlpha ? 1 : 0;
       },
     },
     ...this.defaultSettings(),
@@ -54,9 +68,10 @@ export class BlurShader extends ShaderLayer {
     if (state) {
       this.state = {
         ...this.state,
-        redSize: state.redSize,
-        greenSize: state.greenSize,
-        blueSize: state.blueSize,
+        redRadius: state.redRadius,
+        greenRadius: state.greenRadius,
+        blueRadius: state.blueRadius,
+        ignoreAlpha: state.ignoreAlpha,
       };
     }
   }
@@ -68,17 +83,19 @@ export class BlurShader extends ShaderLayer {
   defaultState(): BlurShaderState {
     return {
       ...super.defaultState(),
-      redSize: 10,
-      greenSize: 10,
-      blueSize: 10,
+      redRadius: 10,
+      greenRadius: 10,
+      blueRadius: 10,
+      ignoreAlpha: false,
     };
   }
 
   setupUniformValues(): { [key: string]: UniformData } {
     return {
-      uRedSize: { value: this.state.redSize, type: "f32" },
-      uGreenSize: { value: this.state.greenSize, type: "f32" },
-      uBlueSize: { value: this.state.blueSize, type: "f32" },
+      uRedRadius: { value: this.state.redRadius, type: "f32" },
+      uGreenRadius: { value: this.state.greenRadius, type: "f32" },
+      uBlueRadius: { value: this.state.blueRadius, type: "f32" },
+      uIgnoreAlpha: { value: this.state.ignoreAlpha ? 1 : 0, type: "i32" },
     };
   }
 }
