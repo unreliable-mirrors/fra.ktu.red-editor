@@ -8,6 +8,7 @@ export type ModulatorState = {
   running: boolean;
   hz: number;
   factor: number;
+  offset: number;
 };
 
 export interface IModulator {

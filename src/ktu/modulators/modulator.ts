@@ -7,7 +7,7 @@ import { IModulator, ModulatorState } from "../../engine/imodulator";
 import { ShaderSetting } from "../shaders/shader_layer";
 
 export type ModulatorSetting = {
-  field: "factor" | "hz";
+  field: "factor" | "hz" | "offset";
   type: "integer" | "bigfloat";
   onchange: (value: string) => void;
 };
@@ -41,6 +41,7 @@ export abstract class Modulator implements IModulator {
         running: state.running,
         hz: state.hz,
         factor: state.factor,
+        offset: state.offset,
       };
     } else {
       this.state = this.defaultState();
@@ -56,6 +57,7 @@ export abstract class Modulator implements IModulator {
       running: true,
       hz: 1,
       factor: 1,
+      offset: 0,
     };
   }
 
@@ -70,9 +72,16 @@ export abstract class Modulator implements IModulator {
       },
       {
         field: "factor",
-        type: "integer",
+        type: "bigfloat",
         onchange: (value) => {
-          this.state.factor = parseInt(value);
+          this.state.factor = parseFloat(value);
+        },
+      },
+      {
+        field: "offset",
+        type: "bigfloat",
+        onchange: (value) => {
+          this.state.offset = parseFloat(value);
         },
       },
     ];
@@ -103,7 +112,8 @@ export abstract class Modulator implements IModulator {
   tick(time: Ticker): void {
     this.elapsedTime += time.elapsedMS;
     if (this.running) {
-      this.value = this.computeValue(time) * this.state.factor;
+      this.value =
+        this.computeValue(time) * this.state.factor + this.state.offset;
       for (const setting of this.bindedSettings) {
         setting.setting.onchange(this.value.toString());
       }
