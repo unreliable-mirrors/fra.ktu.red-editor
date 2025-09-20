@@ -41,6 +41,7 @@ import { HNoiseLinesShader } from "../../shaders/hnoise_lines/hnoise_lines_shade
 import { LightSplitShader } from "../../shaders/light_split/light_split_shader";
 import DataStore from "../core/data_store";
 import { AlphaShader } from "../../shaders/alpha/alpha_shader";
+import { BlurShader } from "../../shaders/blur/blur_shader";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -817,6 +818,38 @@ export class HintPanel extends KTUComponent {
             <div className="tip">
               <div>
                 <strong>Alpha</strong>: The lower, the more transparent.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == BlurShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>RGB Blur Shader</h3>
+            <div className="tip">Take off your glasses</div>
+          </div>
+          <div className="block extraLast">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Red Radius</strong>: Blur radius for the red channel.
+              </div>
+              <div>
+                <strong>Green Radius</strong>: Blur radius for the green
+                channel.
+              </div>
+              <div>
+                <strong>Blue Radius</strong>: Blur radius for the blue channel.
+              </div>
+              <div>
+                <strong>Ignore Alpha</strong>: If enabled, the alpha channel
+                will be ignored during blurring.
               </div>
             </div>
           </div>
