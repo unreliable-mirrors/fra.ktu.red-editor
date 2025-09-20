@@ -564,7 +564,7 @@ export class EditorScene extends BaseScene {
     } = {};
     for (const state of payload.layers) {
       const layer = this.addGenericLayer(state.name, state);
-      state.modulators.forEach((m) => {
+      state.modulators?.forEach((m) => {
         if (!importedModulators[m.modulatorId]) {
           importedModulators[m.modulatorId] = [];
         }
@@ -577,7 +577,7 @@ export class EditorScene extends BaseScene {
 
     for (const state of payload.shaders) {
       const layer = this.addGenericShader(state.name, state);
-      state.modulators.forEach((m) => {
+      state.modulators?.forEach((m) => {
         if (!importedModulators[m.modulatorId]) {
           importedModulators[m.modulatorId] = [];
         }

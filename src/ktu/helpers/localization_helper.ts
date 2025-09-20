@@ -20,6 +20,7 @@ const texts: Record<string, string> = {
   add_alpha_shader_button: "Alpha",
   add_multi_posterize_shader_button: "MultiPosterize",
   add_blur_shader_button: "RGB Blur",
+  add_hsb_blur_shader_button: "HSB Blur",
 
   add_sine_modulator_button: "Sine",
 
