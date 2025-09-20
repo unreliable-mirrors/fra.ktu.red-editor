@@ -7,7 +7,6 @@ import {
   IconDuplicate,
   IconPause,
   IconPlay,
-  IconVisible,
 } from "../../../helpers/icons";
 import { ContainerLayer } from "../../../layers/container_layer";
 import { Modulator } from "../../../modulators/modulator";
