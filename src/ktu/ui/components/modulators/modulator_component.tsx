@@ -1,0 +1,103 @@
+import jsx from "texsaur";
+
+import EventDispatcher from "../../core/event_dispatcher";
+import { KTUComponent } from "../../core/ktu_component";
+import { IconClose, IconDuplicate } from "../../../helpers/icons";
+import { ContainerLayer } from "../../../layers/container_layer";
+import { Modulator } from "../../../modulators/modulator";
+
+export class ModulatorComponent extends KTUComponent {
+  modulator: Modulator;
+  containerLayer?: ContainerLayer;
+  valueRenderer?: Element;
+  constructor(modulator: Modulator) {
+    super();
+    this.modulator = modulator;
+    this.modulator.hook = () => {
+      if (this.valueRenderer) {
+        this.valueRenderer.innerHTML = this.modulator.value.toFixed(2);
+      }
+    };
+  }
+
+  //TODO: DEDUPLICATE THIS CODE
+  render(): Element {
+    const active = this.modulator.active ? "active" : "";
+    const settings: Element[] = [];
+    if (this.modulator.active) {
+      for (const setting of this.modulator.settings) {
+        if (setting.type === "integer") {
+          settings.push(
+            <div>
+              <span>{setting.field}: </span>
+              <input
+                type="number"
+                spellcheck="false"
+                autocomplete="off"
+                aria-autocomplete="none"
+                value={
+                  (this.modulator.state as { [key: string]: any })[
+                    setting.field
+                  ]
+                }
+                oninput={(e) => {
+                  setting.onchange((e.target as HTMLInputElement).value);
+                }}
+              ></input>
+            </div>
+          );
+        }
+      }
+    }
+    this.valueRenderer = <div></div>;
+
+    return (
+      <div className={`modulatorItem ${active}`}>
+        <div className="header">
+          <div
+            className="title"
+            onclick={() => {
+              this.handleClick();
+            }}
+          >
+            {this.modulator.state.name} - {this.modulator.state.modulatorId}
+          </div>
+          <div className="icons">
+            <span onclick={() => this.handleDuplicateClick()}>
+              {IconDuplicate()}
+            </span>
+            <span onclick={() => this.handleCloseClick()}>{IconClose()}</span>
+          </div>
+        </div>
+        {this.valueRenderer}
+        {settings}
+      </div>
+    );
+  }
+
+  handleClick() {
+    if (!this.modulator.active) {
+      EventDispatcher.getInstance().dispatchEvent(
+        "scene",
+        "activateModulator",
+        this.modulator
+      );
+    }
+  }
+  handleDuplicateClick() {
+    EventDispatcher.getInstance().dispatchEvent(
+      "scene",
+      "duplicateModulator",
+      this.modulator
+    );
+  }
+  handleCloseClick() {
+    EventDispatcher.getInstance().dispatchEvent(
+      "scene",
+      "removeModulator",
+      this.modulator
+    );
+  }
+}
+
+customElements.define("modulator-component", ModulatorComponent);

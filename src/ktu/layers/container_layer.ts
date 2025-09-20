@@ -49,6 +49,7 @@ export abstract class ContainerLayer implements IEditorLayer {
         layerId: this.layerId,
         visible: state.visible,
         shaders: [],
+        modulators: [],
       };
       console.log("STATE0", JSON.stringify(this.state));
       /*
@@ -93,6 +94,7 @@ export abstract class ContainerLayer implements IEditorLayer {
       layerId: 0,
       visible: true,
       shaders: [],
+      modulators: [],
     };
   };
 

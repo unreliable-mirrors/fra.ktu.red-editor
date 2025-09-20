@@ -10,7 +10,7 @@ export class LayersPanel extends KTUComponent {
       <>
         <layers-buttons></layers-buttons>
         <div className="layerListContainer">
-          <layers-list binding="layers"></layers-list>
+          <layers-list binding="layers,modulators"></layers-list>
         </div>
       </>
     ) : (
@@ -28,8 +28,11 @@ export class LayersPanel extends KTUComponent {
           </div>
         </div>
         <div className="panel right">
-          <shaders-list binding="shaders,shadersVisibility"></shaders-list>
+          <shaders-list binding="shaders,shadersVisibility,modulators"></shaders-list>
         </div>
+        <div className="panel right">
+          <modulators-list binding="modulators,modulatorsVisibility"></modulators-list>
+        </div>{" "}
       </div>
     );
   }

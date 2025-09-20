@@ -120,6 +120,29 @@ export const SHORTCUTS: ShortcutConfigSetting[] = [
   },
   {
     meta: {
+      keyHint: "M",
+      globalHint: "Toggle Modulators Panel",
+      command: "toggleModulators",
+    },
+    shortcuts: [
+      {
+        key: "M",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+      {
+        key: "m",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        metaKey: false,
+      },
+    ],
+  },
+  {
+    meta: {
       keyHint: "F",
       globalHint: "Toggle File Panel",
       command: "toggleFiles",

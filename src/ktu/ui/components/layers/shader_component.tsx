@@ -11,6 +11,7 @@ import {
 } from "../../../helpers/icons";
 import { ContainerLayer } from "../../../layers/container_layer";
 import DataStore from "../../core/data_store";
+import { BindModulatorButton } from "../modulators/bind_modulator_button";
 
 export class ShaderComponent extends KTUComponent {
   shader: ShaderLayer;
@@ -61,6 +62,7 @@ export class ShaderComponent extends KTUComponent {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>
+              {new BindModulatorButton(this.shader, setting)}
             </div>
           );
         } else if (setting.type === "float") {
@@ -82,6 +84,7 @@ export class ShaderComponent extends KTUComponent {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>
+              {new BindModulatorButton(this.shader, setting)}
             </div>
           );
         } else if (setting.type === "boolean") {
@@ -100,6 +103,7 @@ export class ShaderComponent extends KTUComponent {
                   );
                 }}
               ></input>
+              {new BindModulatorButton(this.shader, setting)}
             </div>
           );
         } else if (setting.type === "floatRange") {
@@ -118,6 +122,7 @@ export class ShaderComponent extends KTUComponent {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>
+              {new BindModulatorButton(this.shader, setting)}
             </div>
           );
         }
