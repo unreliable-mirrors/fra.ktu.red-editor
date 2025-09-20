@@ -19,6 +19,7 @@ const texts: Record<string, string> = {
   add_light_split_shader_button: "Light Split",
   add_alpha_shader_button: "Alpha",
   add_multi_posterize_shader_button: "MultiPosterize",
+  add_blur_shader_button: "RGB Blur",
 
   export_state: "Save File",
   import_state: "Import File",

@@ -55,6 +55,7 @@ import {
   MultiPosterizeShader,
   MultiPosterizeShaderState,
 } from "../shaders/multi_posterize/multi_posterize_shader";
+import { BlurShader, BlurShaderState } from "../shaders/blur/blur_shader";
 
 export type ShaderClass = {
   SHADER_NAME: string;
@@ -77,6 +78,7 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   LightSplitShader,
   AlphaShader,
   MultiPosterizeShader,
+  BlurShader,
 ];
 
 export const AVAILABLE_SHADERS_MAP: Record<string, ShaderClass> =
@@ -126,6 +128,8 @@ export const getShaderByName = (
     return new AlphaShader(state as AlphaShaderState);
   } else if (shaderName === MultiPosterizeShader.SHADER_NAME) {
     return new MultiPosterizeShader(state as MultiPosterizeShaderState);
+  } else if (shaderName === BlurShader.SHADER_NAME) {
+    return new BlurShader(state as BlurShaderState);
   }
   return null;
 };
