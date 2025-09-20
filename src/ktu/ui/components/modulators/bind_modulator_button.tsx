@@ -29,7 +29,7 @@ export class BindModulatorButton extends KTUComponent {
         }}
       >
         <option value="">No Modulator</option>
-        {(DataStore.getInstance().getStore("modulators") as Modulator[]).map(
+        {(DataStore.getInstance().getStore("modulators") as Modulator[])?.map(
           (modulator: Modulator) => {
             return (
               <option
