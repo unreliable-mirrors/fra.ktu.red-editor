@@ -7,7 +7,10 @@ export class SineModulator extends Modulator {
 
   //@ts-ignore
   computeValue(time: Ticker): number {
-    return Math.sin(this.elapsedTime / 1000) / 2 + 0.5;
+    return (
+      Math.sin((this.elapsedTime / 1000) * Math.PI * 2 * this.state.hz) / 2 +
+      0.5
+    );
   }
 
   modulatorName(): string {

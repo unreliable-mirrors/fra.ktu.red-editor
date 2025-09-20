@@ -46,6 +46,48 @@ export class ModulatorComponent extends KTUComponent {
               ></input>
             </div>
           );
+        } else if (setting.type === "bigfloat") {
+          settings.push(
+            <div>
+              <span>{setting.field}: </span>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                spellcheck="false"
+                autocomplete="off"
+                aria-autocomplete="none"
+                value={
+                  (this.modulator.state as { [key: string]: any })[
+                    setting.field
+                  ]
+                }
+                oninput={(e) => {
+                  setting.onchange((e.target as HTMLInputElement).value);
+                }}
+              ></input>
+            </div>
+          );
+        } else if (setting.type === "float") {
+          settings.push(
+            <div>
+              <span>{setting.field}: </span>
+              <input
+                type="number"
+                spellcheck="false"
+                autocomplete="off"
+                aria-autocomplete="none"
+                value={
+                  (this.modulator.state as { [key: string]: any })[
+                    setting.field
+                  ]
+                }
+                oninput={(e) => {
+                  setting.onchange((e.target as HTMLInputElement).value);
+                }}
+              ></input>
+            </div>
+          );
         }
       }
     }
