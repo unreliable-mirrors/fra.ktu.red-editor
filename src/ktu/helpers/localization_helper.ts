@@ -24,6 +24,7 @@ const texts: Record<string, string> = {
   add_hue_offset_shader_button: "Hue Offset",
 
   add_sine_modulator_button: "Sine",
+  add_square_modulator_button: "Square",
 
   export_state: "Save File",
   import_state: "Import File",
