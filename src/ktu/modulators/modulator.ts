@@ -1,31 +1,32 @@
 import { Ticker } from "pixi.js";
 
-import { EditorLayerSetting, IEditorLayer } from "../layers/ieditor_layer";
+import { EditorLayerSetting } from "../layers/ieditor_layer";
 import { getSecureIndex } from "../../engine/helpers/secure_index_helper";
 
 import { IModulator, ModulatorState } from "../../engine/imodulator";
 import { ShaderSetting } from "../shaders/shader_layer";
+import { IModulable } from "../../engine/imodulable";
 
 export type ModulatorSetting = {
-  field: "factor" | "hz" | "offset";
+  field: "factor" | "offset";
   type: "integer" | "bigfloat";
   onchange: (value: string) => void;
 };
 
 export type SettingBinding = {
-  layerId: number;
+  uniqueId: number;
   setting: ShaderSetting | EditorLayerSetting;
 };
 
-export abstract class Modulator implements IModulator {
+export abstract class Modulator implements IModulator, IModulable {
   modulatorId: number;
   active: boolean;
   value: number;
   elapsedTime: number;
   hook?: (value: number) => void;
 
-  state!: ModulatorState;
-  abstract settings: ModulatorSetting[];
+  state: ModulatorState;
+  abstract settings: EditorLayerSetting[];
   bindedSettings: SettingBinding[] = [];
 
   public constructor(state?: ModulatorState) {
@@ -39,9 +40,9 @@ export abstract class Modulator implements IModulator {
         name: state.name,
         modulatorId: this.modulatorId,
         running: state.running,
-        hz: state.hz,
         factor: state.factor,
         offset: state.offset,
+        modulators: [],
       };
     } else {
       this.state = this.defaultState();
@@ -55,21 +56,14 @@ export abstract class Modulator implements IModulator {
       name: this.modulatorName(),
       modulatorId: this.modulatorId,
       running: true,
-      hz: 1,
       factor: 1,
       offset: 0,
+      modulators: [],
     };
   }
 
   defaultSettings(): ModulatorSetting[] {
     return [
-      {
-        field: "hz",
-        type: "bigfloat",
-        onchange: (value) => {
-          this.state.hz = parseFloat(value);
-        },
-      },
       {
         field: "factor",
         type: "bigfloat",
@@ -93,12 +87,12 @@ export abstract class Modulator implements IModulator {
     return this.state.running;
   }
 
-  bind(layer: IEditorLayer, setting: ShaderSetting | EditorLayerSetting): void {
-    this.bindedSettings.push({ layerId: layer.state.layerId, setting });
-    layer.state.modulators.push({
-      field: setting.field,
-      modulatorId: this.modulatorId,
-    });
+  bind(modulable: IModulable, setting: EditorLayerSetting): void {
+    this.bindedSettings.push({ uniqueId: modulable.getUniqueId(), setting });
+    modulable.pushModulator(setting.field, this.modulatorId);
+    if (setting.type === "modulator") {
+      setting.onchange(this.getUniqueId().toString());
+    }
   }
 
   unbind(): void {
@@ -115,11 +109,21 @@ export abstract class Modulator implements IModulator {
       this.value =
         this.computeValue(time) * this.state.factor + this.state.offset;
       for (const setting of this.bindedSettings) {
-        setting.setting.onchange(this.value.toString());
+        if (setting.setting.type !== "modulator") {
+          setting.setting.onchange(this.value.toString());
+        }
       }
       this.hook?.(this.value);
     }
   }
 
   abstract computeValue(time: Ticker): number;
+
+  getUniqueId(): number {
+    return this.state.modulatorId;
+  }
+
+  pushModulator(field: string, modulatorId: number): void {
+    this.state.modulators.push({ field: field, modulatorId: modulatorId });
+  }
 }
