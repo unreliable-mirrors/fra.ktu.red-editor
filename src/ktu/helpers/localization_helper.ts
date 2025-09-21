@@ -21,6 +21,7 @@ const texts: Record<string, string> = {
   add_multi_posterize_shader_button: "MultiPosterize",
   add_blur_shader_button: "RGB Blur",
   add_hsb_blur_shader_button: "HSB Blur",
+  add_hue_offset_shader_button: "Hue Offset",
 
   add_sine_modulator_button: "Sine",
 
