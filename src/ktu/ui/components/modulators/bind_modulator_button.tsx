@@ -2,23 +2,20 @@ import jsx from "texsaur";
 import { KTUComponent } from "../../core/ktu_component";
 import DataStore from "../../core/data_store";
 import { Modulator } from "../../../modulators/modulator";
-import { ShaderSetting } from "../../../shaders/shader_layer";
 import {
   EditorLayerSetting,
   IEditorLayer,
 } from "../../../layers/ieditor_layer";
+import { IModulable } from "../../../../engine/imodulable";
 
 export class BindModulatorButton extends KTUComponent {
-  setting: ShaderSetting | EditorLayerSetting;
-  layer: IEditorLayer;
+  setting: EditorLayerSetting;
+  modulable: IModulable;
 
-  constructor(
-    layer: IEditorLayer,
-    setting: ShaderSetting | EditorLayerSetting
-  ) {
+  constructor(modulable: IModulable, setting: EditorLayerSetting) {
     super();
     this.setting = setting;
-    this.layer = layer;
+    this.modulable = modulable;
   }
 
   render(): Element {
@@ -37,7 +34,7 @@ export class BindModulatorButton extends KTUComponent {
                 selected={
                   modulator.bindedSettings.find(
                     (bs) =>
-                      bs.layerId === this.layer.layerId &&
+                      bs.uniqueId === this.modulable.getUniqueId() &&
                       bs.setting.field === this.setting.field
                   ) !== undefined
                 }
@@ -58,7 +55,7 @@ export class BindModulatorButton extends KTUComponent {
       const modulator: Modulator = (
         DataStore.getInstance().getStore("modulators") as Modulator[]
       ).find((modulator) => modulator.state.modulatorId === parseInt(id))!;
-      modulator.bind(this.layer, this.setting);
+      modulator.bind(this.modulable, this.setting);
     }
   }
 }

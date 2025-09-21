@@ -16,6 +16,7 @@ import { KeyboardManager } from "../helpers/keyboard_manager";
 import { Modulator } from "../modulators/modulator";
 import { IModulator, ModulatorState } from "../../engine/imodulator";
 import { getModulatorByName } from "../helpers/modulators";
+import { IModulable } from "../../engine/imodulable";
 
 export type EditorSceneState = {
   layers: ContainerLayerState[];
@@ -560,7 +561,7 @@ export class EditorScene extends BaseScene {
     rebuildAssets(payload.assets);
 
     const importedModulators: {
-      [key: number]: { layer: IEditorLayer; setting: EditorLayerSetting }[];
+      [key: number]: { layer: IModulable; setting: EditorLayerSetting }[];
     } = {};
     for (const state of payload.layers) {
       const layer = this.addGenericLayer(state.name, state);
@@ -588,10 +589,27 @@ export class EditorScene extends BaseScene {
       });
     }
 
+    const oldModulatorIds: { [key: number]: IModulator } = {};
     for (const state of payload.modulators) {
       const modulator = getModulatorByName(state.name, state)!;
       this.addModulator(modulator);
+      state.modulators?.forEach((m) => {
+        if (!importedModulators[m.modulatorId]) {
+          importedModulators[m.modulatorId] = [];
+        }
+        importedModulators[m.modulatorId].push({
+          layer: modulator,
+          setting: modulator.settings.find((s) => s.field === m.field)!,
+        });
+      });
+      oldModulatorIds[state.modulatorId] = modulator;
+    }
+
+    console.log(oldModulatorIds);
+    for (const state of payload.modulators) {
+      const modulator = oldModulatorIds[state.modulatorId];
       importedModulators[state.modulatorId]?.forEach((s) => {
+        console.log("BIND", modulator, s.layer, s.setting);
         modulator.bind(s.layer, s.setting);
       });
     }

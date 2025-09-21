@@ -323,4 +323,12 @@ export abstract class ContainerLayer implements IEditorLayer {
   pointerUp(event: PointerEvent): void {}
   //@ts-ignore
   pointerMove(event: PointerEvent): void {}
+
+  getUniqueId(): number {
+    return this.state.layerId;
+  }
+
+  pushModulator(field: string, modulatorId: number): void {
+    this.state.modulators.push({ field: field, modulatorId: modulatorId });
+  }
 }

@@ -1,7 +1,17 @@
-import { SineModulator } from "../modulators/sine_modulator";
+import {
+  SineModulator,
+  SineModulatorState,
+} from "../modulators/sine_modulator";
 import { Modulator } from "../modulators/modulator";
 import { ModulatorState } from "../../engine/imodulator";
-import { SquareModulator } from "../modulators/square_modulator";
+import {
+  SquareModulator,
+  SquareModulatorState,
+} from "../modulators/square_modulator";
+import {
+  RingModulator,
+  RingModulatorState,
+} from "../modulators/ring_modulator";
 
 export type ModulatorClass = {
   MODULATOR_NAME: string;
@@ -9,6 +19,7 @@ export type ModulatorClass = {
 export const AVAILABLE_MODULATORS: ModulatorClass[] = [
   SineModulator,
   SquareModulator,
+  RingModulator,
 ];
 
 export const AVAILABLE_MODULATORS_MAP: Record<string, ModulatorClass> =
@@ -25,9 +36,11 @@ export const getModulatorByName = (
   state?: ModulatorState
 ): Modulator | null => {
   if (modulatorName === SineModulator.MODULATOR_NAME) {
-    return new SineModulator(state as ModulatorState);
+    return new SineModulator(state as SineModulatorState);
   } else if (modulatorName === SquareModulator.MODULATOR_NAME) {
-    return new SquareModulator(state as ModulatorState);
+    return new SquareModulator(state as SquareModulatorState);
+  } else if (modulatorName === RingModulator.MODULATOR_NAME) {
+    return new RingModulator(state as RingModulatorState);
   }
   return null;
 };

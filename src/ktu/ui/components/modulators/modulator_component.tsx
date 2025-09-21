@@ -11,6 +11,7 @@ import {
 import { ContainerLayer } from "../../../layers/container_layer";
 import { Modulator } from "../../../modulators/modulator";
 import DataStore from "../../core/data_store";
+import { BindModulatorButton } from "./bind_modulator_button";
 
 export class ModulatorComponent extends KTUComponent {
   modulator: Modulator;
@@ -50,6 +51,7 @@ export class ModulatorComponent extends KTUComponent {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>
+              {new BindModulatorButton(this.modulator, setting)}
             </div>
           );
         } else if (setting.type === "bigfloat") {
@@ -72,6 +74,7 @@ export class ModulatorComponent extends KTUComponent {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>
+              {new BindModulatorButton(this.modulator, setting)}
             </div>
           );
         } else if (setting.type === "float") {
@@ -92,6 +95,14 @@ export class ModulatorComponent extends KTUComponent {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>
+              {new BindModulatorButton(this.modulator, setting)}
+            </div>
+          );
+        } else if (setting.type === "modulator") {
+          settings.push(
+            <div>
+              <span>{setting.field}: </span>
+              {new BindModulatorButton(this.modulator, setting)}
             </div>
           );
         }

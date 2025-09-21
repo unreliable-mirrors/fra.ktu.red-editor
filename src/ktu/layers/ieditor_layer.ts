@@ -1,4 +1,5 @@
 import { ILayer } from "../../engine/ilayer";
+import { IModulable } from "../../engine/imodulable";
 
 export type EditorLayerState = {
   name: string;
@@ -14,7 +15,7 @@ export type EditorLayerSetting = {
   onchange: (value: string) => void;
 };
 
-export interface IEditorLayer extends ILayer {
+export interface IEditorLayer extends ILayer, IModulable {
   active: boolean;
   state: EditorLayerState;
   settings: EditorLayerSetting[];
