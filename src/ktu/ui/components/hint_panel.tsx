@@ -42,6 +42,8 @@ import { LightSplitShader } from "../../shaders/light_split/light_split_shader";
 import DataStore from "../core/data_store";
 import { AlphaShader } from "../../shaders/alpha/alpha_shader";
 import { BlurShader } from "../../shaders/blur/blur_shader";
+import { HsbBlurShader } from "../../shaders/hsb_blur/hsb_blur_shader";
+import { HueOffsetShader } from "../../shaders/hue_offset/hue_offset_shader";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -831,7 +833,7 @@ export class HintPanel extends KTUComponent {
         <>
           <div className="block">
             <h3>RGB Blur Shader</h3>
-            <div className="tip">Take off your glasses</div>
+            <div className="tip">It feels like miopia</div>
           </div>
           <div className="block extraLast">
             <h3>Attributes</h3>
@@ -850,6 +852,61 @@ export class HintPanel extends KTUComponent {
               <div>
                 <strong>Ignore Alpha</strong>: If enabled, the alpha channel
                 will be ignored during blurring.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() == HsbBlurShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>HSB Blur Shader</h3>
+            <div className="tip">It blorks colours and sharpness</div>
+          </div>
+          <div className="block extraLast">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Hue Radius</strong>: Blur radius for the hue channel.
+              </div>
+              <div>
+                <strong>Saturation Radius</strong>: Blur radius for the
+                saturation channel.
+              </div>
+              <div>
+                <strong>Lightness Radius</strong>: Blur radius for the lightness
+                channel.
+              </div>
+              <div>
+                <strong>Ignore Alpha</strong>: If enabled, the alpha channel
+                will be ignored during blurring.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() ==
+        HueOffsetShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>Hue Offset Shader</h3>
+            <div className="tip">Offset all colours by a certain degree</div>
+          </div>
+          <div className="block extraLast">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Hue Offset</strong>: Offset degrees for the hue channel.
               </div>
             </div>
           </div>
