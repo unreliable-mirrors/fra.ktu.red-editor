@@ -16,11 +16,10 @@ export interface IModulator {
   active: boolean;
   state: ModulatorState;
   value: number;
-  elapsedTime: number;
   hook?: (value: number) => void;
 
   bind(modulable: IModulable, setting: EditorLayerSetting): void;
   unbind(setting: EditorLayerSetting): void;
   unbindAll(): void;
-  tick(time: Ticker): void;
+  tick(elapsedTime: number): void;
 }

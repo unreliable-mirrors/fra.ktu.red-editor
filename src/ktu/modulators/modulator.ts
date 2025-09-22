@@ -1,5 +1,3 @@
-import { Ticker } from "pixi.js";
-
 import { EditorLayerSetting } from "../layers/ieditor_layer";
 import { getSecureIndex } from "../../engine/helpers/secure_index_helper";
 
@@ -22,7 +20,6 @@ export abstract class Modulator implements IModulator, IModulable {
   modulatorId: number;
   active: boolean;
   value: number;
-  elapsedTime: number;
   hook?: (value: number) => void;
 
   state: ModulatorState;
@@ -33,7 +30,6 @@ export abstract class Modulator implements IModulator, IModulable {
     this.modulatorId = getSecureIndex();
     this.active = false;
     this.value = 0;
-    this.elapsedTime = 0;
 
     if (state) {
       this.state = {
@@ -105,11 +101,10 @@ export abstract class Modulator implements IModulator, IModulable {
     this.bindedSettings = [];
   }
 
-  tick(time: Ticker): void {
-    this.elapsedTime += time.elapsedMS;
+  tick(elapsedTime: number): void {
     if (this.running) {
       this.value =
-        this.computeValue(time) * this.state.factor + this.state.offset;
+        this.computeValue(elapsedTime) * this.state.factor + this.state.offset;
       for (const setting of this.bindedSettings) {
         if (setting.setting.type !== "modulator") {
           setting.setting.onchange(this.value.toString());
@@ -119,7 +114,7 @@ export abstract class Modulator implements IModulator, IModulable {
     }
   }
 
-  abstract computeValue(time: Ticker): number;
+  abstract computeValue(elapsedTime: number): number;
 
   getUniqueId(): number {
     return this.state.modulatorId;

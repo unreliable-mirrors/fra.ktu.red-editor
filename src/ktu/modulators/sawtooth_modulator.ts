@@ -44,9 +44,8 @@ export class SawtoothModulator extends Modulator {
     };
   }
 
-  //@ts-ignore
-  computeValue(time: Ticker): number {
-    return (this.elapsedTime % (1000 / this.state.hz)) / (1000 / this.state.hz);
+  computeValue(elapsedTime: number): number {
+    return (elapsedTime % (1000 / this.state.hz)) / (1000 / this.state.hz);
   }
 
   modulatorName(): string {

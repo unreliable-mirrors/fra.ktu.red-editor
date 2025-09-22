@@ -122,8 +122,7 @@ export class ZeroOneGateModulator extends Modulator {
     };
   }
 
-  //@ts-ignore
-  computeValue(time: Ticker): number {
+  computeValue(_elapsedTime: number): number {
     let originalValue = this.modulator?.value || 0;
     let outValue = this.modulator?.value || 0;
     if (outValue >= this.state.cutoff) {

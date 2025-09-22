@@ -64,8 +64,7 @@ export class RingModulator extends Modulator {
     };
   }
 
-  //@ts-ignore
-  computeValue(time: Ticker): number {
+  computeValue(_elapsedTime: number): number {
     return (this.modulatorA?.value || 0) * (this.modulatorB?.value || 0);
   }
 

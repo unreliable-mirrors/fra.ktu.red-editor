@@ -44,11 +44,9 @@ export class SineModulator extends Modulator {
     };
   }
 
-  //@ts-ignore
-  computeValue(time: Ticker): number {
+  computeValue(elapsedTime: number): number {
     return (
-      Math.sin((this.elapsedTime / 1000) * Math.PI * 2 * this.state.hz) / 2 +
-      0.5
+      Math.sin((elapsedTime / 1000) * Math.PI * 2 * this.state.hz) / 2 + 0.5
     );
   }
 
