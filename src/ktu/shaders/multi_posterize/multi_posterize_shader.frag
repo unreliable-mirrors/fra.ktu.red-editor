@@ -15,7 +15,7 @@ float round( float x )
 
 void main(){
     vec4 oTex = texture(uTexture, vTextureCoord);
-    vec4 tex = texture2D(uTexture, vTextureCoord);
+    vec4 tex = texture(uTexture, vTextureCoord);
     tex.r = round(tex.r * (uLevels - 1.0))/(uLevels - 1.0);
     tex.g = round(tex.g * (uLevels - 1.0))/(uLevels - 1.0);
     tex.b = round(tex.b * (uLevels - 1.0))/(uLevels - 1.0);
