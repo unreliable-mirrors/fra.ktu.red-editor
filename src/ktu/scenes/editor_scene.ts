@@ -574,6 +574,21 @@ export class EditorScene extends BaseScene {
           setting: layer.settings.find((s) => s.field === m.field)!,
         });
       });
+      for (let i = 0; i < state.shaders.length; i++) {
+        const shaderState = state.shaders[i];
+        shaderState.modulators?.forEach((m) => {
+          if (!importedModulators[m.modulatorId]) {
+            importedModulators[m.modulatorId] = [];
+          }
+          const containerLayer = layer as ContainerLayer;
+          importedModulators[m.modulatorId].push({
+            layer: containerLayer.shaders[i],
+            setting: containerLayer.shaders[i].settings.find(
+              (s) => s.field === m.field
+            )!,
+          });
+        });
+      }
     }
 
     for (const state of payload.shaders) {
