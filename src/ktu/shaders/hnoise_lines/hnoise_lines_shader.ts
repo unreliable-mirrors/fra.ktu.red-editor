@@ -1,4 +1,4 @@
-import { Ticker, UniformData } from "pixi.js";
+import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./hnoise_lines_shader.frag?raw";
@@ -9,7 +9,6 @@ export type HNoiseLinesShaderState = ShaderState & {
   strength: number;
   lineThickness: number;
   negative: boolean;
-  refreshChance: number;
 };
 
 export type HNoiseLinesShaderSetting = {
@@ -18,8 +17,14 @@ export type HNoiseLinesShaderSetting = {
     | "strength"
     | "noiseSize"
     | "lineThickness"
-    | "negative";
-  type: ShaderSetting["type"] | "integer" | "float" | "boolean";
+    | "negative"
+    | "refresh";
+  type:
+    | ShaderSetting["type"]
+    | "integer"
+    | "float"
+    | "boolean"
+    | "modulator_only";
   onchange: (value: string) => void;
 };
 
@@ -56,8 +61,17 @@ export class HNoiseLinesShader extends ShaderLayer {
       field: "negative",
       type: "boolean",
       onchange: (value) => {
-        this.state.negative = "true" == value;
+        this.state.negative = "true" === value || parseFloat(value) >= 1;
         this.uniforms.uniforms.uNegative = this.state.negative ? 1 : 0;
+      },
+    },
+    {
+      field: "refresh",
+      type: "modulator_only",
+      onchange: (value) => {
+        if (parseFloat(value) >= 1) {
+          this.uniforms.uniforms.uTime = Math.random() * 60;
+        }
       },
     },
     ...this.defaultSettings(),
@@ -94,22 +108,7 @@ export class HNoiseLinesShader extends ShaderLayer {
       strength: 0.1,
       lineThickness: 1,
       negative: false,
-      refreshChance: 1,
     };
-  }
-
-  tick(time: Ticker): void {
-    if (
-      true ||
-      this.state.refreshChance === 1 ||
-      Math.random() < this.state.refreshChance
-    ) {
-      if ((this.uniforms.uniforms.uTime as number) > 60) {
-        (this.uniforms.uniforms.uTime as number) = 0;
-      }
-      this.uniforms.uniforms.uTime =
-        (this.uniforms.uniforms.uTime as number) + time.elapsedMS / 1000;
-    }
   }
 
   setupUniformValues(): { [key: string]: UniformData } {

@@ -11,7 +11,7 @@ uniform float uBlueRadius;
 uniform int uIgnoreAlpha;
 
 // GAUSSIAN BLUR SETTINGS {{{
-const float uQuality = 8.0; // BLUR QUALITY (Default 4.0 - More is better but slower)
+const float uQuality = 4.0; // BLUR QUALITY (Default 4.0 - More is better but slower)
 const float Directions =16.0; // BLUR DIRECTIONS (Default 16.0 - More is better but slower
 const float stepSize = Pi/Directions;
 const float qualityStep = 1.0/uQuality;

@@ -58,7 +58,7 @@ export class ZeroOneGateModulator extends Modulator {
       field: "highCompress",
       type: "boolean",
       onchange: (value) => {
-        this.state.highCompress = "true" === value;
+        this.state.highCompress = "true" === value || parseFloat(value) >= 1;
       },
     },
     {
@@ -72,7 +72,7 @@ export class ZeroOneGateModulator extends Modulator {
       field: "lowCompress",
       type: "boolean",
       onchange: (value) => {
-        this.state.lowCompress = "true" === value;
+        this.state.lowCompress = "true" === value || parseFloat(value) >= 1;
       },
     },
     {

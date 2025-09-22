@@ -49,7 +49,7 @@ export class LightSplitShader extends ShaderLayer {
       field: "darken",
       type: "boolean",
       onchange: (value) => {
-        this.state.darken = "true" === value;
+        this.state.darken = "true" === value || parseFloat(value) >= 1;
         this.uniforms.uniforms.uDarken = this.state.darken ? 1 : 0;
       },
     },
@@ -57,7 +57,7 @@ export class LightSplitShader extends ShaderLayer {
       field: "lighten",
       type: "boolean",
       onchange: (value) => {
-        this.state.lighten = "true" === value;
+        this.state.lighten = "true" === value || parseFloat(value) >= 1;
         this.uniforms.uniforms.uLighten = this.state.lighten ? 1 : 0;
       },
     },
@@ -65,7 +65,7 @@ export class LightSplitShader extends ShaderLayer {
       field: "inverse",
       type: "boolean",
       onchange: (value) => {
-        this.state.inverse = "true" === value;
+        this.state.inverse = "true" === value || parseFloat(value) >= 1;
         this.uniforms.uniforms.uInverse = this.state.inverse ? 1 : 0;
       },
     },

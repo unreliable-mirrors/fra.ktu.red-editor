@@ -66,7 +66,7 @@ export class RecolourShader extends ShaderLayer {
       field: "onlyHue",
       type: "boolean",
       onchange: (value) => {
-        this.state.onlyHue = "true" === value;
+        this.state.onlyHue = "true" === value || parseFloat(value) >= 1;
         this.uniforms.uniforms.uOnlyHue = this.state.onlyHue ? 1 : 0;
       },
     },
@@ -74,7 +74,7 @@ export class RecolourShader extends ShaderLayer {
       field: "onlySaturation",
       type: "boolean",
       onchange: (value) => {
-        this.state.onlySaturation = "true" === value;
+        this.state.onlySaturation = "true" === value || parseFloat(value) >= 1;
         this.uniforms.uniforms.uOnlySaturation = this.state.onlySaturation
           ? 1
           : 0;
@@ -84,7 +84,7 @@ export class RecolourShader extends ShaderLayer {
       field: "onlyLightness",
       type: "boolean",
       onchange: (value) => {
-        this.state.onlyLightness = "true" === value;
+        this.state.onlyLightness = "true" === value || parseFloat(value) >= 1;
         this.uniforms.uniforms.uOnlyLightness = this.state.onlyLightness
           ? 1
           : 0;

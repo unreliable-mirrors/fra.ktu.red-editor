@@ -55,7 +55,8 @@ export class CrossesShader extends ShaderLayer {
       field: "variableCrossSize",
       type: "boolean",
       onchange: (value) => {
-        this.state.variableCrossSize = "true" === value;
+        this.state.variableCrossSize =
+          "true" === value || parseFloat(value) >= 1;
         this.uniforms.uniforms.uVariableCrossSize = this.state.variableCrossSize
           ? 1
           : 0;

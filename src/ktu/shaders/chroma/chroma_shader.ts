@@ -47,7 +47,7 @@ export class ChromaShader extends ShaderLayer {
       type: "boolean",
       onchange: (value) => {
         console.log("VALUE", value);
-        this.state.not = "true" === value;
+        this.state.not = "true" === value || parseFloat(value) >= 1;
         this.uniforms.uniforms.uNot = this.state.not ? 1 : 0;
       },
     },
