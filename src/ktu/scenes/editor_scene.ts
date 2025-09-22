@@ -640,6 +640,7 @@ export class EditorScene extends BaseScene {
     }
   }
   activateModulator(modulator: IModulator) {
+    this.deactivateLayer();
     if (this.activeModulator) this.activeModulator.active = false;
     this.activeModulator = modulator;
     this.activeModulator.active = true;
@@ -669,6 +670,7 @@ export class EditorScene extends BaseScene {
     }
   }
   activateLayer(layer: IEditorLayer) {
+    this.deactivateModulator();
     if (this.activeLayer) this.activeLayer.active = false;
     this.activeLayer = layer;
     DataStore.getInstance().setStore("activeLayer", this.activeLayer);

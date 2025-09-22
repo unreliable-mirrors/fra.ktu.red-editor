@@ -12,6 +12,7 @@ import {
 import { ContainerLayer } from "../../../layers/container_layer";
 import DataStore from "../../core/data_store";
 import { BindModulatorButton } from "../modulators/bind_modulator_button";
+import { ModulatorHint } from "../modulators/modulator_hint";
 
 export class ShaderComponent extends KTUComponent {
   shader: ShaderLayer;
@@ -64,7 +65,7 @@ export class ShaderComponent extends KTUComponent {
                   }}
                 ></input>
               ) : (
-                setting.modulator_name + " - " + setting.modulator_id
+                new ModulatorHint(setting.modulator_id, setting.modulator_name!)
               )}
               {new BindModulatorButton(this.shader, setting)}
             </div>
@@ -90,7 +91,7 @@ export class ShaderComponent extends KTUComponent {
                   }}
                 ></input>
               ) : (
-                setting.modulator_name + " - " + setting.modulator_id
+                new ModulatorHint(setting.modulator_id, setting.modulator_name!)
               )}
               {new BindModulatorButton(this.shader, setting)}
             </div>
@@ -113,7 +114,7 @@ export class ShaderComponent extends KTUComponent {
                   }}
                 ></input>
               ) : (
-                setting.modulator_name + " - " + setting.modulator_id
+                new ModulatorHint(setting.modulator_id, setting.modulator_name!)
               )}
               {new BindModulatorButton(this.shader, setting)}
             </div>
@@ -136,7 +137,7 @@ export class ShaderComponent extends KTUComponent {
                   }}
                 ></input>
               ) : (
-                setting.modulator_name + " - " + setting.modulator_id
+                new ModulatorHint(setting.modulator_id, setting.modulator_name!)
               )}
               {new BindModulatorButton(this.shader, setting)}
             </div>
