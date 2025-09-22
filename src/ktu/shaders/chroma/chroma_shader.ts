@@ -2,6 +2,7 @@ import { Color, Container, UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./chroma_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type ChromaShaderState = ShaderState & {
   color: string;

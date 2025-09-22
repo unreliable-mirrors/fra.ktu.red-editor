@@ -2,6 +2,7 @@ import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./hines_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type HLinesShaderState = ShaderState & {
   size: number;
