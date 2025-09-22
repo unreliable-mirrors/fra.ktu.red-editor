@@ -44,6 +44,7 @@ import { AlphaShader } from "../../shaders/alpha/alpha_shader";
 import { BlurShader } from "../../shaders/blur/blur_shader";
 import { HsbBlurShader } from "../../shaders/hsb_blur/hsb_blur_shader";
 import { HueOffsetShader } from "../../shaders/hue_offset/hue_offset_shader";
+import { HuePosterizeShader } from "../../shaders/hue_posterize/hue_posterize_shader";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -907,6 +908,31 @@ export class HintPanel extends KTUComponent {
             <div className="tip">
               <div>
                 <strong>Hue Offset</strong>: Offset degrees for the hue channel.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() ==
+        HuePosterizeShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>Hue Posterize Shader</h3>
+            <div className="tip">Posterize all hues by a certain level</div>
+          </div>
+          <div className="block extraLast">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <strong>Levels</strong>: Posterization levels for the hue
+                channel.
+                <strong>Offset</strong>: 0-1 range of displacement towards the
+                next breakpoint.
               </div>
             </div>
           </div>

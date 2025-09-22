@@ -64,6 +64,10 @@ import {
   HueOffsetShader,
   HueOffsetShaderState,
 } from "../shaders/hue_offset/hue_offset_shader";
+import {
+  HuePosterizeShader,
+  HuePosterizeShaderState,
+} from "../shaders/hue_posterize/hue_posterize_shader";
 
 export type ShaderClass = {
   SHADER_NAME: string;
@@ -89,6 +93,7 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   BlurShader,
   HsbBlurShader,
   HueOffsetShader,
+  HuePosterizeShader,
 ];
 
 export const AVAILABLE_SHADERS_MAP: Record<string, ShaderClass> =
@@ -144,6 +149,8 @@ export const getShaderByName = (
     return new HsbBlurShader(state as HsbBlurShaderState);
   } else if (shaderName === HueOffsetShader.SHADER_NAME) {
     return new HueOffsetShader(state as HueOffsetShaderState);
+  } else if (shaderName === HuePosterizeShader.SHADER_NAME) {
+    return new HuePosterizeShader(state as HuePosterizeShaderState);
   }
 
   return null;
