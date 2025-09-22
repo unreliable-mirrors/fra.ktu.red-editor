@@ -2,6 +2,7 @@ import { Graphics, Point } from "pixi.js";
 
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import DataStore from "../ui/core/data_store";
+import { registerModulatorsFromState } from "../helpers/modulators";
 
 export type DrawLayerState = ContainerLayerState & {
   points: Record<string, boolean>;
@@ -87,7 +88,7 @@ export class DrawLayer extends ContainerLayer {
     },
   ];
 
-  constructor(state?: DrawLayerState) {
+  constructor(state?: DrawLayerState, includeModulators: boolean = false) {
     super(state);
     this.graphics = new Graphics();
     this.container.addChild(this.graphics);
@@ -106,6 +107,9 @@ export class DrawLayer extends ContainerLayer {
       };
       for (var shader of state.shaders) {
         this.addShaderFromState(shader.name, shader);
+      }
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
       }
       for (var key in state.points) {
         const x = parseInt(key.split("X")[0]);

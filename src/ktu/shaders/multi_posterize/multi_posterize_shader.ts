@@ -2,6 +2,7 @@ import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./multi_posterize_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type MultiPosterizeShaderState = ShaderState & {
   levels: number;
@@ -30,7 +31,10 @@ export class MultiPosterizeShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: MultiPosterizeShaderState) {
+  constructor(
+    state?: MultiPosterizeShaderState,
+    includeModulators: boolean = false
+  ) {
     super(state);
 
     if (state) {
@@ -38,6 +42,9 @@ export class MultiPosterizeShader extends ShaderLayer {
         ...this.state,
         levels: state.levels,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

@@ -1,6 +1,7 @@
 import { Modulator, ModulatorSetting } from "./modulator";
 import { ModulatorState } from "../../engine/imodulator";
 import DataStore from "../ui/core/data_store";
+import { registerModulatorsFromState } from "../helpers/modulators";
 
 export type RescaleModulatorState = ModulatorState & {
   modulator: number;
@@ -38,7 +39,10 @@ export class RescaleModulator extends Modulator {
     ...this.defaultSettings(),
   ];
 
-  public constructor(state?: RescaleModulatorState) {
+  public constructor(
+    state?: RescaleModulatorState,
+    includeModulators: boolean = false
+  ) {
     super(state);
 
     if (state) {
@@ -47,6 +51,9 @@ export class RescaleModulator extends Modulator {
         modulator: state.modulator,
         flip: state.flip,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

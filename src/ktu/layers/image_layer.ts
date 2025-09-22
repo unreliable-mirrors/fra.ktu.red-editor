@@ -11,6 +11,7 @@ import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import DataStore from "../ui/core/data_store";
 import { AnimatedGIF } from "@pixi/gif";
 import { cacheAsset, freeAsset, getAsset } from "../helpers/assets";
+import { registerModulatorsFromState } from "../helpers/modulators";
 
 export type ImageLayerState = ContainerLayerState & {
   panX: number;
@@ -67,7 +68,7 @@ export class ImageLayer extends ContainerLayer {
     },
   ];
 
-  constructor(state?: ImageLayerState) {
+  constructor(state?: ImageLayerState, includeModulators: boolean = false) {
     super(state);
     console.log("LAYER_ID", this.layerId);
     this.sprite = new Sprite();
@@ -83,6 +84,9 @@ export class ImageLayer extends ContainerLayer {
       };
       for (var shader of state.shaders) {
         this.addShaderFromState(shader.name, shader);
+      }
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
       }
     }
     console.log("STATE LAYER_ID", this.state.layerId);

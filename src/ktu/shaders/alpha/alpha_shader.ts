@@ -2,6 +2,7 @@ import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./alpha_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type AlphaShaderState = ShaderState & {
   alpha: number;
@@ -30,7 +31,7 @@ export class AlphaShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: AlphaShaderState) {
+  constructor(state?: AlphaShaderState, includeModulators: boolean = false) {
     super(state);
 
     if (state) {
@@ -38,6 +39,9 @@ export class AlphaShader extends ShaderLayer {
         ...this.state,
         alpha: state.alpha,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

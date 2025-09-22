@@ -2,6 +2,7 @@ import { Ticker, UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./pixelate_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type PixelateShaderState = ShaderState & {
   pixelSize: number;
@@ -48,9 +49,8 @@ export class PixelateShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: PixelateShaderState) {
+  constructor(state?: PixelateShaderState, includeModulators: boolean = false) {
     super(state);
-    console.log("CONSTRUCTOR", state, this.state);
     if (state) {
       this.state = {
         ...this.state,
@@ -58,6 +58,9 @@ export class PixelateShader extends ShaderLayer {
         strength: state.strength,
         onlyPixels: state.onlyPixels,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

@@ -38,7 +38,7 @@ export class HLinesShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: HLinesShaderState) {
+  constructor(state?: HLinesShaderState, includeModulators: boolean = false) {
     super(state);
     console.log("CONSTRUCTOR", state, this.state);
     if (state) {
@@ -47,6 +47,9 @@ export class HLinesShader extends ShaderLayer {
         size: state.size,
         lineThickness: state.lineThickness,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

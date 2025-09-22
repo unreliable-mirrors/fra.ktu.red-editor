@@ -1,6 +1,7 @@
 import { Modulator, ModulatorSetting } from "./modulator";
 import { ModulatorState } from "../../engine/imodulator";
 import DataStore from "../ui/core/data_store";
+import { registerModulatorsFromState } from "../helpers/modulators";
 
 export type ZeroOneGateModulatorState = ModulatorState & {
   modulator: number;
@@ -91,7 +92,10 @@ export class ZeroOneGateModulator extends Modulator {
     ...this.defaultSettings(),
   ];
 
-  public constructor(state?: ZeroOneGateModulatorState) {
+  public constructor(
+    state?: ZeroOneGateModulatorState,
+    includeModulators: boolean = false
+  ) {
     super(state);
 
     if (state) {
@@ -105,6 +109,9 @@ export class ZeroOneGateModulator extends Modulator {
         lowValue: state.lowValue,
         dryWet: state.dryWet,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

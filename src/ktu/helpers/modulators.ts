@@ -28,6 +28,8 @@ import {
   RescaleModulator,
   RescaleModulatorState,
 } from "../modulators/rescale_modulator";
+import DataStore from "../ui/core/data_store";
+import { IModulable, ModulableState } from "../../engine/imodulable";
 
 export type ModulatorClass = {
   MODULATOR_NAME: string;
@@ -53,22 +55,56 @@ export const AVAILABLE_MODULATORS_NAMES: string[] = AVAILABLE_MODULATORS.map(
 
 export const getModulatorByName = (
   modulatorName: string,
-  state?: ModulatorState
+  state?: ModulatorState,
+  includeModulators: boolean = false
 ): Modulator | null => {
   if (modulatorName === SineModulator.MODULATOR_NAME) {
-    return new SineModulator(state as SineModulatorState);
+    return new SineModulator(state as SineModulatorState, includeModulators);
   } else if (modulatorName === SquareModulator.MODULATOR_NAME) {
-    return new SquareModulator(state as SquareModulatorState);
+    return new SquareModulator(
+      state as SquareModulatorState,
+      includeModulators
+    );
   } else if (modulatorName === RingModulator.MODULATOR_NAME) {
-    return new RingModulator(state as RingModulatorState);
+    return new RingModulator(state as RingModulatorState, includeModulators);
   } else if (modulatorName === SawtoothModulator.MODULATOR_NAME) {
-    return new SawtoothModulator(state as SawtoothModulatorState);
+    return new SawtoothModulator(
+      state as SawtoothModulatorState,
+      includeModulators
+    );
   } else if (modulatorName === ZeroOneGateModulator.MODULATOR_NAME) {
-    return new ZeroOneGateModulator(state as ZeroOneGateModulatorState);
+    return new ZeroOneGateModulator(
+      state as ZeroOneGateModulatorState,
+      includeModulators
+    );
   } else if (modulatorName === RandomModulator.MODULATOR_NAME) {
-    return new RandomModulator(state as RandomModulatorState);
+    return new RandomModulator(
+      state as RandomModulatorState,
+      includeModulators
+    );
   } else if (modulatorName === RescaleModulator.MODULATOR_NAME) {
-    return new RescaleModulator(state as RescaleModulatorState);
+    return new RescaleModulator(
+      state as RescaleModulatorState,
+      includeModulators
+    );
   }
   return null;
+};
+
+export const getModulatorById = (modulatorId: number): Modulator | null => {
+  return DataStore.getInstance()
+    .getStore("modulators")
+    .find((m: Modulator) => m.getUniqueId() === modulatorId);
+};
+
+export const registerModulatorsFromState = (
+  modulable: IModulable,
+  modulators: ModulableState[]
+): void => {
+  for (var modulatorState of modulators) {
+    getModulatorById(modulatorState.modulatorId)?.bind(
+      modulable,
+      modulable.settings.find((s) => s.field === modulatorState.field)!
+    );
+  }
 };

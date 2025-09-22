@@ -2,6 +2,7 @@ import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./anaglyph_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type AnaglyphShaderState = ShaderState & {
   strength: number;
@@ -30,7 +31,7 @@ export class AnaglyphShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: AnaglyphShaderState) {
+  constructor(state?: AnaglyphShaderState, includeModulators: boolean = false) {
     super(state);
 
     if (state) {
@@ -38,6 +39,9 @@ export class AnaglyphShader extends ShaderLayer {
         ...this.state,
         strength: state.strength,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

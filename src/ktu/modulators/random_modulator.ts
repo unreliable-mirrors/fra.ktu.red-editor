@@ -1,6 +1,7 @@
 import { Modulator, ModulatorSetting } from "./modulator";
 import { ModulatorState } from "../../engine/imodulator";
 import Rand from "rand-seed";
+import { registerModulatorsFromState } from "../helpers/modulators";
 
 export type RandomModulatorState = ModulatorState & {
   hz: number;
@@ -33,7 +34,10 @@ export class RandomModulator extends Modulator {
     ...this.defaultSettings(),
   ];
 
-  public constructor(state?: RandomModulatorState) {
+  public constructor(
+    state?: RandomModulatorState,
+    includeModulators: boolean = false
+  ) {
     super(state);
 
     if (state) {
@@ -42,6 +46,9 @@ export class RandomModulator extends Modulator {
         hz: state.hz,
         salt: state.salt,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

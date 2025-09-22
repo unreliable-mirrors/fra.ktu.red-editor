@@ -2,6 +2,7 @@ import { Ticker, UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./hnoise_lines_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type HNoiseLinesShaderState = ShaderState & {
   noiseSize: number;
@@ -62,7 +63,10 @@ export class HNoiseLinesShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: HNoiseLinesShaderState) {
+  constructor(
+    state?: HNoiseLinesShaderState,
+    includeModulators: boolean = false
+  ) {
     super(state);
     console.log("CONSTRUCTOR", state, this.state);
     if (state) {
@@ -73,6 +77,9 @@ export class HNoiseLinesShader extends ShaderLayer {
         negative: state.negative,
         lineThickness: state.lineThickness,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

@@ -2,14 +2,14 @@ import jsx from "texsaur";
 import { KTUComponent } from "../../core/ktu_component";
 import DataStore from "../../core/data_store";
 import { Modulator } from "../../../modulators/modulator";
-import { EditorLayerSetting } from "../../../layers/ieditor_layer";
 import { IModulable } from "../../../../engine/imodulable";
+import { LayerSetting } from "../../../../engine/ilayer";
 
 export class BindModulatorButton extends KTUComponent {
-  setting: EditorLayerSetting;
+  setting: LayerSetting;
   modulable: IModulable;
 
-  constructor(modulable: IModulable, setting: EditorLayerSetting) {
+  constructor(modulable: IModulable, setting: LayerSetting) {
     super();
     this.setting = setting;
     this.modulable = modulable;

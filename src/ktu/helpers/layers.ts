@@ -24,18 +24,22 @@ export const AVAILABLE_LAYER_NAMES: string[] = AVAILABLE_LAYERS.map(
 
 export const getLayerByName = (
   layerName: string,
-  state?: ContainerLayerState
+  state?: ContainerLayerState,
+  includeModulators: boolean = false
 ): ContainerLayer | null => {
   if (layerName === BackgroundLayer.LAYER_NAME) {
-    return new BackgroundLayer(state as BackgroundLayerState);
+    return new BackgroundLayer(
+      state as BackgroundLayerState,
+      includeModulators
+    );
   } else if (layerName === DrawLayer.LAYER_NAME) {
-    return new DrawLayer(state as DrawLayerState);
+    return new DrawLayer(state as DrawLayerState, includeModulators);
   } else if (layerName === ImageLayer.LAYER_NAME) {
-    return new ImageLayer(state as ImageLayerState);
+    return new ImageLayer(state as ImageLayerState, includeModulators);
   } else if (layerName === TextLayer.LAYER_NAME) {
-    return new TextLayer(state as TextLayerState);
+    return new TextLayer(state as TextLayerState, includeModulators);
   } else if (layerName === ShapeLayer.LAYER_NAME) {
-    return new ShapeLayer(state as ShapeLayerState);
+    return new ShapeLayer(state as ShapeLayerState, includeModulators);
   }
   return null;
 };

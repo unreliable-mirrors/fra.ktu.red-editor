@@ -1,4 +1,4 @@
-import { EditorLayerSetting } from "../ktu/layers/ieditor_layer";
+import { LayerSetting } from "./ilayer";
 import { IModulable } from "./imodulable";
 
 export type ModulatorState = {
@@ -18,8 +18,8 @@ export interface IModulator {
   valueLog: number[];
   hook?: (value: number) => void;
 
-  bind(modulable: IModulable, setting: EditorLayerSetting): void;
-  unbind(modulable: IModulable, setting: EditorLayerSetting): void;
+  bind(modulable: IModulable, setting: LayerSetting): void;
+  unbind(modulable: IModulable, setting: LayerSetting): void;
   unbindAll(): void;
   tick(elapsedTime: number): void;
 }

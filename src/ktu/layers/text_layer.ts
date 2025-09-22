@@ -8,6 +8,7 @@ import {
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import DataStore from "../ui/core/data_store";
 import { getStartingText } from "../helpers/sparkle";
+import { registerModulatorsFromState } from "../helpers/modulators";
 
 export type TextLayerState = ContainerLayerState & {
   text: string;
@@ -95,7 +96,7 @@ export class TextLayer extends ContainerLayer {
     },
   ];
 
-  constructor(state?: TextLayerState) {
+  constructor(state?: TextLayerState, includeModulators: boolean = false) {
     super(state);
     this.text = new Text();
     this.container.addChild(this.text);
@@ -112,6 +113,9 @@ export class TextLayer extends ContainerLayer {
       };
       for (var shader of state.shaders) {
         this.addShaderFromState(shader.name, shader);
+      }
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
       }
     }
   }

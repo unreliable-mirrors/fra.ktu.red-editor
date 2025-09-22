@@ -2,6 +2,7 @@ import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./vines_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type VLinesShaderState = ShaderState & {
   size: number;
@@ -38,7 +39,7 @@ export class VLinesShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: VLinesShaderState) {
+  constructor(state?: VLinesShaderState, includeModulators: boolean = false) {
     super(state);
     console.log("CONSTRUCTOR", state, this.state);
     if (state) {
@@ -47,6 +48,9 @@ export class VLinesShader extends ShaderLayer {
         size: state.size,
         lineThickness: state.lineThickness,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

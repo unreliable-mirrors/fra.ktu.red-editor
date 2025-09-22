@@ -2,6 +2,7 @@ import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./hsb_blur_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type HsbBlurShaderState = ShaderState & {
   hueRadius: number;
@@ -62,7 +63,7 @@ export class HsbBlurShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: HsbBlurShaderState) {
+  constructor(state?: HsbBlurShaderState, includeModulators: boolean = false) {
     super(state);
 
     if (state) {
@@ -73,6 +74,9 @@ export class HsbBlurShader extends ShaderLayer {
         lightnessRadius: state.lightnessRadius,
         ignoreAlpha: state.ignoreAlpha,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

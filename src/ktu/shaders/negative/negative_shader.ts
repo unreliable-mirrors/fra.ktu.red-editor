@@ -2,6 +2,7 @@ import { Container, UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./negative_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type NegativeShaderState = ShaderState & {
   strength: number;
@@ -14,8 +15,13 @@ export class NegativeShader extends ShaderLayer {
   container!: Container;
   settings: ShaderSetting[] = this.defaultSettings();
 
-  constructor(state?: NegativeShaderState) {
+  constructor(state?: NegativeShaderState, includeModulators: boolean = false) {
     super(state);
+    if (state) {
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
+    }
   }
 
   shaderName(): string {

@@ -2,6 +2,7 @@ import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./blur_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type BlurShaderState = ShaderState & {
   redRadius: number;
@@ -62,7 +63,7 @@ export class BlurShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: BlurShaderState) {
+  constructor(state?: BlurShaderState, includeModulators: boolean = false) {
     super(state);
 
     if (state) {
@@ -73,6 +74,9 @@ export class BlurShader extends ShaderLayer {
         blueRadius: state.blueRadius,
         ignoreAlpha: state.ignoreAlpha,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

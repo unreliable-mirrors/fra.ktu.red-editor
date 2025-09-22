@@ -107,50 +107,72 @@ export const AVAILABLE_SHADERS_NAMES: string[] = AVAILABLE_SHADERS.map(
 
 export const getShaderByName = (
   shaderName: string,
-  state?: ShaderState
+  state?: ShaderState,
+  includeModulators: boolean = false
 ): ShaderLayer | null => {
   if (shaderName === BnwShader.SHADER_NAME) {
-    return new BnwShader(state as BnwShaderState);
+    return new BnwShader(state as BnwShaderState, includeModulators);
   } else if (shaderName === VintageShader.SHADER_NAME) {
-    return new VintageShader(state as VintageShaderState);
+    return new VintageShader(state as VintageShaderState, includeModulators);
   } else if (shaderName === PixelateShader.SHADER_NAME) {
-    return new PixelateShader(state as PixelateShaderState);
+    return new PixelateShader(state as PixelateShaderState, includeModulators);
   } else if (shaderName === MontecarloSampleShader.SHADER_NAME) {
-    return new MontecarloSampleShader(state as MontecarloSampleShaderState);
+    return new MontecarloSampleShader(
+      state as MontecarloSampleShaderState,
+      includeModulators
+    );
   } else if (shaderName === AnaglyphShader.SHADER_NAME) {
-    return new AnaglyphShader(state as AnaglyphShaderState);
+    return new AnaglyphShader(state as AnaglyphShaderState, includeModulators);
   } else if (shaderName === PosterizeShader.SHADER_NAME) {
-    return new PosterizeShader(state as PosterizeShaderState);
+    return new PosterizeShader(
+      state as PosterizeShaderState,
+      includeModulators
+    );
   } else if (shaderName === VLinesShader.SHADER_NAME) {
-    return new VLinesShader(state as VLinesShaderState);
+    return new VLinesShader(state as VLinesShaderState, includeModulators);
   } else if (shaderName === HLinesShader.SHADER_NAME) {
-    return new HLinesShader(state as HLinesShaderState);
+    return new HLinesShader(state as HLinesShaderState, includeModulators);
   } else if (shaderName === ChromaShader.SHADER_NAME) {
-    return new ChromaShader(state as ChromaShaderState);
+    return new ChromaShader(state as ChromaShaderState, includeModulators);
   } else if (shaderName === ScrambleShader.SHADER_NAME) {
-    return new ScrambleShader(state as ScrambleShaderState);
+    return new ScrambleShader(state as ScrambleShaderState, includeModulators);
   } else if (shaderName === NegativeShader.SHADER_NAME) {
-    return new NegativeShader(state as NegativeShaderState);
+    return new NegativeShader(state as NegativeShaderState, includeModulators);
   } else if (shaderName === CrossesShader.SHADER_NAME) {
-    return new CrossesShader(state as CrossesShaderState);
+    return new CrossesShader(state as CrossesShaderState, includeModulators);
   } else if (shaderName === RecolourShader.SHADER_NAME) {
-    return new RecolourShader(state as RecolourShaderState);
+    return new RecolourShader(state as RecolourShaderState, includeModulators);
   } else if (shaderName === HNoiseLinesShader.SHADER_NAME) {
-    return new HNoiseLinesShader(state as HNoiseLinesShaderState);
+    return new HNoiseLinesShader(
+      state as HNoiseLinesShaderState,
+      includeModulators
+    );
   } else if (shaderName === LightSplitShader.SHADER_NAME) {
-    return new LightSplitShader(state as LightSplitShaderState);
+    return new LightSplitShader(
+      state as LightSplitShaderState,
+      includeModulators
+    );
   } else if (shaderName === AlphaShader.SHADER_NAME) {
-    return new AlphaShader(state as AlphaShaderState);
+    return new AlphaShader(state as AlphaShaderState, includeModulators);
   } else if (shaderName === MultiPosterizeShader.SHADER_NAME) {
-    return new MultiPosterizeShader(state as MultiPosterizeShaderState);
+    return new MultiPosterizeShader(
+      state as MultiPosterizeShaderState,
+      includeModulators
+    );
   } else if (shaderName === BlurShader.SHADER_NAME) {
-    return new BlurShader(state as BlurShaderState);
+    return new BlurShader(state as BlurShaderState, includeModulators);
   } else if (shaderName === HsbBlurShader.SHADER_NAME) {
-    return new HsbBlurShader(state as HsbBlurShaderState);
+    return new HsbBlurShader(state as HsbBlurShaderState, includeModulators);
   } else if (shaderName === HueOffsetShader.SHADER_NAME) {
-    return new HueOffsetShader(state as HueOffsetShaderState);
+    return new HueOffsetShader(
+      state as HueOffsetShaderState,
+      includeModulators
+    );
   } else if (shaderName === HuePosterizeShader.SHADER_NAME) {
-    return new HuePosterizeShader(state as HuePosterizeShaderState);
+    return new HuePosterizeShader(
+      state as HuePosterizeShaderState,
+      includeModulators
+    );
   }
 
   return null;

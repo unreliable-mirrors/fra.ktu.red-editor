@@ -2,6 +2,7 @@ import { Container, Ticker, UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./scramble_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type ScrambleShaderState = ShaderState & {
   range: number;
@@ -38,7 +39,7 @@ export class ScrambleShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: ScrambleShaderState) {
+  constructor(state?: ScrambleShaderState, includeModulators: boolean = false) {
     super(state);
 
     if (state) {
@@ -47,6 +48,9 @@ export class ScrambleShader extends ShaderLayer {
         range: state.range,
         refreshChance: state.refreshChance,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

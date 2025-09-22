@@ -63,7 +63,7 @@ export class CrossesShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: CrossesShaderState) {
+  constructor(state?: CrossesShaderState, includeModulators: boolean = false) {
     super(state);
     console.log("CONSTRUCTOR", state, this.state);
     if (state) {
@@ -74,6 +74,9 @@ export class CrossesShader extends ShaderLayer {
         lineThickness: state.lineThickness,
         variableCrossSize: state.variableCrossSize,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

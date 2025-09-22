@@ -1,5 +1,6 @@
 import { Modulator, ModulatorSetting } from "./modulator";
 import { ModulatorState } from "../../engine/imodulator";
+import { registerModulatorsFromState } from "../helpers/modulators";
 
 export type SawtoothModulatorState = ModulatorState & {
   hz: number;
@@ -25,7 +26,10 @@ export class SawtoothModulator extends Modulator {
     ...this.defaultSettings(),
   ];
 
-  public constructor(state?: SawtoothModulatorState) {
+  public constructor(
+    state?: SawtoothModulatorState,
+    includeModulators: boolean = false
+  ) {
     super(state);
 
     if (state) {
@@ -33,6 +37,9 @@ export class SawtoothModulator extends Modulator {
         ...this.state,
         hz: state.hz,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 
