@@ -120,6 +120,31 @@ export class ModulatorComponent extends KTUComponent {
               {new BindModulatorButton(this.modulator, setting)}
             </div>
           );
+        } else if (setting.type === "boolean") {
+          settings.push(
+            <div>
+              <span>{setting.field}: </span>
+              {setting.modulator_id === undefined ? (
+                <input
+                  type="checkbox"
+                  value="true"
+                  defaultChecked={
+                    (this.modulator.state as { [key: string]: any })[
+                      setting.field
+                    ]
+                  }
+                  oninput={(e) => {
+                    setting.onchange(
+                      (e.target as HTMLInputElement).checked ? "true" : "false"
+                    );
+                  }}
+                ></input>
+              ) : (
+                setting.modulator_name + " - " + setting.modulator_id
+              )}
+              {new BindModulatorButton(this.modulator, setting)}
+            </div>
+          );
         }
       }
     }
