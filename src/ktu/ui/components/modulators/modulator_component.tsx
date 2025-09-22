@@ -145,6 +145,27 @@ export class ModulatorComponent extends KTUComponent {
               {new BindModulatorButton(this.modulator, setting)}
             </div>
           );
+        } else if (setting.type === "text") {
+          settings.push(
+            <div>
+              <span>{setting.field}: </span>
+
+              <input
+                type="text"
+                value={
+                  (this.modulator.state as { [key: string]: any })[
+                    setting.field
+                  ]
+                }
+                spellcheck="false"
+                autocomplete="off"
+                aria-autocomplete="none"
+                oninput={(e) => {
+                  setting.onchange((e.target as HTMLInputElement).value);
+                }}
+              ></input>
+            </div>
+          );
         }
       }
     }

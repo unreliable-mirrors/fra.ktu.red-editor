@@ -18,6 +18,7 @@
   "dependencies": {
     "@pixi/gif": "^3.0.1",
     "js-md5": "^0.8.3",
-    "pixi.js": "^8.6.6"
+    "pixi.js": "^8.6.6",
+    "rand-seed": "^3.0.0"
   }
 }

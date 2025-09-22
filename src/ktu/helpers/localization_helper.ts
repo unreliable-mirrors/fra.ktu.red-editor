@@ -28,6 +28,7 @@ const texts: Record<string, string> = {
   add_ring_modulator_button: "Ring",
   add_sawtooth_modulator_button: "Sawtooth",
   add_zero_one_gate_modulator_button: "01Gate",
+  add_random_modulator_button: "Random",
 
   export_state: "Save File",
   import_state: "Import File",
