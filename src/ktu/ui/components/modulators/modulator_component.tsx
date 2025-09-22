@@ -12,6 +12,7 @@ import { ContainerLayer } from "../../../layers/container_layer";
 import { Modulator } from "../../../modulators/modulator";
 import DataStore from "../../core/data_store";
 import { BindModulatorButton } from "./bind_modulator_button";
+import { ModulatorHint } from "./modulator_hint";
 
 export class ModulatorComponent extends KTUComponent {
   modulator: Modulator;
@@ -53,7 +54,7 @@ export class ModulatorComponent extends KTUComponent {
                   }}
                 ></input>
               ) : (
-                setting.modulator_name + " - " + setting.modulator_id
+                new ModulatorHint(setting.modulator_id, setting.modulator_name!)
               )}
               {new BindModulatorButton(this.modulator, setting)}
             </div>
@@ -80,7 +81,7 @@ export class ModulatorComponent extends KTUComponent {
                   }}
                 ></input>
               ) : (
-                setting.modulator_name + " - " + setting.modulator_id
+                new ModulatorHint(setting.modulator_id, setting.modulator_name!)
               )}
               {new BindModulatorButton(this.modulator, setting)}
             </div>
@@ -105,7 +106,7 @@ export class ModulatorComponent extends KTUComponent {
                   }}
                 ></input>
               ) : (
-                setting.modulator_name + " - " + setting.modulator_id
+                new ModulatorHint(setting.modulator_id, setting.modulator_name!)
               )}
               {new BindModulatorButton(this.modulator, setting)}
             </div>
@@ -115,7 +116,10 @@ export class ModulatorComponent extends KTUComponent {
             <div>
               <span>{setting.field}: </span>
               {setting.modulator_id !== undefined
-                ? setting.modulator_name + " - " + setting.modulator_id
+                ? new ModulatorHint(
+                    setting.modulator_id,
+                    setting.modulator_name!
+                  )
                 : "-"}
               {new BindModulatorButton(this.modulator, setting)}
             </div>
@@ -140,7 +144,7 @@ export class ModulatorComponent extends KTUComponent {
                   }}
                 ></input>
               ) : (
-                setting.modulator_name + " - " + setting.modulator_id
+                new ModulatorHint(setting.modulator_id, setting.modulator_name!)
               )}
               {new BindModulatorButton(this.modulator, setting)}
             </div>

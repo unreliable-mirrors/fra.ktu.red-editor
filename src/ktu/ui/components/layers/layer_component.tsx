@@ -18,6 +18,7 @@ import {
 } from "../../../helpers/icons";
 import { ImageLayer } from "../../../layers/image_layer";
 import { BindModulatorButton } from "../modulators/bind_modulator_button";
+import { ModulatorHint } from "../modulators/modulator_hint";
 
 export class LayerComponent extends KTUComponent {
   layer: ContainerLayer;
@@ -66,7 +67,7 @@ export class LayerComponent extends KTUComponent {
                   }}
                 ></input>
               ) : (
-                setting.modulator_name + " - " + setting.modulator_id
+                new ModulatorHint(setting.modulator_id, setting.modulator_name!)
               )}
               {new BindModulatorButton(this.layer, setting)}
             </>
@@ -91,7 +92,7 @@ export class LayerComponent extends KTUComponent {
                   }}
                 ></input>
               ) : (
-                setting.modulator_name + " - " + setting.modulator_id
+                new ModulatorHint(setting.modulator_id, setting.modulator_name!)
               )}
               {new BindModulatorButton(this.layer, setting)}
             </>
