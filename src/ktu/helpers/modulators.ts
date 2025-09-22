@@ -24,6 +24,10 @@ import {
   RandomModulator,
   RandomModulatorState,
 } from "../modulators/random_modulator";
+import {
+  RescaleModulator,
+  RescaleModulatorState,
+} from "../modulators/rescale_modulator";
 
 export type ModulatorClass = {
   MODULATOR_NAME: string;
@@ -35,6 +39,7 @@ export const AVAILABLE_MODULATORS: ModulatorClass[] = [
   RingModulator,
   ZeroOneGateModulator,
   RandomModulator,
+  RescaleModulator,
 ];
 
 export const AVAILABLE_MODULATORS_MAP: Record<string, ModulatorClass> =
@@ -62,6 +67,8 @@ export const getModulatorByName = (
     return new ZeroOneGateModulator(state as ZeroOneGateModulatorState);
   } else if (modulatorName === RandomModulator.MODULATOR_NAME) {
     return new RandomModulator(state as RandomModulatorState);
+  } else if (modulatorName === RescaleModulator.MODULATOR_NAME) {
+    return new RescaleModulator(state as RescaleModulatorState);
   }
   return null;
 };
