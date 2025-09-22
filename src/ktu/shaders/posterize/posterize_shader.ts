@@ -2,6 +2,7 @@ import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./posterize_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type PosterizeShaderState = ShaderState & {
   threshold: number;
@@ -30,7 +31,10 @@ export class PosterizeShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: PosterizeShaderState) {
+  constructor(
+    state?: PosterizeShaderState,
+    includeModulators: boolean = false
+  ) {
     super(state);
 
     if (state) {
@@ -38,6 +42,9 @@ export class PosterizeShader extends ShaderLayer {
         ...this.state,
         threshold: state.threshold,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

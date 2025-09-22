@@ -5,17 +5,14 @@ import {
   Point,
   Ticker,
 } from "pixi.js";
-import {
-  EditorLayerSetting,
-  EditorLayerState,
-  IEditorLayer,
-} from "./ieditor_layer";
+import { EditorLayerState, IEditorLayer } from "./ieditor_layer";
 
 import { ShaderLayer, ShaderState } from "../shaders/shader_layer";
 import EventDispatcher from "../ui/core/event_dispatcher";
 import { getSecureIndex } from "../../engine/helpers/secure_index_helper";
 import DataStore from "../ui/core/data_store";
 import { getShaderByName } from "../helpers/shaders";
+import { LayerSetting } from "../../engine/ilayer";
 
 export type ContainerLayerState = EditorLayerState & {
   shaders: ShaderState[];
@@ -25,7 +22,7 @@ export abstract class ContainerLayer implements IEditorLayer {
   layerId: number;
   container: Container;
   state: ContainerLayerState;
-  abstract settings: EditorLayerSetting[];
+  abstract settings: LayerSetting[];
   active: boolean;
   shaders: ShaderLayer[];
   lastSize: Point;
@@ -107,11 +104,19 @@ export abstract class ContainerLayer implements IEditorLayer {
     return this.state.visible;
   }
 
-  addShaderFromState(shaderName: string, state?: ShaderState): void {
-    this.addGenericShader(shaderName, state);
+  addShaderFromState(
+    shaderName: string,
+    state?: ShaderState,
+    includeModulators: boolean = false
+  ): void {
+    this.addGenericShader(shaderName, state, includeModulators);
   }
-  addGenericShader(shaderName: string, state?: ShaderState) {
-    const layer = getShaderByName(shaderName, state);
+  addGenericShader(
+    shaderName: string,
+    state?: ShaderState,
+    includeModulators: boolean = false
+  ): void {
+    const layer = getShaderByName(shaderName, state, includeModulators);
     this.addShader(layer!);
   }
   //TODO: DEDUPLICATE THIS

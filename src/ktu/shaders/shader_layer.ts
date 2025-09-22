@@ -1,14 +1,10 @@
 import { Container, Filter, Ticker, UniformData, UniformGroup } from "pixi.js";
 
-import {
-  EditorLayerSetting,
-  EditorLayerState,
-  IEditorLayer,
-} from "../layers/ieditor_layer";
+import { EditorLayerState, IEditorLayer } from "../layers/ieditor_layer";
 import { getSecureIndex } from "../../engine/helpers/secure_index_helper";
 
 import vertex from "./defaultFilter.vert?raw";
-import { ILayer } from "../../engine/ilayer";
+import { ILayer, LayerSetting } from "../../engine/ilayer";
 
 export type ShaderState = EditorLayerState & {
   dryWet: number;
@@ -23,7 +19,7 @@ export type ShaderSetting = {
 export abstract class ShaderLayer implements IEditorLayer {
   layerId: number;
   state!: ShaderState;
-  abstract settings: EditorLayerSetting[];
+  abstract settings: LayerSetting[];
   active: boolean;
   shader!: Filter;
   abstract fragment: string;

@@ -1,8 +1,8 @@
-import { EditorLayerSetting } from "../layers/ieditor_layer";
 import { getSecureIndex } from "../../engine/helpers/secure_index_helper";
 
 import { IModulator, ModulatorState } from "../../engine/imodulator";
 import { IModulable } from "../../engine/imodulable";
+import { LayerSetting } from "../../engine/ilayer";
 
 export type ModulatorSetting = {
   field: "factor" | "offset";
@@ -12,7 +12,7 @@ export type ModulatorSetting = {
 
 export type SettingBinding = {
   uniqueId: number;
-  setting: EditorLayerSetting;
+  setting: LayerSetting;
   modulable: IModulable;
 };
 
@@ -24,7 +24,7 @@ export abstract class Modulator implements IModulator, IModulable {
   hook?: (value: number) => void;
 
   state: ModulatorState;
-  abstract settings: EditorLayerSetting[];
+  abstract settings: LayerSetting[];
   bindedSettings: SettingBinding[] = [];
 
   public constructor(state?: ModulatorState) {
@@ -85,7 +85,7 @@ export abstract class Modulator implements IModulator, IModulable {
     return this.state.running;
   }
 
-  bind(modulable: IModulable, setting: EditorLayerSetting): void {
+  bind(modulable: IModulable, setting: LayerSetting): void {
     setting.modulator_id = this.getUniqueId();
     setting.modulator_name = this.state.name;
     modulable.pushModulator(setting.field, this.modulatorId);
@@ -99,7 +99,7 @@ export abstract class Modulator implements IModulator, IModulable {
     }
   }
 
-  unbind(modulable: IModulable, setting: EditorLayerSetting): void {
+  unbind(modulable: IModulable, setting: LayerSetting): void {
     setting.modulator_id = undefined;
     setting.modulator_name = undefined;
     modulable.pullModulator(setting.field, this.modulatorId);
@@ -114,7 +114,7 @@ export abstract class Modulator implements IModulator, IModulable {
 
   unbindAll(): void {
     for (const setting of this.bindedSettings) {
-      this.unbind(setting.modulable, setting.setting as EditorLayerSetting);
+      this.unbind(setting.modulable, setting.setting);
     }
     this.bindedSettings = [];
   }

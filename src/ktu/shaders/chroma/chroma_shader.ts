@@ -53,7 +53,7 @@ export class ChromaShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: ChromaShaderState) {
+  constructor(state?: ChromaShaderState, includeModulators: boolean = false) {
     super(state);
 
     if (state) {
@@ -63,6 +63,9 @@ export class ChromaShader extends ShaderLayer {
         threshold: state.threshold,
         not: state.not,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

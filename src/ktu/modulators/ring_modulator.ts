@@ -1,6 +1,7 @@
 import { Modulator, ModulatorSetting } from "./modulator";
 import { ModulatorState } from "../../engine/imodulator";
 import DataStore from "../ui/core/data_store";
+import { registerModulatorsFromState } from "../helpers/modulators";
 
 export type RingModulatorState = ModulatorState & {
   modulatorAId: number;
@@ -43,7 +44,10 @@ export class RingModulator extends Modulator {
     ...this.defaultSettings(),
   ];
 
-  public constructor(state?: RingModulatorState) {
+  public constructor(
+    state?: RingModulatorState,
+    includeModulators: boolean = false
+  ) {
     super(state);
 
     if (state) {
@@ -52,6 +56,9 @@ export class RingModulator extends Modulator {
         modulatorAId: state.modulatorAId,
         modulatorBId: state.modulatorBId,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

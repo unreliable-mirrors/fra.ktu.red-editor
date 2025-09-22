@@ -10,7 +10,6 @@ import {
 } from "../../../helpers/icons";
 import { ContainerLayer } from "../../../layers/container_layer";
 import { Modulator } from "../../../modulators/modulator";
-import DataStore from "../../core/data_store";
 import { BindModulatorButton } from "./bind_modulator_button";
 import { ModulatorHint } from "./modulator_hint";
 

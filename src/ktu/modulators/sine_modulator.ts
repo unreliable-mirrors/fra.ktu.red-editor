@@ -1,5 +1,6 @@
 import { Modulator, ModulatorSetting } from "./modulator";
 import { ModulatorState } from "../../engine/imodulator";
+import { registerModulatorsFromState } from "../helpers/modulators";
 
 export type SineModulatorState = ModulatorState & {
   hz: number;
@@ -25,7 +26,10 @@ export class SineModulator extends Modulator {
     ...this.defaultSettings(),
   ];
 
-  public constructor(state?: SineModulatorState) {
+  public constructor(
+    state?: SineModulatorState,
+    includeModulators: boolean = false
+  ) {
     super(state);
 
     if (state) {
@@ -33,6 +37,10 @@ export class SineModulator extends Modulator {
         ...this.state,
         hz: state.hz,
       };
+      console.log(includeModulators, state.modulators);
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

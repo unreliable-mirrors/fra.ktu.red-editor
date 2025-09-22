@@ -1,6 +1,7 @@
 import { Container, Graphics, Point, Ticker } from "pixi.js";
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import { getFunColor } from "../helpers/sparkle";
+import { registerModulatorsFromState } from "../helpers/modulators";
 
 export type BackgroundLayerState = ContainerLayerState & {
   color: string;
@@ -29,19 +30,24 @@ export class BackgroundLayer extends ContainerLayer {
     },
   ];
 
-  constructor(state?: BackgroundLayerState) {
+  constructor(
+    state?: BackgroundLayerState,
+    includeModulators: boolean = false
+  ) {
     super(state);
     this.graphics = new Graphics();
     this.container.addChild(this.graphics);
     this.backgroundSize = new Point(window.innerWidth, window.innerHeight);
 
     if (state) {
-      console.log("VISIBLE", JSON.stringify(state.visible));
-      console.log("THIS STATEA", JSON.stringify(this.state));
       this.state = { ...this.state, color: state.color };
-      console.log("THIS STATEB", JSON.stringify(this.state));
+      state.modulators;
       for (var shader of state.shaders) {
-        this.addShaderFromState(shader.name, shader);
+        this.addShaderFromState(shader.name, shader, includeModulators);
+      }
+
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
       }
     }
   }

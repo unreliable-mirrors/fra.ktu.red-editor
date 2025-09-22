@@ -2,6 +2,7 @@ import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./light_split_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type LightSplitShaderState = ShaderState & {
   lightThreshold: number;
@@ -71,7 +72,10 @@ export class LightSplitShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: LightSplitShaderState) {
+  constructor(
+    state?: LightSplitShaderState,
+    includeModulators: boolean = false
+  ) {
     super(state);
     if (state) {
       this.state = {
@@ -82,6 +86,9 @@ export class LightSplitShader extends ShaderLayer {
         lighten: state.lighten,
         inverse: state.inverse,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

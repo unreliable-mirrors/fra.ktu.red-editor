@@ -1,6 +1,7 @@
 import { Container, Graphics, Point } from "pixi.js";
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import DataStore from "../ui/core/data_store";
+import { registerModulatorsFromState } from "../helpers/modulators";
 
 export type ShapeLayerState = ContainerLayerState & {
   shape: string;
@@ -79,7 +80,7 @@ export class ShapeLayer extends ContainerLayer {
     },
   ];
 
-  constructor(state?: ShapeLayerState) {
+  constructor(state?: ShapeLayerState, includeModulators: boolean = false) {
     super(state);
     this.graphics = new Graphics();
     this.container.addChild(this.graphics);
@@ -95,6 +96,9 @@ export class ShapeLayer extends ContainerLayer {
       };
       for (var shader of state.shaders) {
         this.addShaderFromState(shader.name, shader);
+      }
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
       }
     }
   }

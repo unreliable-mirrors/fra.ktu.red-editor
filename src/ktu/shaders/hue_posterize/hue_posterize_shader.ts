@@ -2,6 +2,7 @@ import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./hue_posterize_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type HuePosterizeShaderState = ShaderState & {
   levels: number;
@@ -39,7 +40,10 @@ export class HuePosterizeShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: HuePosterizeShaderState) {
+  constructor(
+    state?: HuePosterizeShaderState,
+    includeModulators: boolean = false
+  ) {
     super(state);
 
     if (state) {
@@ -47,6 +51,9 @@ export class HuePosterizeShader extends ShaderLayer {
         ...this.state,
         levels: state.levels,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

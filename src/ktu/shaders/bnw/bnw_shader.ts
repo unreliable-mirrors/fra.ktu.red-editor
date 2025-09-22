@@ -2,6 +2,7 @@ import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./bnw_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type BnwShaderState = ShaderState & {
   strength: number;
@@ -14,8 +15,13 @@ export class BnwShader extends ShaderLayer {
 
   settings: ShaderSetting[] = this.defaultSettings();
 
-  constructor(state?: BnwShaderState) {
+  constructor(state?: BnwShaderState, includeModulators: boolean = false) {
     super(state);
+    if (state) {
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
+    }
   }
 
   shaderName(): string {

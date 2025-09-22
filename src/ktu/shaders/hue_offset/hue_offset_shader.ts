@@ -2,6 +2,7 @@ import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./hue_offset_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type HueOffsetShaderState = ShaderState & {
   offset: number;
@@ -30,7 +31,10 @@ export class HueOffsetShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: HueOffsetShaderState) {
+  constructor(
+    state?: HueOffsetShaderState,
+    includeModulators: boolean = false
+  ) {
     super(state);
 
     if (state) {
@@ -38,6 +42,9 @@ export class HueOffsetShader extends ShaderLayer {
         ...this.state,
         offset: state.offset,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

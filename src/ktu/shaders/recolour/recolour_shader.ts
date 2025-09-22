@@ -2,6 +2,7 @@ import { Color, Container, UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./recolour_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type RecolourShaderState = ShaderState & {
   fromColor: string;
@@ -92,7 +93,7 @@ export class RecolourShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(state?: RecolourShaderState) {
+  constructor(state?: RecolourShaderState, includeModulators: boolean = false) {
     super(state);
 
     if (state) {
@@ -105,6 +106,9 @@ export class RecolourShader extends ShaderLayer {
         onlySaturation: state.onlySaturation,
         onlyLightness: state.onlyLightness,
       };
+      if (includeModulators) {
+        registerModulatorsFromState(this, state.modulators);
+      }
     }
   }
 

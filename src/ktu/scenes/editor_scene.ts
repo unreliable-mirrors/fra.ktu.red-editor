@@ -10,13 +10,14 @@ import { getStartingName } from "../helpers/sparkle";
 import { getShaderByName } from "../helpers/shaders";
 import { ASSETS_MAP, rebuildAssets } from "../helpers/assets";
 import { getLayerByName } from "../helpers/layers";
-import { EditorLayerSetting, IEditorLayer } from "../layers/ieditor_layer";
+import { IEditorLayer } from "../layers/ieditor_layer";
 import { Camera } from "./camera";
 import { KeyboardManager } from "../helpers/keyboard_manager";
 import { Modulator } from "../modulators/modulator";
 import { IModulator, ModulatorState } from "../../engine/imodulator";
 import { getModulatorByName } from "../helpers/modulators";
 import { IModulable } from "../../engine/imodulable";
+import { LayerSetting } from "../../engine/ilayer";
 
 export type EditorSceneState = {
   layers: ContainerLayerState[];
@@ -236,15 +237,16 @@ export class EditorScene extends BaseScene {
       (payload: IEditorLayer) => {
         const state = JSON.parse(JSON.stringify(payload.state));
         if (payload instanceof ContainerLayer) {
-          this.addGenericLayer(state.name, state);
+          this.addGenericLayer(state.name, state, true);
         } else if (payload instanceof ShaderLayer) {
           if (payload.bindedLayer) {
             (payload.bindedLayer as ContainerLayer).addGenericShader(
               state.name,
-              state
+              state,
+              true
             );
           } else {
-            this.addGenericShader(state.name, state);
+            this.addGenericShader(state.name, state, true);
           }
         }
       }
@@ -254,7 +256,7 @@ export class EditorScene extends BaseScene {
       "duplicateModulator",
       (payload: IModulator) => {
         const state = JSON.parse(JSON.stringify(payload.state));
-        this.addModulator(getModulatorByName(state.name, state)!);
+        this.addModulator(getModulatorByName(state.name, state, true)!);
       }
     );
     EventDispatcher.getInstance().addEventListener(
@@ -566,7 +568,7 @@ export class EditorScene extends BaseScene {
     rebuildAssets(payload.assets);
 
     const importedModulators: {
-      [key: number]: { layer: IModulable; setting: EditorLayerSetting }[];
+      [key: number]: { layer: IModulable; setting: LayerSetting }[];
     } = {};
     for (const state of payload.layers) {
       const layer = this.addGenericLayer(state.name, state);
@@ -870,14 +872,19 @@ export class EditorScene extends BaseScene {
   }
   addGenericLayer(
     layerName: string,
-    state?: ContainerLayerState
+    state?: ContainerLayerState,
+    includeModulators: boolean = false
   ): IEditorLayer {
-    const layer = getLayerByName(layerName, state);
+    const layer = getLayerByName(layerName, state, includeModulators);
     this.addLayer(layer!);
     return layer!;
   }
-  addGenericShader(shaderName: string, state?: ShaderState): ShaderLayer {
-    const layer = getShaderByName(shaderName, state);
+  addGenericShader(
+    shaderName: string,
+    state?: ShaderState,
+    includeModulators: boolean = false
+  ): ShaderLayer {
+    const layer = getShaderByName(shaderName, state, includeModulators);
     this.addShader(layer!);
     return layer!;
   }
