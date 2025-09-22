@@ -1,4 +1,3 @@
-import { Ticker } from "pixi.js";
 import { EditorLayerSetting } from "../ktu/layers/ieditor_layer";
 import { IModulable } from "./imodulable";
 
