@@ -1,5 +1,5 @@
 import jsx from "texsaur";
-
+import { LineChart } from "chartist";
 import EventDispatcher from "../../core/event_dispatcher";
 import { KTUComponent } from "../../core/ktu_component";
 import {
@@ -18,12 +18,24 @@ export class ModulatorComponent extends KTUComponent {
   modulator: Modulator;
   containerLayer?: ContainerLayer;
   valueRenderer?: Element;
+  chart?: LineChart;
   constructor(modulator: Modulator) {
     super();
     this.modulator = modulator;
     this.modulator.hook = () => {
       if (this.valueRenderer) {
         this.valueRenderer.innerHTML = this.modulator.value.toFixed(2);
+        this.chart?.update(
+          { series: [this.modulator.valueLog] },
+          {
+            axisX: { showLabel: false, showGrid: false },
+            axisY: {
+              high: Math.ceil(Math.max(...this.modulator.valueLog)),
+              low: Math.floor(Math.min(...this.modulator.valueLog)),
+              showGrid: false,
+            },
+          }
+        );
       }
     };
   }
@@ -197,14 +209,33 @@ export class ModulatorComponent extends KTUComponent {
           </div>
         </div>
         {this.valueRenderer}
+        <div id={`chart_${this.modulator.state.modulatorId}`}></div>
         {settings}
       </div>
     );
   }
 
+  afterRender() {
+    if (this.modulator.active) {
+      this.chart = new LineChart(
+        `#chart_${this.modulator.state.modulatorId}`,
+        {
+          series: [this.modulator.valueLog],
+        },
+        {
+          axisX: { showLabel: false, showGrid: false },
+          axisY: {
+            high: Math.max(...this.modulator.valueLog),
+            low: Math.min(...this.modulator.valueLog),
+            showGrid: false,
+          },
+        }
+      );
+    }
+  }
+
   handleVisibleClick() {
     this.modulator.running = !this.modulator.running;
-    DataStore.getInstance().touch("modulators");
   }
   handleClick() {
     if (!this.modulator.active) {

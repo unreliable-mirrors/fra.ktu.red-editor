@@ -15,6 +15,7 @@ export interface IModulator {
   active: boolean;
   state: ModulatorState;
   value: number;
+  valueLog: number[];
   hook?: (value: number) => void;
 
   bind(modulable: IModulable, setting: EditorLayerSetting): void;

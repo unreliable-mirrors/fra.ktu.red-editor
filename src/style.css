@@ -300,3 +300,8 @@ button {
 .historyRow span {
   display: block;
 }
+.ct-series-a .ct-line {
+  /* Set the colour of this series line */
+  stroke: #66ff66;
+  fill: none;
+}

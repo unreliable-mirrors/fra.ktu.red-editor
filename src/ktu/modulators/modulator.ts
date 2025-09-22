@@ -20,6 +20,7 @@ export abstract class Modulator implements IModulator, IModulable {
   modulatorId: number;
   active: boolean;
   value: number;
+  valueLog: number[];
   hook?: (value: number) => void;
 
   state: ModulatorState;
@@ -30,6 +31,7 @@ export abstract class Modulator implements IModulator, IModulable {
     this.modulatorId = getSecureIndex();
     this.active = false;
     this.value = 0;
+    this.valueLog = [];
 
     if (state) {
       this.state = {
@@ -121,6 +123,10 @@ export abstract class Modulator implements IModulator, IModulable {
     if (this.running) {
       this.value =
         this.computeValue(elapsedTime) * this.state.factor + this.state.offset;
+      this.valueLog.push(this.value);
+      if (this.valueLog.length > 100) {
+        this.valueLog.shift();
+      }
       for (const setting of this.bindedSettings) {
         if (setting.setting.type !== "modulator") {
           setting.setting.onchange(this.value.toString());
