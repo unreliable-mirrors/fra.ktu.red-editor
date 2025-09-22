@@ -33,10 +33,10 @@ export class LayerComponent extends KTUComponent {
     const shaderButtons: Element[] = [];
     if (this.layer.active) {
       for (const setting of this.layer.settings) {
+        let input = <></>;
         if (setting.type === "color") {
-          settings.push(
-            <div>
-              <span>{setting.field}: </span>
+          input = (
+            <>
               <input
                 type="color"
                 value={
@@ -46,53 +46,59 @@ export class LayerComponent extends KTUComponent {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>
-            </div>
+            </>
           );
         } else if (setting.type === "integer") {
-          settings.push(
-            <div>
-              <span>{setting.field}: </span>
-              <input
-                type="number"
-                value={
-                  (this.layer.state as { [key: string]: any })[setting.field]
-                }
-                spellcheck="false"
-                autocomplete="off"
-                aria-autocomplete="none"
-                oninput={(e) => {
-                  setting.onchange((e.target as HTMLInputElement).value);
-                }}
-              ></input>
+          input = (
+            <>
+              {" "}
+              {setting.modulator_id === undefined ? (
+                <input
+                  type="number"
+                  value={
+                    (this.layer.state as { [key: string]: any })[setting.field]
+                  }
+                  spellcheck="false"
+                  autocomplete="off"
+                  aria-autocomplete="none"
+                  oninput={(e) => {
+                    setting.onchange((e.target as HTMLInputElement).value);
+                  }}
+                ></input>
+              ) : (
+                setting.modulator_name + " - " + setting.modulator_id
+              )}
               {new BindModulatorButton(this.layer, setting)}
-            </div>
+            </>
           );
         } else if (setting.type === "float") {
-          settings.push(
-            <div>
-              <span>{setting.field}: </span>
-              <input
-                type="number"
-                value={
-                  (this.layer.state as { [key: string]: any })[setting.field]
-                }
-                min="0"
-                max="1"
-                step="0.01"
-                spellcheck="false"
-                autocomplete="off"
-                aria-autocomplete="none"
-                oninput={(e) => {
-                  setting.onchange((e.target as HTMLInputElement).value);
-                }}
-              ></input>
+          input = (
+            <>
+              {setting.modulator_id === undefined ? (
+                <input
+                  type="number"
+                  value={
+                    (this.layer.state as { [key: string]: any })[setting.field]
+                  }
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  spellcheck="false"
+                  autocomplete="off"
+                  aria-autocomplete="none"
+                  oninput={(e) => {
+                    setting.onchange((e.target as HTMLInputElement).value);
+                  }}
+                ></input>
+              ) : (
+                setting.modulator_name + " - " + setting.modulator_id
+              )}
               {new BindModulatorButton(this.layer, setting)}
-            </div>
+            </>
           );
         } else if (setting.type === "text") {
-          settings.push(
-            <div>
-              <span>{setting.field}: </span>
+          input = (
+            <>
               <input
                 type="text"
                 value={
@@ -105,24 +111,22 @@ export class LayerComponent extends KTUComponent {
                   setting.onchange((e.target as HTMLInputElement).value);
                 }}
               ></input>
-            </div>
+            </>
           );
         } else if (setting.type === "file") {
-          settings.push(
-            <div>
-              <span>{setting.field}: </span>
+          input = (
+            <>
               {
                 new FileLoaderComponent({
                   onchange: setting.onchange,
                   layer: this.layer as ImageLayer,
                 })
               }
-            </div>
+            </>
           );
         } else if (setting.type === "options") {
-          settings.push(
-            <div>
-              <span>{setting.field}: </span>
+          input = (
+            <>
               {setting.values ? (
                 setting.values.map((e) => (
                   <button onclick={() => setting.onchange(e)}>{e}</button>
@@ -130,9 +134,15 @@ export class LayerComponent extends KTUComponent {
               ) : (
                 <></>
               )}
-            </div>
+            </>
           );
         }
+        settings.push(
+          <div>
+            <span>{setting.field}: </span>
+            {input}
+          </div>
+        );
       }
     }
     let anyActive = false;

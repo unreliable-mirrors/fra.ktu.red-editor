@@ -88,6 +88,8 @@ export abstract class Modulator implements IModulator, IModulable {
   }
 
   bind(modulable: IModulable, setting: EditorLayerSetting): void {
+    setting.modulator_id = this.getUniqueId();
+    setting.modulator_name = this.state.name;
     this.bindedSettings.push({ uniqueId: modulable.getUniqueId(), setting });
     modulable.pushModulator(setting.field, this.modulatorId);
     if (setting.type === "modulator") {

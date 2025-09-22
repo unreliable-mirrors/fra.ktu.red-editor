@@ -50,18 +50,22 @@ export class ShaderComponent extends KTUComponent {
           settings.push(
             <div>
               <span>{setting.field}: </span>
-              <input
-                type="number"
-                spellcheck="false"
-                autocomplete="off"
-                aria-autocomplete="none"
-                value={
-                  (this.shader.state as { [key: string]: any })[setting.field]
-                }
-                oninput={(e) => {
-                  setting.onchange((e.target as HTMLInputElement).value);
-                }}
-              ></input>
+              {setting.modulator_id === undefined ? (
+                <input
+                  type="number"
+                  spellcheck="false"
+                  autocomplete="off"
+                  aria-autocomplete="none"
+                  value={
+                    (this.shader.state as { [key: string]: any })[setting.field]
+                  }
+                  oninput={(e) => {
+                    setting.onchange((e.target as HTMLInputElement).value);
+                  }}
+                ></input>
+              ) : (
+                setting.modulator_name + " - " + setting.modulator_id
+              )}
               {new BindModulatorButton(this.shader, setting)}
             </div>
           );
@@ -69,21 +73,25 @@ export class ShaderComponent extends KTUComponent {
           settings.push(
             <div>
               <span>{setting.field}: </span>
-              <input
-                type="number"
-                spellcheck="false"
-                autocomplete="off"
-                aria-autocomplete="none"
-                value={
-                  (this.shader.state as { [key: string]: any })[setting.field]
-                }
-                min="0"
-                max="1"
-                step="0.01"
-                oninput={(e) => {
-                  setting.onchange((e.target as HTMLInputElement).value);
-                }}
-              ></input>
+              {setting.modulator_id === undefined ? (
+                <input
+                  type="number"
+                  spellcheck="false"
+                  autocomplete="off"
+                  aria-autocomplete="none"
+                  value={
+                    (this.shader.state as { [key: string]: any })[setting.field]
+                  }
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  oninput={(e) => {
+                    setting.onchange((e.target as HTMLInputElement).value);
+                  }}
+                ></input>
+              ) : (
+                setting.modulator_name + " - " + setting.modulator_id
+              )}
               {new BindModulatorButton(this.shader, setting)}
             </div>
           );
@@ -91,18 +99,22 @@ export class ShaderComponent extends KTUComponent {
           settings.push(
             <div>
               <span>{setting.field}: </span>
-              <input
-                type="checkbox"
-                value="true"
-                defaultChecked={
-                  (this.shader.state as { [key: string]: any })[setting.field]
-                }
-                oninput={(e) => {
-                  setting.onchange(
-                    (e.target as HTMLInputElement).checked ? "true" : "false"
-                  );
-                }}
-              ></input>
+              {setting.modulator_id === undefined ? (
+                <input
+                  type="checkbox"
+                  value="true"
+                  defaultChecked={
+                    (this.shader.state as { [key: string]: any })[setting.field]
+                  }
+                  oninput={(e) => {
+                    setting.onchange(
+                      (e.target as HTMLInputElement).checked ? "true" : "false"
+                    );
+                  }}
+                ></input>
+              ) : (
+                setting.modulator_name + " - " + setting.modulator_id
+              )}
               {new BindModulatorButton(this.shader, setting)}
             </div>
           );
@@ -110,18 +122,22 @@ export class ShaderComponent extends KTUComponent {
           settings.push(
             <div>
               <span>{setting.field}: </span>
-              <input
-                type="range"
-                value={
-                  (this.shader.state as { [key: string]: any })[setting.field]
-                }
-                min="0"
-                max="1"
-                step="0.01"
-                oninput={(e) => {
-                  setting.onchange((e.target as HTMLInputElement).value);
-                }}
-              ></input>
+              {setting.modulator_id === undefined ? (
+                <input
+                  type="range"
+                  value={
+                    (this.shader.state as { [key: string]: any })[setting.field]
+                  }
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  oninput={(e) => {
+                    setting.onchange((e.target as HTMLInputElement).value);
+                  }}
+                ></input>
+              ) : (
+                setting.modulator_name + " - " + setting.modulator_id
+              )}
               {new BindModulatorButton(this.shader, setting)}
             </div>
           );
