@@ -1,4 +1,4 @@
-import { Ticker, UniformData } from "pixi.js";
+import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./pixelate_shader.frag?raw";
@@ -8,12 +8,21 @@ export type PixelateShaderState = ShaderState & {
   pixelSize: number;
   strength: number;
   onlyPixels: boolean;
-  refreshChance: number;
 };
 
 export type PixelateShaderSetting = {
-  field: ShaderSetting["field"] | "pixelSize" | "strength" | "onlyPixels";
-  type: ShaderSetting["type"] | "integer" | "float" | "boolean";
+  field:
+    | ShaderSetting["field"]
+    | "pixelSize"
+    | "strength"
+    | "onlyPixels"
+    | "refresh";
+  type:
+    | ShaderSetting["type"]
+    | "integer"
+    | "float"
+    | "boolean"
+    | "modulator_only";
   onchange: (value: string) => void;
 };
 
@@ -42,8 +51,17 @@ export class PixelateShader extends ShaderLayer {
       field: "onlyPixels",
       type: "boolean",
       onchange: (value) => {
-        this.state.onlyPixels = "true" == value;
+        this.state.onlyPixels = "true" === value || parseFloat(value) >= 1;
         this.uniforms.uniforms.uOnlyPixels = this.state.onlyPixels ? 1 : 0;
+      },
+    },
+    {
+      field: "refresh",
+      type: "modulator_only",
+      onchange: (value) => {
+        if (parseFloat(value) >= 1) {
+          this.uniforms.uniforms.uTime = Math.random() * 60;
+        }
       },
     },
     ...this.defaultSettings(),
@@ -74,23 +92,9 @@ export class PixelateShader extends ShaderLayer {
       pixelSize: 15,
       strength: 1,
       onlyPixels: false,
-      refreshChance: 1,
     };
   }
 
-  tick(time: Ticker): void {
-    if (
-      true ||
-      this.state.refreshChance === 1 ||
-      Math.random() < this.state.refreshChance
-    ) {
-      if ((this.uniforms.uniforms.uTime as number) > 60) {
-        (this.uniforms.uniforms.uTime as number) = 0;
-      }
-      this.uniforms.uniforms.uTime =
-        (this.uniforms.uniforms.uTime as number) + time.elapsedMS / 1000;
-    }
-  }
   setupUniformValues(): { [key: string]: UniformData } {
     return {
       uPixelSize: { value: this.state.pixelSize, type: "f32" },

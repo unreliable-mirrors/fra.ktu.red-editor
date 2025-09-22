@@ -83,7 +83,7 @@ export class ImageLayer extends ContainerLayer {
         imageHash: state.imageHash,
       };
       for (var shader of state.shaders) {
-        this.addShaderFromState(shader.name, shader);
+        this.addShaderFromState(shader.name, shader, includeModulators);
       }
       if (includeModulators) {
         registerModulatorsFromState(this, state.modulators);

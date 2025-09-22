@@ -142,6 +142,19 @@ export class ShaderComponent extends KTUComponent {
               {new BindModulatorButton(this.shader, setting)}
             </div>
           );
+        } else if (setting.type === "modulator_only") {
+          settings.push(
+            <div>
+              <span>{setting.field}: </span>
+              {setting.modulator_id !== undefined
+                ? new ModulatorHint(
+                    setting.modulator_id,
+                    setting.modulator_name!
+                  )
+                : "-"}
+              {new BindModulatorButton(this.shader, setting)}
+            </div>
+          );
         }
       }
     }

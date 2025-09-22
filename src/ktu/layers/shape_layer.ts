@@ -95,7 +95,7 @@ export class ShapeLayer extends ContainerLayer {
         rotation: state.rotation,
       };
       for (var shader of state.shaders) {
-        this.addShaderFromState(shader.name, shader);
+        this.addShaderFromState(shader.name, shader, includeModulators);
       }
       if (includeModulators) {
         registerModulatorsFromState(this, state.modulators);

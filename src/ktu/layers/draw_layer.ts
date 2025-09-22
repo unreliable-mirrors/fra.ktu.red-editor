@@ -106,7 +106,7 @@ export class DrawLayer extends ContainerLayer {
         panY: state.panY,
       };
       for (var shader of state.shaders) {
-        this.addShaderFromState(shader.name, shader);
+        this.addShaderFromState(shader.name, shader, includeModulators);
       }
       if (includeModulators) {
         registerModulatorsFromState(this, state.modulators);

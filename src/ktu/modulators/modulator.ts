@@ -121,15 +121,20 @@ export abstract class Modulator implements IModulator, IModulable {
 
   tick(elapsedTime: number): void {
     if (this.running) {
-      this.value =
+      const value =
         this.computeValue(elapsedTime) * this.state.factor + this.state.offset;
+      const changed: boolean = this.value !== value;
+      this.value = value;
+
       this.valueLog.push(this.value);
       if (this.valueLog.length > 100) {
         this.valueLog.shift();
       }
-      for (const setting of this.bindedSettings) {
-        if (setting.setting.type !== "modulator") {
-          setting.setting.onchange(this.value.toString());
+      if (changed) {
+        for (const setting of this.bindedSettings) {
+          if (setting.setting.type !== "modulator") {
+            setting.setting.onchange(this.value.toString());
+          }
         }
       }
       this.hook?.(this.value);

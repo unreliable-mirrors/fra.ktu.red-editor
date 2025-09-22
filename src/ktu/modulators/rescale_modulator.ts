@@ -33,7 +33,7 @@ export class RescaleModulator extends Modulator {
       field: "flip",
       type: "boolean",
       onchange: (value) => {
-        this.state.flip = "true" === value;
+        this.state.flip = "true" === value || parseFloat(value) >= 1;
       },
     },
     ...this.defaultSettings(),

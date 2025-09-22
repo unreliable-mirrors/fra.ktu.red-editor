@@ -1,4 +1,4 @@
-import { Point, Ticker, UniformData } from "pixi.js";
+import { Point, UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./montecarlo_sample.frag?raw";
@@ -6,12 +6,11 @@ import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type MontecarloSampleShaderState = ShaderState & {
   strength: number;
-  refreshChance: number;
 };
 
 export type MontecarloSampleShaderSetting = {
-  field: ShaderSetting["field"] | "strength" | "refreshChance";
-  type: ShaderSetting["type"] | "float";
+  field: ShaderSetting["field"] | "strength" | "refresh";
+  type: ShaderSetting["type"] | "float" | "modulator_only";
   onchange: (value: string) => void;
 };
 
@@ -30,10 +29,12 @@ export class MontecarloSampleShader extends ShaderLayer {
       },
     },
     {
-      field: "refreshChance",
-      type: "float",
+      field: "refresh",
+      type: "modulator_only",
       onchange: (value) => {
-        this.state.refreshChance = parseFloat(value);
+        if (parseFloat(value) >= 1) {
+          this.uniforms.uniforms.uTime = Math.random() * 60;
+        }
       },
     },
     ...this.defaultSettings(),
@@ -49,24 +50,10 @@ export class MontecarloSampleShader extends ShaderLayer {
       this.state = {
         ...this.state,
         strength: state.strength,
-        refreshChance: state.refreshChance,
       };
       if (includeModulators) {
         registerModulatorsFromState(this, state.modulators);
       }
-    }
-  }
-
-  tick(time: Ticker): void {
-    if (
-      this.state.refreshChance === 1 ||
-      Math.random() < this.state.refreshChance
-    ) {
-      if ((this.uniforms.uniforms.uTime as number) > 60) {
-        (this.uniforms.uniforms.uTime as number) = 0;
-      }
-      this.uniforms.uniforms.uTime =
-        (this.uniforms.uniforms.uTime as number) + time.elapsedMS / 1000;
     }
   }
 
@@ -75,7 +62,7 @@ export class MontecarloSampleShader extends ShaderLayer {
   }
 
   defaultState(): MontecarloSampleShaderState {
-    return { ...super.defaultState(), strength: 0.1, refreshChance: 1 };
+    return { ...super.defaultState(), strength: 0.1 };
   }
   setupUniformValues(): { [key: string]: UniformData } {
     return {

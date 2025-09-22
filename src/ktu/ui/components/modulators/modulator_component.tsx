@@ -12,6 +12,7 @@ import { ContainerLayer } from "../../../layers/container_layer";
 import { Modulator } from "../../../modulators/modulator";
 import { BindModulatorButton } from "./bind_modulator_button";
 import { ModulatorHint } from "./modulator_hint";
+import DataStore from "../../core/data_store";
 
 export class ModulatorComponent extends KTUComponent {
   modulator: Modulator;
@@ -235,6 +236,7 @@ export class ModulatorComponent extends KTUComponent {
 
   handleVisibleClick() {
     this.modulator.running = !this.modulator.running;
+    DataStore.getInstance().touch("modulators");
   }
   handleClick() {
     if (!this.modulator.active) {
