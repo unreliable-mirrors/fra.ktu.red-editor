@@ -2,10 +2,7 @@ import jsx from "texsaur";
 import { KTUComponent } from "../../core/ktu_component";
 import DataStore from "../../core/data_store";
 import { Modulator } from "../../../modulators/modulator";
-import {
-  EditorLayerSetting,
-  IEditorLayer,
-} from "../../../layers/ieditor_layer";
+import { EditorLayerSetting } from "../../../layers/ieditor_layer";
 import { IModulable } from "../../../../engine/imodulable";
 
 export class BindModulatorButton extends KTUComponent {
@@ -57,6 +54,7 @@ export class BindModulatorButton extends KTUComponent {
       ).find((modulator) => modulator.state.modulatorId === parseInt(id))!;
       modulator.bind(this.modulable, this.setting);
     }
+    DataStore.getInstance().touch("modulators");
   }
 }
 

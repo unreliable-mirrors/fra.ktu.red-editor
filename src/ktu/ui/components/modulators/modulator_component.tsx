@@ -37,20 +37,24 @@ export class ModulatorComponent extends KTUComponent {
           settings.push(
             <div>
               <span>{setting.field}: </span>
-              <input
-                type="number"
-                spellcheck="false"
-                autocomplete="off"
-                aria-autocomplete="none"
-                value={
-                  (this.modulator.state as { [key: string]: any })[
-                    setting.field
-                  ]
-                }
-                oninput={(e) => {
-                  setting.onchange((e.target as HTMLInputElement).value);
-                }}
-              ></input>
+              {setting.modulator_id === undefined ? (
+                <input
+                  type="number"
+                  spellcheck="false"
+                  autocomplete="off"
+                  aria-autocomplete="none"
+                  value={
+                    (this.modulator.state as { [key: string]: any })[
+                      setting.field
+                    ]
+                  }
+                  oninput={(e) => {
+                    setting.onchange((e.target as HTMLInputElement).value);
+                  }}
+                ></input>
+              ) : (
+                setting.modulator_name + " - " + setting.modulator_id
+              )}
               {new BindModulatorButton(this.modulator, setting)}
             </div>
           );
@@ -58,22 +62,26 @@ export class ModulatorComponent extends KTUComponent {
           settings.push(
             <div>
               <span>{setting.field}: </span>
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                spellcheck="false"
-                autocomplete="off"
-                aria-autocomplete="none"
-                value={
-                  (this.modulator.state as { [key: string]: any })[
-                    setting.field
-                  ]
-                }
-                oninput={(e) => {
-                  setting.onchange((e.target as HTMLInputElement).value);
-                }}
-              ></input>
+              {setting.modulator_id === undefined ? (
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  spellcheck="false"
+                  autocomplete="off"
+                  aria-autocomplete="none"
+                  value={
+                    (this.modulator.state as { [key: string]: any })[
+                      setting.field
+                    ]
+                  }
+                  oninput={(e) => {
+                    setting.onchange((e.target as HTMLInputElement).value);
+                  }}
+                ></input>
+              ) : (
+                setting.modulator_name + " - " + setting.modulator_id
+              )}
               {new BindModulatorButton(this.modulator, setting)}
             </div>
           );
@@ -81,20 +89,24 @@ export class ModulatorComponent extends KTUComponent {
           settings.push(
             <div>
               <span>{setting.field}: </span>
-              <input
-                type="number"
-                spellcheck="false"
-                autocomplete="off"
-                aria-autocomplete="none"
-                value={
-                  (this.modulator.state as { [key: string]: any })[
-                    setting.field
-                  ]
-                }
-                oninput={(e) => {
-                  setting.onchange((e.target as HTMLInputElement).value);
-                }}
-              ></input>
+              {setting.modulator_id === undefined ? (
+                <input
+                  type="number"
+                  spellcheck="false"
+                  autocomplete="off"
+                  aria-autocomplete="none"
+                  value={
+                    (this.modulator.state as { [key: string]: any })[
+                      setting.field
+                    ]
+                  }
+                  oninput={(e) => {
+                    setting.onchange((e.target as HTMLInputElement).value);
+                  }}
+                ></input>
+              ) : (
+                setting.modulator_name + " - " + setting.modulator_id
+              )}
               {new BindModulatorButton(this.modulator, setting)}
             </div>
           );
@@ -102,6 +114,9 @@ export class ModulatorComponent extends KTUComponent {
           settings.push(
             <div>
               <span>{setting.field}: </span>
+              {setting.modulator_id !== undefined
+                ? setting.modulator_name + " - " + setting.modulator_id
+                : "-"}
               {new BindModulatorButton(this.modulator, setting)}
             </div>
           );

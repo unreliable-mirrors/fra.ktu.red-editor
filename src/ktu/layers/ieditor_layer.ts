@@ -13,6 +13,8 @@ export type EditorLayerSetting = {
   type: string;
   values?: string[];
   onchange: (value: string) => void;
+  modulator_id?: number;
+  modulator_name?: string;
 };
 
 export interface IEditorLayer extends ILayer, IModulable {
