@@ -12,6 +12,10 @@ import {
   RingModulator,
   RingModulatorState,
 } from "../modulators/ring_modulator";
+import {
+  SawtoothModulator,
+  SawtoothModulatorState,
+} from "../modulators/sawtooth_modulator";
 
 export type ModulatorClass = {
   MODULATOR_NAME: string;
@@ -19,6 +23,7 @@ export type ModulatorClass = {
 export const AVAILABLE_MODULATORS: ModulatorClass[] = [
   SineModulator,
   SquareModulator,
+  SawtoothModulator,
   RingModulator,
 ];
 
@@ -41,6 +46,8 @@ export const getModulatorByName = (
     return new SquareModulator(state as SquareModulatorState);
   } else if (modulatorName === RingModulator.MODULATOR_NAME) {
     return new RingModulator(state as RingModulatorState);
+  } else if (modulatorName === SawtoothModulator.MODULATOR_NAME) {
+    return new SawtoothModulator(state as SawtoothModulatorState);
   }
   return null;
 };
