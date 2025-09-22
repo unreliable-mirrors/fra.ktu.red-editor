@@ -18,7 +18,7 @@ export interface IModulator {
   hook?: (value: number) => void;
 
   bind(modulable: IModulable, setting: EditorLayerSetting): void;
-  unbind(setting: EditorLayerSetting): void;
+  unbind(modulable: IModulable, setting: EditorLayerSetting): void;
   unbindAll(): void;
   tick(elapsedTime: number): void;
 }

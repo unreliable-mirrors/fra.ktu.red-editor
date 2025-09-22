@@ -49,12 +49,26 @@ export class BindModulatorButton extends KTUComponent {
     const id = (e.target as HTMLSelectElement).value;
     console.log(id);
     if (id !== "") {
+      this.unbindSetting();
       const modulator: Modulator = (
         DataStore.getInstance().getStore("modulators") as Modulator[]
       ).find((modulator) => modulator.state.modulatorId === parseInt(id))!;
       modulator.bind(this.modulable, this.setting);
+    } else {
+      this.unbindSetting();
     }
     DataStore.getInstance().touch("modulators");
+  }
+
+  unbindSetting() {
+    if (this.setting.modulator_id) {
+      const modulator: Modulator = (
+        DataStore.getInstance().getStore("modulators") as Modulator[]
+      ).find(
+        (modulator) => modulator.state.modulatorId === this.setting.modulator_id
+      )!;
+      modulator.unbind(this.modulable, this.setting);
+    }
   }
 }
 

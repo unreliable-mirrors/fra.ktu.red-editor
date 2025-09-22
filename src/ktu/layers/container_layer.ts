@@ -331,4 +331,10 @@ export abstract class ContainerLayer implements IEditorLayer {
   pushModulator(field: string, modulatorId: number): void {
     this.state.modulators.push({ field: field, modulatorId: modulatorId });
   }
+
+  pullModulator(field: string, modulatorId: number): void {
+    this.state.modulators = this.state.modulators.filter(
+      (m) => !(m.field === field && m.modulatorId === modulatorId)
+    );
+  }
 }

@@ -2,7 +2,6 @@ import { EditorLayerSetting } from "../layers/ieditor_layer";
 import { getSecureIndex } from "../../engine/helpers/secure_index_helper";
 
 import { IModulator, ModulatorState } from "../../engine/imodulator";
-import { ShaderSetting } from "../shaders/shader_layer";
 import { IModulable } from "../../engine/imodulable";
 
 export type ModulatorSetting = {
@@ -13,7 +12,8 @@ export type ModulatorSetting = {
 
 export type SettingBinding = {
   uniqueId: number;
-  setting: ShaderSetting | EditorLayerSetting;
+  setting: EditorLayerSetting;
+  modulable: IModulable;
 };
 
 export abstract class Modulator implements IModulator, IModulable {
@@ -86,18 +86,34 @@ export abstract class Modulator implements IModulator, IModulable {
   bind(modulable: IModulable, setting: EditorLayerSetting): void {
     setting.modulator_id = this.getUniqueId();
     setting.modulator_name = this.state.name;
-    this.bindedSettings.push({ uniqueId: modulable.getUniqueId(), setting });
     modulable.pushModulator(setting.field, this.modulatorId);
+    this.bindedSettings.push({
+      uniqueId: modulable.getUniqueId(),
+      setting,
+      modulable,
+    });
     if (setting.type === "modulator") {
       setting.onchange(this.getUniqueId().toString());
     }
   }
 
-  unbind(): void {
-    //TODO: REMOVE PROPERLY
+  unbind(modulable: IModulable, setting: EditorLayerSetting): void {
+    setting.modulator_id = undefined;
+    setting.modulator_name = undefined;
+    modulable.pullModulator(setting.field, this.modulatorId);
+    this.bindedSettings = this.bindedSettings.filter(
+      (b) =>
+        !(
+          b.uniqueId === modulable.getUniqueId() &&
+          b.setting.field === setting.field
+        )
+    );
   }
 
   unbindAll(): void {
+    for (const setting of this.bindedSettings) {
+      this.unbind(setting.modulable, setting.setting as EditorLayerSetting);
+    }
     this.bindedSettings = [];
   }
 
@@ -122,5 +138,11 @@ export abstract class Modulator implements IModulator, IModulable {
 
   pushModulator(field: string, modulatorId: number): void {
     this.state.modulators.push({ field: field, modulatorId: modulatorId });
+  }
+
+  pullModulator(field: string, modulatorId: number): void {
+    this.state.modulators = this.state.modulators.filter(
+      (m) => !(m.field === field && m.modulatorId === modulatorId)
+    );
   }
 }
