@@ -2,6 +2,7 @@ import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./crosses_shader.frag?raw";
+import { registerModulatorsFromState } from "../../helpers/modulators";
 
 export type CrossesShaderState = ShaderState & {
   gridSize: number;

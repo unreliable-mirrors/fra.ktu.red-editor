@@ -5,7 +5,7 @@ uniform float uDryWet;
 
 void main(){
     vec4 tex = texture(uTexture, vTextureCoord);
-    shade = (tex.r + tex.g + tex.b) / 3.0;
+    float shade = (tex.r + tex.g + tex.b) / 3.0;
     gl_FragColor = vec4(shade, shade, shade, tex.a);
 
     //DRY/WET
