@@ -46,6 +46,7 @@ export class EditorScene extends BaseScene {
   camera: Camera;
   frameSize: Point;
   frameOverride: boolean = false;
+  elapsedTime: number;
 
   public constructor() {
     super();
@@ -56,6 +57,7 @@ export class EditorScene extends BaseScene {
     this.graphics = new Graphics();
     this.container.addChild(this.graphics);
     this.camera = new Camera(this.container);
+    this.elapsedTime = 0;
 
     this.frameSize = new Point(window.innerWidth, window.innerHeight);
 
@@ -112,6 +114,7 @@ export class EditorScene extends BaseScene {
     }, 60000);
 
     Ticker.shared.add((time) => {
+      this.elapsedTime += time.elapsedMS;
       if (
         this.lastSize.x != window.innerWidth ||
         this.lastSize.y != window.innerHeight
@@ -126,7 +129,7 @@ export class EditorScene extends BaseScene {
         shader.tick(time);
       }
       for (const modulator of this.modulators) {
-        modulator.tick(time);
+        modulator.tick(this.elapsedTime);
       }
     });
 
@@ -555,6 +558,8 @@ export class EditorScene extends BaseScene {
 
     this.setupContainer();
     this.container.addChild(this.graphics);
+
+    this.elapsedTime = 0;
   }
 
   importState(payload: EditorSceneState, importing: boolean = false) {
