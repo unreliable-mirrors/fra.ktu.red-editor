@@ -254,6 +254,7 @@ export class ShaderComponent extends KTUComponent {
   }
   handleVisibleClick() {
     this.shader.visible = !this.shader.visible;
+    DataStore.getInstance().touch("shaders");
     DataStore.getInstance().touch("layers");
   }
   handleDuplicateClick() {
