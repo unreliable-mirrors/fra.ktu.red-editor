@@ -105,6 +105,9 @@ export class ModulatorComponent extends KTUComponent {
               {setting.modulator_id === undefined ? (
                 <input
                   type="number"
+                  min="0"
+                  max="1"
+                  step="0.01"
                   spellcheck="false"
                   autocomplete="off"
                   aria-autocomplete="none"
