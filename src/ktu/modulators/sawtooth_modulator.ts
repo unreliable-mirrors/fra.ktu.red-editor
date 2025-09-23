@@ -4,10 +4,11 @@ import { registerModulatorsFromState } from "../helpers/modulators";
 
 export type SawtoothModulatorState = ModulatorState & {
   hz: number;
+  phase: number;
 };
 export type SawtoothModulatorSetting = {
-  field: ModulatorSetting["field"] | "hz";
-  type: ModulatorSetting["type"] | "bigfloat";
+  field: ModulatorSetting["field"] | "hz" | "phase";
+  type: ModulatorSetting["type"] | "bigfloat" | "float";
   onchange: (value: string) => void;
 };
 
@@ -20,6 +21,13 @@ export class SawtoothModulator extends Modulator {
       type: "bigfloat",
       onchange: (value) => {
         this.state.hz = parseFloat(value);
+      },
+    },
+    {
+      field: "phase",
+      type: "float",
+      onchange: (value) => {
+        this.state.phase = parseFloat(value);
       },
     },
 
@@ -36,6 +44,7 @@ export class SawtoothModulator extends Modulator {
       this.state = {
         ...this.state,
         hz: state.hz,
+        phase: state.phase,
       };
       if (includeModulators) {
         registerModulatorsFromState(this, state.modulators);
@@ -47,11 +56,16 @@ export class SawtoothModulator extends Modulator {
     return {
       ...super.defaultState(),
       hz: 1,
+      phase: 0,
     };
   }
 
   computeValue(elapsedTime: number): number {
-    return (elapsedTime % (1000 / this.state.hz)) / (1000 / this.state.hz);
+    return (
+      ((elapsedTime % (1000 / this.state.hz)) / (1000 / this.state.hz) +
+        this.state.phase) %
+      1
+    );
   }
 
   modulatorName(): string {
