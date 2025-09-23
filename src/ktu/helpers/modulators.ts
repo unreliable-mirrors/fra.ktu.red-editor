@@ -34,6 +34,10 @@ import {
   FourBarModulator,
   FourBarModulatorState,
 } from "../modulators/four_bar_modulator";
+import {
+  TriangleModulator,
+  TriangleModulatorState,
+} from "../modulators/triangle_modulator";
 
 export type ModulatorClass = {
   MODULATOR_NAME: string;
@@ -42,11 +46,12 @@ export const AVAILABLE_MODULATORS: ModulatorClass[] = [
   SineModulator,
   SquareModulator,
   SawtoothModulator,
+  TriangleModulator,
+  RandomModulator,
+  FourBarModulator,
   RingModulator,
   ZeroOneGateModulator,
-  RandomModulator,
   RescaleModulator,
-  FourBarModulator,
 ];
 
 export const AVAILABLE_MODULATORS_MAP: Record<string, ModulatorClass> =
@@ -95,6 +100,11 @@ export const getModulatorByName = (
   } else if (modulatorName === FourBarModulator.MODULATOR_NAME) {
     return new FourBarModulator(
       state as FourBarModulatorState,
+      includeModulators
+    );
+  } else if (modulatorName === TriangleModulator.MODULATOR_NAME) {
+    return new TriangleModulator(
+      state as TriangleModulatorState,
       includeModulators
     );
   }
