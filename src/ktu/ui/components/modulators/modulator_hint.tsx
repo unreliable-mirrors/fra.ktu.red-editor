@@ -1,8 +1,6 @@
 import jsx from "texsaur";
 import { KTUComponent } from "../../core/ktu_component";
-import { Modulator } from "../../../modulators/modulator";
 import EventDispatcher from "../../core/event_dispatcher";
-import DataStore from "../../core/data_store";
 import { getModulatorById } from "../../../helpers/modulators";
 
 export class ModulatorHint extends KTUComponent {
