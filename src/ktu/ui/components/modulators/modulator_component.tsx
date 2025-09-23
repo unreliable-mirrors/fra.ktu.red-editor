@@ -182,6 +182,30 @@ export class ModulatorComponent extends KTUComponent {
               ></input>
             </div>
           );
+        } else if (setting.type === "options") {
+          settings.push(
+            <div>
+              {setting.values ? (
+                setting.values.map((e) => (
+                  <button
+                    onclick={() => setting.onchange(e)}
+                    className={
+                      e ==
+                      (this.modulator.state as { [key: string]: any })[
+                        setting.field
+                      ].toString()
+                        ? "selected"
+                        : ""
+                    }
+                  >
+                    {e}
+                  </button>
+                ))
+              ) : (
+                <></>
+              )}
+            </div>
+          );
         }
       }
     }
@@ -209,7 +233,10 @@ export class ModulatorComponent extends KTUComponent {
           </div>
         </div>
         {this.valueRenderer}
-        <div id={`chart_${this.modulator.state.modulatorId}`}></div>
+        <div
+          className="chartContainer"
+          id={`chart_${this.modulator.state.modulatorId}`}
+        ></div>
         {settings}
       </div>
     );

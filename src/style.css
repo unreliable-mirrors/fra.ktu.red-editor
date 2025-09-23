@@ -305,3 +305,13 @@ button {
   stroke: #66ff66;
   fill: none;
 }
+.selected {
+  color: red;
+}
+.modulatorsList {
+  max-height: 50vh;
+  overflow: auto;
+}
+.chartContainer {
+  min-height: 154px;
+}
