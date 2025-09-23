@@ -233,10 +233,14 @@ export class ModulatorComponent extends KTUComponent {
           </div>
         </div>
         {this.valueRenderer}
-        <div
-          className="chartContainer"
-          id={`chart_${this.modulator.state.modulatorId}`}
-        ></div>
+        {this.modulator.active ? (
+          <div
+            className="chartContainer"
+            id={`chart_${this.modulator.state.modulatorId}`}
+          ></div>
+        ) : (
+          <></>
+        )}
         {settings}
       </div>
     );

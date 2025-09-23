@@ -306,7 +306,7 @@ button {
   fill: none;
 }
 .selected {
-  color: red;
+  color: #ff66ff;
 }
 .modulatorsList {
   max-height: 50vh;
