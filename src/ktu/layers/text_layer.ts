@@ -17,11 +17,21 @@ export type TextLayerState = ContainerLayerState & {
   color: string;
   panX: number;
   panY: number;
+  vFlip: boolean;
+  hFlip: boolean;
 };
 
 export type TextLayerSetting = {
-  field: "font" | "text" | "fontSize" | "color" | "panX" | "panY";
-  type: "text" | "integer" | "color" | "float" | "options";
+  field:
+    | "font"
+    | "text"
+    | "fontSize"
+    | "color"
+    | "panX"
+    | "panY"
+    | "vFlip"
+    | "hFlip";
+  type: "text" | "integer" | "color" | "float" | "options" | "boolean";
   values?: string[];
   onchange: (value: string) => void;
 };
@@ -95,6 +105,22 @@ export class TextLayer extends ContainerLayer {
         this.repaint();
       },
     },
+    {
+      field: "vFlip",
+      type: "boolean",
+      onchange: (value) => {
+        this.state.vFlip = "true" === value || parseFloat(value) >= 1;
+        this.repaint();
+      },
+    },
+    {
+      field: "hFlip",
+      type: "boolean",
+      onchange: (value) => {
+        this.state.hFlip = "true" === value || parseFloat(value) >= 1;
+        this.repaint();
+      },
+    },
   ];
 
   constructor(state?: TextLayerState, includeModulators: boolean = false) {
@@ -134,6 +160,8 @@ export class TextLayer extends ContainerLayer {
       color: "#FFFFFF",
       panX: Math.floor((Math.random() * 0.8 + 0.1) * window.innerWidth),
       panY: Math.floor((Math.random() * 0.8 + 0.1) * window.innerHeight),
+      hFlip: false,
+      vFlip: false,
     };
   }
 
@@ -184,6 +212,12 @@ export class TextLayer extends ContainerLayer {
     this.text.x = this.state.panX;
     this.text.y = this.state.panY;
     this.text.anchor.set(0.5, 0.5);
+    this.text.scale.y = this.state.vFlip
+      ? -this.text.scale.y
+      : this.text.scale.y;
+    this.text.scale.x = this.state.hFlip
+      ? -this.text.scale.x
+      : this.text.scale.x;
     this.container.addChild(this.text);
   }
 

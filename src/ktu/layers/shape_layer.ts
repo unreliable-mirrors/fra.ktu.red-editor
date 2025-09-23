@@ -36,6 +36,7 @@ export class ShapeLayer extends ContainerLayer {
       onchange: (value) => {
         this.state.shape = value;
         this.repaint();
+        DataStore.getInstance().touch("layers");
       },
     },
     {
