@@ -7,7 +7,9 @@ import {
   IconClose,
   IconDown,
   IconDuplicate,
+  IconHidden,
   IconUp,
+  IconVisible,
 } from "../../../helpers/icons";
 import { ContainerLayer } from "../../../layers/container_layer";
 import DataStore from "../../core/data_store";
@@ -197,6 +199,9 @@ export class ShaderComponent extends KTUComponent {
                 <></>
               )}
             </span>
+            <span onclick={() => this.handleVisibleClick()}>
+              {this.shader.visible ? IconVisible() : IconHidden()}
+            </span>
             <span onclick={() => this.handleDuplicateClick()}>
               {IconDuplicate()}
             </span>
@@ -246,6 +251,10 @@ export class ShaderComponent extends KTUComponent {
         this.shader
       );
     }
+  }
+  handleVisibleClick() {
+    this.shader.visible = !this.shader.visible;
+    DataStore.getInstance().touch("layers");
   }
   handleDuplicateClick() {
     EventDispatcher.getInstance().dispatchEvent(

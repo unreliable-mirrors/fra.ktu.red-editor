@@ -69,7 +69,9 @@ export abstract class ShaderLayer implements IEditorLayer {
         type: "float",
         onchange: (value) => {
           this.state.dryWet = parseFloat(value);
-          this.uniforms.uniforms.uDryWet = this.state.dryWet;
+          this.uniforms.uniforms.uDryWet = this.state.visible
+            ? this.state.dryWet
+            : 0;
         },
       },
     ];
@@ -101,8 +103,9 @@ export abstract class ShaderLayer implements IEditorLayer {
   //@ts-ignore
   set visible(value: boolean) {
     this.state.visible = value;
-    this.shader.enabled = this.state.visible;
-    console.log("ENABLED", this.shader.enabled);
+    //this.shader.enabled = this.state.visible;
+    //console.log("ENABLED", this.shader.enabled);
+    this.uniforms.uniforms.uDryWet = this.state.visible ? this.state.dryWet : 0;
   }
   get visible(): boolean {
     return this.state.visible;
