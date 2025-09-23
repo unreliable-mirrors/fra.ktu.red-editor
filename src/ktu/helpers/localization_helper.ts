@@ -33,6 +33,7 @@ const texts: Record<string, string> = {
   add_random_modulator_button: "Random",
   add_rescale_modulator_button: "Rescale",
   add_four_bar_modulator_button: "4Bar",
+  add_triangle_modulator_button: "Triangle",
 
   export_state: "Save File",
   import_state: "Import File",
