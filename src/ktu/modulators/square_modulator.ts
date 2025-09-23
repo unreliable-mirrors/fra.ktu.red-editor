@@ -4,10 +4,11 @@ import { registerModulatorsFromState } from "../helpers/modulators";
 
 export type SquareModulatorState = ModulatorState & {
   hz: number;
+  phase: number;
 };
 export type SquareModulatorSetting = {
-  field: ModulatorSetting["field"] | "hz";
-  type: ModulatorSetting["type"] | "bigfloat";
+  field: ModulatorSetting["field"] | "hz" | "phase";
+  type: ModulatorSetting["type"] | "bigfloat" | "float";
   onchange: (value: string) => void;
 };
 
@@ -20,6 +21,13 @@ export class SquareModulator extends Modulator {
       type: "bigfloat",
       onchange: (value) => {
         this.state.hz = parseFloat(value);
+      },
+    },
+    {
+      field: "phase",
+      type: "float",
+      onchange: (value) => {
+        this.state.phase = parseFloat(value);
       },
     },
 
@@ -36,6 +44,7 @@ export class SquareModulator extends Modulator {
       this.state = {
         ...this.state,
         hz: state.hz,
+        phase: state.phase,
       };
       if (includeModulators) {
         registerModulatorsFromState(this, state.modulators);
@@ -47,12 +56,20 @@ export class SquareModulator extends Modulator {
     return {
       ...super.defaultState(),
       hz: 1,
+      phase: 0,
     };
   }
 
   computeValue(elapsedTime: number): number {
     return Math.round(
-      Math.sin((elapsedTime / 1000) * Math.PI * 2 * this.state.hz) / 2 + 0.5
+      Math.sin(
+        ((elapsedTime % (1000 / this.state.hz)) / (1000 / this.state.hz) +
+          this.state.phase) *
+          Math.PI *
+          2
+      ) /
+        2 +
+        0.5
     );
   }
 

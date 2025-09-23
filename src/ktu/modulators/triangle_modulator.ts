@@ -4,10 +4,11 @@ import { registerModulatorsFromState } from "../helpers/modulators";
 
 export type TriangleModulatorState = ModulatorState & {
   hz: number;
+  phase: number;
 };
 export type TriangleModulatorSetting = {
-  field: ModulatorSetting["field"] | "hz";
-  type: ModulatorSetting["type"] | "bigfloat";
+  field: ModulatorSetting["field"] | "hz" | "phase";
+  type: ModulatorSetting["type"] | "bigfloat" | "float";
   onchange: (value: string) => void;
 };
 
@@ -20,6 +21,13 @@ export class TriangleModulator extends Modulator {
       type: "bigfloat",
       onchange: (value) => {
         this.state.hz = parseFloat(value);
+      },
+    },
+    {
+      field: "phase",
+      type: "float",
+      onchange: (value) => {
+        this.state.phase = parseFloat(value);
       },
     },
 
@@ -36,6 +44,7 @@ export class TriangleModulator extends Modulator {
       this.state = {
         ...this.state,
         hz: state.hz,
+        phase: state.phase,
       };
       if (includeModulators) {
         registerModulatorsFromState(this, state.modulators);
@@ -47,12 +56,14 @@ export class TriangleModulator extends Modulator {
     return {
       ...super.defaultState(),
       hz: 1,
+      phase: 0,
     };
   }
 
   computeValue(elapsedTime: number): number {
     const beatDuration = 1000 / this.state.hz;
-    const position = (elapsedTime % beatDuration) / beatDuration;
+    const position =
+      ((elapsedTime % beatDuration) / beatDuration + this.state.phase) % 1;
     if (position < 0.5) {
       return position * 2;
     } else {
