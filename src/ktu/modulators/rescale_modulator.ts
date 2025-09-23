@@ -1,7 +1,10 @@
 import { Modulator, ModulatorSetting } from "./modulator";
 import { ModulatorState } from "../../engine/imodulator";
 import DataStore from "../ui/core/data_store";
-import { registerModulatorsFromState } from "../helpers/modulators";
+import {
+  getModulatorById,
+  registerModulatorsFromState,
+} from "../helpers/modulators";
 
 export type RescaleModulatorState = ModulatorState & {
   modulator: number;
@@ -24,9 +27,7 @@ export class RescaleModulator extends Modulator {
       type: "modulator",
       onchange: (value) => {
         this.state.modulator = parseInt(value);
-        this.modulator = DataStore.getInstance()
-          .getStore("modulators")
-          .find((m: Modulator) => m.getUniqueId() === this.state.modulator);
+        this.modulator = getModulatorById(this.state.modulator)!;
       },
     },
     {

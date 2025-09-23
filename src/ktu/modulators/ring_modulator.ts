@@ -1,7 +1,10 @@
 import { Modulator, ModulatorSetting } from "./modulator";
 import { ModulatorState } from "../../engine/imodulator";
 import DataStore from "../ui/core/data_store";
-import { registerModulatorsFromState } from "../helpers/modulators";
+import {
+  getModulatorById,
+  registerModulatorsFromState,
+} from "../helpers/modulators";
 
 export type RingModulatorState = ModulatorState & {
   modulatorAId: number;
@@ -25,9 +28,7 @@ export class RingModulator extends Modulator {
       type: "modulator",
       onchange: (value) => {
         this.state.modulatorAId = parseInt(value);
-        this.modulatorA = DataStore.getInstance()
-          .getStore("modulators")
-          .find((m: Modulator) => m.getUniqueId() === this.state.modulatorAId);
+        this.modulatorA = getModulatorById(this.state.modulatorAId)!;
       },
     },
     {
@@ -35,9 +36,7 @@ export class RingModulator extends Modulator {
       type: "modulator",
       onchange: (value) => {
         this.state.modulatorBId = parseInt(value);
-        this.modulatorB = DataStore.getInstance()
-          .getStore("modulators")
-          .find((m: Modulator) => m.getUniqueId() === this.state.modulatorBId);
+        this.modulatorB = getModulatorById(this.state.modulatorBId)!;
       },
     },
 
