@@ -68,6 +68,10 @@ import {
   HuePosterizeShader,
   HuePosterizeShaderState,
 } from "../shaders/hue_posterize/hue_posterize_shader";
+import {
+  PaletteRecolourShader,
+  PaletteRecolourShaderState,
+} from "../shaders/palette_recolour/palette_recolour_shader";
 
 export type ShaderClass = {
   SHADER_NAME: string;
@@ -94,6 +98,7 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   HsbBlurShader,
   HueOffsetShader,
   HuePosterizeShader,
+  PaletteRecolourShader,
 ];
 
 export const AVAILABLE_SHADERS_MAP: Record<string, ShaderClass> =
@@ -171,6 +176,11 @@ export const getShaderByName = (
   } else if (shaderName === HuePosterizeShader.SHADER_NAME) {
     return new HuePosterizeShader(
       state as HuePosterizeShaderState,
+      includeModulators
+    );
+  } else if (shaderName === PaletteRecolourShader.SHADER_NAME) {
+    return new PaletteRecolourShader(
+      state as PaletteRecolourShaderState,
       includeModulators
     );
   }

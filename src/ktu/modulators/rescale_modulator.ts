@@ -1,6 +1,5 @@
 import { Modulator, ModulatorSetting } from "./modulator";
 import { ModulatorState } from "../../engine/imodulator";
-import DataStore from "../ui/core/data_store";
 import {
   getModulatorById,
   registerModulatorsFromState,

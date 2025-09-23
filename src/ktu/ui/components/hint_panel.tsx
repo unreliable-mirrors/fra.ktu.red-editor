@@ -45,6 +45,7 @@ import { BlurShader } from "../../shaders/blur/blur_shader";
 import { HsbBlurShader } from "../../shaders/hsb_blur/hsb_blur_shader";
 import { HueOffsetShader } from "../../shaders/hue_offset/hue_offset_shader";
 import { HuePosterizeShader } from "../../shaders/hue_posterize/hue_posterize_shader";
+import { PaletteRecolourShader } from "../../shaders/palette_recolour/palette_recolour_shader";
 
 export class HintPanel extends KTUComponent {
   render(): Element {
@@ -929,10 +930,61 @@ export class HintPanel extends KTUComponent {
 
             <div className="tip">
               <div>
-                <strong>Levels</strong>: Posterization levels for the hue
-                channel.
-                <strong>Offset</strong>: 0-1 range of displacement towards the
-                next breakpoint.
+                <div>
+                  <strong>Levels</strong>: Posterization levels for the hue
+                  channel.
+                </div>
+                <div>
+                  <strong>Offset</strong>: 0-1 range of displacement towards the
+                  next breakpoint.
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    } else if (
+      this.bindingData["activeLayer"] instanceof ShaderLayer &&
+      this.bindingData["activeLayer"].shaderName() ==
+        PaletteRecolourShader.SHADER_NAME
+    ) {
+      extraContent = (
+        <>
+          <div className="block">
+            <h3>Palette Recolour Shader</h3>
+            <div className="tip">
+              Recolour towards the nearest neighbour from a palette
+            </div>
+          </div>
+          <div className="block ">
+            <h3>Attributes</h3>
+
+            <div className="tip">
+              <div>
+                <div>
+                  <strong>Colours</strong>: The colours to recolour towards.
+                  Black is ignored.
+                </div>
+                <div>
+                  <strong>onlyHue</strong>: Tint images respecting original
+                  saturation and light.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="block extraLast">
+            <h3></h3>
+
+            <div className="tip">
+              <div>
+                <div>
+                  <strong>onlySaturation</strong>: Resaturate images respecting
+                  original hue and light.
+                </div>
+                <div>
+                  <strong>onlyLightness</strong>: Relighten images respecting
+                  original hue and saturation.
+                </div>
               </div>
             </div>
           </div>
