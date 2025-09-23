@@ -149,6 +149,29 @@ export class LayerComponent extends KTUComponent {
               )}
             </>
           );
+        } else if (setting.type === "boolean") {
+          input = (
+            <>
+              {" "}
+              {setting.modulator_id === undefined ? (
+                <input
+                  type="checkbox"
+                  value="true"
+                  defaultChecked={
+                    (this.layer.state as { [key: string]: any })[setting.field]
+                  }
+                  oninput={(e) => {
+                    setting.onchange(
+                      (e.target as HTMLInputElement).checked ? "true" : "false"
+                    );
+                  }}
+                ></input>
+              ) : (
+                new ModulatorHint(setting.modulator_id, setting.modulator_name!)
+              )}
+              {new BindModulatorButton(this.layer, setting)}
+            </>
+          );
         }
         settings.push(
           <div>

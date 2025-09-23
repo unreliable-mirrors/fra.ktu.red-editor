@@ -17,12 +17,14 @@ export type ImageLayerState = ContainerLayerState & {
   panX: number;
   panY: number;
   scale: number;
+  vFlip: boolean;
+  hFlip: boolean;
   imageHash: string;
 };
 
 export type ImageLayerSetting = {
-  field: "imageSource" | "panX" | "panY" | "scale";
-  type: "file" | "float" | "integer";
+  field: "imageSource" | "panX" | "panY" | "scale" | "vFlip" | "hFlip";
+  type: "file" | "float" | "integer" | "boolean";
   onchange: (value: string) => void;
 };
 
@@ -66,6 +68,22 @@ export class ImageLayer extends ContainerLayer {
         this.reposition();
       },
     },
+    {
+      field: "vFlip",
+      type: "boolean",
+      onchange: (value) => {
+        this.state.vFlip = "true" === value || parseFloat(value) >= 1;
+        this.reposition();
+      },
+    },
+    {
+      field: "hFlip",
+      type: "boolean",
+      onchange: (value) => {
+        this.state.hFlip = "true" === value || parseFloat(value) >= 1;
+        this.reposition();
+      },
+    },
   ];
 
   constructor(state?: ImageLayerState, includeModulators: boolean = false) {
@@ -81,6 +99,8 @@ export class ImageLayer extends ContainerLayer {
         panY: state.panY,
         scale: state.scale,
         imageHash: state.imageHash,
+        vFlip: state.vFlip,
+        hFlip: state.hFlip,
       };
       for (var shader of state.shaders) {
         this.addShaderFromState(shader.name, shader, includeModulators);
@@ -113,6 +133,8 @@ export class ImageLayer extends ContainerLayer {
       panY: 0,
       scale: 100,
       imageHash: "",
+      vFlip: false,
+      hFlip: false,
     };
   };
 
@@ -218,8 +240,15 @@ export class ImageLayer extends ContainerLayer {
 
   reposition() {
     this.sprite.scale = this.state.scale / 100;
-    this.sprite.x = this.state.panX;
-    this.sprite.y = this.state.panY;
+    this.sprite.anchor.set(0.5, 0.5);
+    this.sprite.x = this.state.panX + this.sprite.width / 2;
+    this.sprite.y = this.state.panY + this.sprite.height / 2;
+    this.sprite.scale.y = this.state.vFlip
+      ? -this.sprite.scale.y
+      : this.sprite.scale.y;
+    this.sprite.scale.x = this.state.hFlip
+      ? -this.sprite.scale.x
+      : this.sprite.scale.x;
   }
 
   loadImage(value: string) {

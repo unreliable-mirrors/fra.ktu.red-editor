@@ -13,6 +13,7 @@ import { getSecureIndex } from "../../engine/helpers/secure_index_helper";
 import DataStore from "../ui/core/data_store";
 import { getShaderByName } from "../helpers/shaders";
 import { LayerSetting } from "../../engine/ilayer";
+import { getModulatorById } from "../helpers/modulators";
 
 export type ContainerLayerState = EditorLayerState & {
   shaders: ShaderState[];
@@ -304,6 +305,12 @@ export abstract class ContainerLayer implements IEditorLayer {
     this.container.removeChildren();
     this.container.filters = [];
     this.container.destroy();
+    for (const modulator of this.state.modulators) {
+      getModulatorById(modulator.modulatorId)?.unbind(
+        this,
+        this.settings.find((s) => s.field === modulator.field)!
+      );
+    }
   }
 
   //@ts-ignore
