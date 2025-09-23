@@ -3,6 +3,7 @@ import { KTUComponent } from "../../core/ktu_component";
 import { Modulator } from "../../../modulators/modulator";
 import EventDispatcher from "../../core/event_dispatcher";
 import DataStore from "../../core/data_store";
+import { getModulatorById } from "../../../helpers/modulators";
 
 export class ModulatorHint extends KTUComponent {
   modulatorId: number;
@@ -27,12 +28,7 @@ export class ModulatorHint extends KTUComponent {
   }
 
   handleClick() {
-    const modulator = DataStore.getInstance()
-      .getStore("modulators")
-      .find(
-        (modulator: Modulator) =>
-          modulator.state.modulatorId === this.modulatorId
-      );
+    const modulator = getModulatorById(this.modulatorId)!;
     if (!modulator.active) {
       EventDispatcher.getInstance().dispatchEvent(
         "scene",

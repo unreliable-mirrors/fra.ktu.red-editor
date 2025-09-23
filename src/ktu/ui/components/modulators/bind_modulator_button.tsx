@@ -4,6 +4,7 @@ import DataStore from "../../core/data_store";
 import { Modulator } from "../../../modulators/modulator";
 import { IModulable } from "../../../../engine/imodulable";
 import { LayerSetting } from "../../../../engine/ilayer";
+import { getModulatorById } from "../../../helpers/modulators";
 
 export class BindModulatorButton extends KTUComponent {
   setting: LayerSetting;
@@ -50,9 +51,7 @@ export class BindModulatorButton extends KTUComponent {
     console.log(id);
     if (id !== "") {
       this.unbindSetting();
-      const modulator: Modulator = (
-        DataStore.getInstance().getStore("modulators") as Modulator[]
-      ).find((modulator) => modulator.state.modulatorId === parseInt(id))!;
+      const modulator: Modulator = getModulatorById(parseInt(id))!;
       modulator.bind(this.modulable, this.setting);
     } else {
       this.unbindSetting();
@@ -62,11 +61,7 @@ export class BindModulatorButton extends KTUComponent {
 
   unbindSetting() {
     if (this.setting.modulator_id) {
-      const modulator: Modulator = (
-        DataStore.getInstance().getStore("modulators") as Modulator[]
-      ).find(
-        (modulator) => modulator.state.modulatorId === this.setting.modulator_id
-      )!;
+      const modulator: Modulator = getModulatorById(this.setting.modulator_id)!;
       modulator.unbind(this.modulable, this.setting);
     }
   }
