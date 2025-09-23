@@ -60,6 +60,7 @@ export class TextLayer extends ContainerLayer {
       onchange: (value) => {
         this.state.font = value;
         this.repaint();
+        DataStore.getInstance().touch("layers");
       },
     },
     {

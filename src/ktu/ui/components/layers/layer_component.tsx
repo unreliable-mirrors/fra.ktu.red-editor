@@ -130,7 +130,19 @@ export class LayerComponent extends KTUComponent {
             <>
               {setting.values ? (
                 setting.values.map((e) => (
-                  <button onclick={() => setting.onchange(e)}>{e}</button>
+                  <button
+                    onclick={() => setting.onchange(e)}
+                    className={
+                      e ===
+                      (this.layer.state as { [key: string]: any })[
+                        setting.field
+                      ].toString()
+                        ? "selected"
+                        : ""
+                    }
+                  >
+                    {e}
+                  </button>
                 ))
               ) : (
                 <></>

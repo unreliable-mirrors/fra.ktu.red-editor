@@ -31,6 +31,7 @@ const texts: Record<string, string> = {
   add_zero_one_gate_modulator_button: "01Gate",
   add_random_modulator_button: "Random",
   add_rescale_modulator_button: "Rescale",
+  add_four_bar_modulator_button: "4Bar",
 
   export_state: "Save File",
   import_state: "Import File",

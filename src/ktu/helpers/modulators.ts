@@ -30,6 +30,10 @@ import {
 } from "../modulators/rescale_modulator";
 import DataStore from "../ui/core/data_store";
 import { IModulable, ModulableState } from "../../engine/imodulable";
+import {
+  FourBarModulator,
+  FourBarModulatorState,
+} from "../modulators/four_bar_modulator";
 
 export type ModulatorClass = {
   MODULATOR_NAME: string;
@@ -42,6 +46,7 @@ export const AVAILABLE_MODULATORS: ModulatorClass[] = [
   ZeroOneGateModulator,
   RandomModulator,
   RescaleModulator,
+  FourBarModulator,
 ];
 
 export const AVAILABLE_MODULATORS_MAP: Record<string, ModulatorClass> =
@@ -85,6 +90,11 @@ export const getModulatorByName = (
   } else if (modulatorName === RescaleModulator.MODULATOR_NAME) {
     return new RescaleModulator(
       state as RescaleModulatorState,
+      includeModulators
+    );
+  } else if (modulatorName === FourBarModulator.MODULATOR_NAME) {
+    return new FourBarModulator(
+      state as FourBarModulatorState,
       includeModulators
     );
   }
