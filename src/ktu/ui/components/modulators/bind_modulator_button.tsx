@@ -26,6 +26,9 @@ export class BindModulatorButton extends KTUComponent {
         <option value="">No Modulator</option>
         {(DataStore.getInstance().getStore("modulators") as Modulator[])?.map(
           (modulator: Modulator) => {
+            if (modulator.getUniqueId() === this.modulable.getUniqueId()) {
+              return null;
+            }
             return (
               <option
                 value={modulator.state.modulatorId}
