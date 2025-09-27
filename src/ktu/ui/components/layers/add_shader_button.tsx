@@ -29,7 +29,7 @@ export class AddShaderButtonComponent extends KTUComponent {
     } else {
       EventDispatcher.getInstance().dispatchEvent(
         "scene",
-        `add_shader`,
+        "add_shader",
         this.shaderName
       );
     }

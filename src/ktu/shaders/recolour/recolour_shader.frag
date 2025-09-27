@@ -1,7 +1,6 @@
 in vec2 vTextureCoord;
 
 uniform sampler2D uTexture;
-uniform vec2 uSize;
 uniform float uFromR;
 uniform float uFromG;
 uniform float uFromB;

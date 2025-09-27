@@ -24,6 +24,7 @@ const texts: Record<string, string> = {
   add_hue_offset_shader_button: "Hue Offset",
   add_hue_posterize_shader_button: "Hue Posterize",
   add_palette_recolour_shader_button: "Palette Recolour",
+  add_time_fade_sample_shader_button: "Time Fade",
 
   add_sine_modulator_button: "Sine",
   add_square_modulator_button: "Square",

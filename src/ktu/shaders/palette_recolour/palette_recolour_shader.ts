@@ -1,4 +1,4 @@
-import { Color, Container, UniformData } from "pixi.js";
+import { Color, UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./palette_recolour_shader.frag?raw";
@@ -34,7 +34,6 @@ export class PaletteRecolourShader extends ShaderLayer {
   static SHADER_NAME: string = "palette_recolour_shader";
   declare state: PaletteRecolourShaderState;
   fragment: string = fragment;
-  container!: Container;
   settings: PaletteRecolourShaderSetting[] = [
     {
       field: "color1",
