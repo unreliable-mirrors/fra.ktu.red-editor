@@ -15,6 +15,8 @@ import { LayersPanel } from "./ktu/ui/components/layers_panel";
 import { LeftPanel } from "./ktu/ui/components/left_panel";
 import { ExportViewportButtonComponent } from "./ktu/ui/components/file/export_viewport";
 import { ModulatorsList } from "./ktu/ui/components/modulators/modulators_list";
+import { PlaybackControlsComponent } from "./ktu/ui/components/file/playback_controls";
+import { TimeRendererComponent } from "./ktu/ui/components/file/time_renderer";
 
 declare global {
   interface Window {
@@ -61,4 +63,6 @@ export default {
   LayersPanel,
   LeftPanel,
   ExportViewportButtonComponent,
+  PlaybackControlsComponent,
+  TimeRendererComponent,
 };

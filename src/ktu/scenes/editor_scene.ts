@@ -27,7 +27,11 @@ export type EditorSceneState = {
   assets: Record<string, string>;
 };
 
-export type EditorSceneMetadata = { name: string; timestamp: number };
+export type EditorSceneMetadata = {
+  name: string;
+  timestamp: number;
+  length: number;
+};
 export type EditorSceneHistoryEntry = {
   timestamp: number;
   raw: string;
@@ -46,7 +50,6 @@ export class EditorScene extends BaseScene {
   graphics: Graphics;
   camera: Camera;
   frameSize: Point;
-  frameOverride: boolean = false;
   elapsedTime: number;
 
   public constructor() {
@@ -59,6 +62,8 @@ export class EditorScene extends BaseScene {
     this.container.addChild(this.graphics);
     this.camera = new Camera(this.container);
     this.elapsedTime = 0;
+    DataStore.getInstance().setStore("playing", true);
+    DataStore.getInstance().setStore("elapsedTime", this.elapsedTime);
 
     this.frameSize = new Point(window.innerWidth, window.innerHeight);
 
@@ -66,7 +71,11 @@ export class EditorScene extends BaseScene {
 
     KeyboardManager.listenKeyboardEvents();
 
-    this.metadata = { name: getStartingName(), timestamp: Date.now() };
+    this.metadata = {
+      name: getStartingName(),
+      timestamp: Date.now(),
+      length: -1,
+    };
     DataStore.getInstance().setStore("metadata", this.metadata);
 
     this.history = [];
@@ -115,25 +124,41 @@ export class EditorScene extends BaseScene {
     }, 60000);
 
     Ticker.shared.add((time) => {
-      this.elapsedTime += time.elapsedMS;
-      if (
-        this.lastSize.x != window.innerWidth ||
-        this.lastSize.y != window.innerHeight
-      ) {
-        this.lastSize = new Point(window.innerWidth, window.innerHeight);
-        this.setupContainer();
-      }
-      for (const layer of this.layers) {
-        layer.tick(time);
-      }
-      for (const shader of this.shaders) {
-        shader.tick(time);
-      }
-      for (const modulator of this.modulators) {
-        modulator.tick(this.elapsedTime);
+      if (DataStore.getInstance().getStore("playing")) {
+        this.elapsedTime += time.elapsedMS;
+        if (this.metadata.length > 0) {
+          this.elapsedTime = this.elapsedTime % (this.metadata.length * 1000);
+        }
+        if (
+          this.lastSize.x != window.innerWidth ||
+          this.lastSize.y != window.innerHeight
+        ) {
+          this.lastSize = new Point(window.innerWidth, window.innerHeight);
+          this.setupContainer();
+        }
+        for (const layer of this.layers) {
+          layer.tick(time);
+        }
+        for (const shader of this.shaders) {
+          shader.tick(time);
+        }
+        for (const modulator of this.modulators) {
+          modulator.tick(this.elapsedTime);
+        }
+        DataStore.getInstance().setStore("elapsedTime", this.elapsedTime);
       }
     });
 
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "togglePlayback",
+      () => {
+        DataStore.getInstance().setStore(
+          "playing",
+          !DataStore.getInstance().getStore("playing")
+        );
+      }
+    );
     EventDispatcher.getInstance().addEventListener(
       "scene",
       "toggleHints",
@@ -457,6 +482,13 @@ export class EditorScene extends BaseScene {
         this.metadata.name = name;
       }
     );
+    EventDispatcher.getInstance().addEventListener(
+      "scene",
+      "setLength",
+      (length: number) => {
+        this.metadata.length = length;
+      }
+    );
     EventDispatcher.getInstance().addEventListener("scene", "resetZoom", () => {
       this.camera.reset();
     });
@@ -531,7 +563,11 @@ export class EditorScene extends BaseScene {
     if (!timestamp) {
       timestamp = Date.now();
     }
-    this.metadata = { name: getStartingName(), timestamp: timestamp };
+    this.metadata = {
+      name: getStartingName(),
+      timestamp: timestamp,
+      length: -1,
+    };
     DataStore.getInstance().setStore("metadata", this.metadata);
 
     this.activeLayer = undefined;
