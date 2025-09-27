@@ -50,7 +50,6 @@ import {
   LightSplitShader,
   LightSplitShaderState,
 } from "../shaders/light_split/light_split_shader";
-import { AlphaShader, AlphaShaderState } from "../shaders/alpha/alpha_shader";
 import {
   MultiPosterizeShader,
   MultiPosterizeShaderState,
@@ -76,6 +75,10 @@ import {
   TimeFadeSampleShader,
   TimeFadeSampleShaderState,
 } from "../shaders/time_fade/time_fade_shader";
+import {
+  AdjustmentShader,
+  AdjustmentShaderState,
+} from "../shaders/adjustment/adjustment_shader";
 
 export type ShaderClass = {
   SHADER_NAME: string;
@@ -96,7 +99,6 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   RecolourShader,
   HNoiseLinesShader,
   LightSplitShader,
-  AlphaShader,
   MultiPosterizeShader,
   BlurShader,
   HsbBlurShader,
@@ -104,6 +106,7 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   HuePosterizeShader,
   PaletteRecolourShader,
   TimeFadeSampleShader,
+  AdjustmentShader,
 ];
 
 export const AVAILABLE_SHADERS_MAP: Record<string, ShaderClass> =
@@ -162,8 +165,6 @@ export const getShaderByName = (
       state as LightSplitShaderState,
       includeModulators
     );
-  } else if (shaderName === AlphaShader.SHADER_NAME) {
-    return new AlphaShader(state as AlphaShaderState, includeModulators);
   } else if (shaderName === MultiPosterizeShader.SHADER_NAME) {
     return new MultiPosterizeShader(
       state as MultiPosterizeShaderState,
@@ -191,6 +192,11 @@ export const getShaderByName = (
   } else if (shaderName === TimeFadeSampleShader.SHADER_NAME) {
     return new TimeFadeSampleShader(
       state as TimeFadeSampleShaderState,
+      includeModulators
+    );
+  } else if (shaderName === AdjustmentShader.SHADER_NAME) {
+    return new AdjustmentShader(
+      state as AdjustmentShaderState,
       includeModulators
     );
   }

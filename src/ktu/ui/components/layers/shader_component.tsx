@@ -98,6 +98,30 @@ export class ShaderComponent extends KTUComponent {
               {new BindModulatorButton(this.shader, setting)}
             </div>
           );
+        } else if (setting.type === "bigfloat") {
+          settings.push(
+            <div>
+              <span>{setting.field}: </span>
+              {setting.modulator_id === undefined ? (
+                <input
+                  type="number"
+                  spellcheck="false"
+                  autocomplete="off"
+                  aria-autocomplete="none"
+                  value={
+                    (this.shader.state as { [key: string]: any })[setting.field]
+                  }
+                  step="0.01"
+                  oninput={(e) => {
+                    setting.onchange((e.target as HTMLInputElement).value);
+                  }}
+                ></input>
+              ) : (
+                new ModulatorHint(setting.modulator_id, setting.modulator_name!)
+              )}
+              {new BindModulatorButton(this.shader, setting)}
+            </div>
+          );
         } else if (setting.type === "boolean") {
           settings.push(
             <div>
