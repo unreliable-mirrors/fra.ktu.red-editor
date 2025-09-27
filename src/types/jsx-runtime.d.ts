@@ -14,5 +14,7 @@ declare namespace JSX {
     ["layers-panel"]: any;
     ["left-panel"]: any;
     ["export-viewport-button"]: any;
+    ["playback-controls"]: any;
+    ["time-renderer"]: any;
   }
 }
