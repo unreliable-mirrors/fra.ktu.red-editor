@@ -1,4 +1,4 @@
-import { Container, UniformData } from "pixi.js";
+import { UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./scramble_shader.frag?raw";
@@ -18,7 +18,6 @@ export class ScrambleShader extends ShaderLayer {
   static SHADER_NAME: string = "scramble_shader";
   declare state: ScrambleShaderState;
   fragment: string = fragment;
-  container!: Container;
   settings: ScrambleShaderSetting[] = [
     {
       field: "range",

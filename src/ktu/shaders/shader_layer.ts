@@ -1,4 +1,11 @@
-import { Container, Filter, Ticker, UniformData, UniformGroup } from "pixi.js";
+import {
+  Container,
+  Filter,
+  TextureSource,
+  Ticker,
+  UniformData,
+  UniformGroup,
+} from "pixi.js";
 
 import { EditorLayerState, IEditorLayer } from "../layers/ieditor_layer";
 import { getSecureIndex } from "../../engine/helpers/secure_index_helper";
@@ -25,6 +32,7 @@ export abstract class ShaderLayer implements IEditorLayer {
   abstract fragment: string;
   uniforms!: UniformGroup;
   bindedLayer?: ILayer;
+  container?: Container;
   absorbingLayer: boolean = false;
 
   public constructor(state?: ShaderState) {
@@ -85,6 +93,16 @@ export abstract class ShaderLayer implements IEditorLayer {
     [key: string]: UniformData;
   };
 
+  getExtraTextures(): {
+    [key: string]: TextureSource;
+  } {
+    return {};
+  }
+
+  getVertex(): string {
+    return vertex;
+  }
+
   buildShader() {
     this.uniforms = new UniformGroup({
       ...this.defaultUniforms(),
@@ -93,28 +111,26 @@ export abstract class ShaderLayer implements IEditorLayer {
     const uniforms = this.uniforms;
     this.shader = Filter.from({
       gl: {
-        vertex: vertex,
+        vertex: this.getVertex(),
         fragment: this.fragment,
       },
-      resources: { uniforms },
+      resources: { uniforms, ...this.getExtraTextures() },
     });
   }
 
-  //@ts-ignore
   set visible(value: boolean) {
     this.state.visible = value;
-    //this.shader.enabled = this.state.visible;
-    //console.log("ENABLED", this.shader.enabled);
     this.uniforms.uniforms.uDryWet = this.state.visible ? this.state.dryWet : 0;
   }
+
   get visible(): boolean {
     return this.state.visible;
   }
 
-  //@ts-ignore
   bind(container: Container, layer?: ILayer): void {
-    this.buildShader();
     this.bindedLayer = layer;
+    this.container = container;
+    this.buildShader();
   }
 
   unbind(): void {

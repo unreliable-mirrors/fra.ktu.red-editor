@@ -1,4 +1,4 @@
-import { Color, Container, UniformData } from "pixi.js";
+import { Color, UniformData } from "pixi.js";
 import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./recolour_shader.frag?raw";
@@ -30,7 +30,6 @@ export class RecolourShader extends ShaderLayer {
   static SHADER_NAME: string = "recolour_shader";
   declare state: RecolourShaderState;
   fragment: string = fragment;
-  container!: Container;
   settings: RecolourShaderSetting[] = [
     {
       field: "fromColor",
