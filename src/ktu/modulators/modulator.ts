@@ -125,7 +125,9 @@ export abstract class Modulator implements IModulator, IModulable {
         this.computeValue(elapsedTime) * this.state.factor + this.state.offset;
       const changed: boolean = this.value !== value;
       this.value = value;
-
+      if (isNaN(this.value)) {
+        this.value = 0;
+      }
       this.valueLog.push(this.value);
       if (this.valueLog.length > 100) {
         this.valueLog.shift();
