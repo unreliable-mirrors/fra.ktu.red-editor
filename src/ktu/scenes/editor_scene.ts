@@ -124,28 +124,48 @@ export class EditorScene extends BaseScene {
     }, 60000);
 
     Ticker.shared.add((time) => {
+      if (
+        this.lastSize.x != window.innerWidth ||
+        this.lastSize.y != window.innerHeight
+      ) {
+        this.lastSize = new Point(window.innerWidth, window.innerHeight);
+        this.setupContainer();
+      }
       if (DataStore.getInstance().getStore("playing")) {
         this.elapsedTime += time.elapsedMS;
+        let loop = false;
         if (this.metadata.length > 0) {
-          this.elapsedTime = this.elapsedTime % (this.metadata.length * 1000);
+          const t = this.elapsedTime % (this.metadata.length * 1000);
+          if (t < this.elapsedTime) {
+            loop = true;
+          }
+          this.elapsedTime = t;
         }
         if (
-          this.lastSize.x != window.innerWidth ||
-          this.lastSize.y != window.innerHeight
+          Math.floor(this.elapsedTime / 100) !=
+          Math.floor(DataStore.getInstance().getStore("elapsedTime") / 100)
         ) {
-          this.lastSize = new Point(window.innerWidth, window.innerHeight);
-          this.setupContainer();
+          DataStore.getInstance().setStore(
+            "elapsedTime",
+            this.elapsedTime,
+            false
+          );
+        } else {
+          DataStore.getInstance().setStore(
+            "elapsedTime",
+            this.elapsedTime,
+            true
+          );
         }
         for (const layer of this.layers) {
-          layer.tick(time);
+          layer.tick(time, loop);
         }
         for (const shader of this.shaders) {
-          shader.tick(time);
+          shader.tick(time, loop);
         }
         for (const modulator of this.modulators) {
           modulator.tick(this.elapsedTime);
         }
-        DataStore.getInstance().setStore("elapsedTime", this.elapsedTime);
       }
     });
 
@@ -159,6 +179,7 @@ export class EditorScene extends BaseScene {
         );
       }
     );
+
     EventDispatcher.getInstance().addEventListener(
       "scene",
       "toggleHints",

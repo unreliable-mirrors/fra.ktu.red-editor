@@ -117,6 +117,7 @@ export abstract class ContainerLayer implements IEditorLayer {
     state?: ShaderState,
     includeModulators: boolean = false
   ): void {
+    console.log("SHADERNAME", shaderName);
     const layer = getShaderByName(shaderName, state, includeModulators);
     this.addShader(layer!);
   }
@@ -313,8 +314,7 @@ export abstract class ContainerLayer implements IEditorLayer {
     }
   }
 
-  //@ts-ignore
-  tick(time: Ticker): void {
+  tick(time: Ticker, _loop: boolean): void {
     if (
       this.lastSize.x != this.container.width ||
       this.lastSize.y != this.container.height
@@ -325,7 +325,7 @@ export abstract class ContainerLayer implements IEditorLayer {
       }
     }
     for (const shader of this.shaders) {
-      shader.tick(time);
+      shader.tick(time, _loop);
     }
   }
 

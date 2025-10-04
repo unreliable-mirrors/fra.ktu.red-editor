@@ -25,7 +25,7 @@ export class AddModulatorButtonComponent extends KTUComponent {
   handleClick() {
     EventDispatcher.getInstance().dispatchEvent(
       "scene",
-      `add_modulator`,
+      "add_modulator",
       this.modulatorName
     );
   }

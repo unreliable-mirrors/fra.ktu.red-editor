@@ -16,10 +16,9 @@
     "vite": "^6.3.6"
   },
   "dependencies": {
-    "@pixi/gif": "^3.0.1",
     "chartist": "^1.4.0",
     "js-md5": "^0.8.3",
-    "pixi.js": "^8.6.6",
+    "pixi.js": "^8.13.2",
     "rand-seed": "^3.0.0"
   }
 }

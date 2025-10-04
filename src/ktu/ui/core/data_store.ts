@@ -8,9 +8,11 @@ class DataStore {
     this._data = {};
   }
 
-  setStore(key: string, value: any) {
+  setStore(key: string, value: any, silent: boolean = false): void {
     this._data[key] = value;
-    this.touch(key);
+    if (!silent) {
+      this.touch(key);
+    }
   }
 
   getStore(key: string): any {
