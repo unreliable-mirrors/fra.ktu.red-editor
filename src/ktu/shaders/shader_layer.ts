@@ -67,7 +67,12 @@ export abstract class ShaderLayer implements IEditorLayer {
   defaultUniforms(): {
     [key: string]: UniformData;
   } {
-    return { uDryWet: { value: this.state.dryWet, type: "f32" } };
+    return {
+      uDryWet: {
+        value: this.state.visible ? this.state.dryWet : 0,
+        type: "f32",
+      },
+    };
   }
 
   defaultSettings(): ShaderSetting[] {
@@ -140,8 +145,7 @@ export abstract class ShaderLayer implements IEditorLayer {
   //@ts-ignore
   resize(container: Container): void {}
 
-  //@ts-ignore
-  tick(time: Ticker): void {}
+  tick(_time: Ticker, _loop: boolean): void {}
 
   //@ts-ignore
   pointerDown(event: PointerEvent): void {}

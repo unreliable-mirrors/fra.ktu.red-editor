@@ -1,17 +1,18 @@
-import "@pixi/gif";
 import {
   Assets,
   Container,
   Point,
   Sprite,
   Texture,
+  Ticker,
   VideoSource,
 } from "pixi.js";
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import DataStore from "../ui/core/data_store";
-import { AnimatedGIF } from "@pixi/gif";
 import { cacheAsset, freeAsset, getAsset } from "../helpers/assets";
 import { registerModulatorsFromState } from "../helpers/modulators";
+import { GifSprite } from "pixi.js/gif";
+import EventDispatcher from "../ui/core/event_dispatcher";
 
 export type ImageLayerState = ContainerLayerState & {
   panX: number;
@@ -109,7 +110,31 @@ export class ImageLayer extends ContainerLayer {
         registerModulatorsFromState(this, state.modulators);
       }
     }
-    console.log("STATE LAYER_ID", this.state.layerId);
+
+    EventDispatcher.getInstance().addEventListener(
+      "playing",
+      "update",
+      (value: boolean) => {
+        if (
+          this.sprite.texture &&
+          this.sprite.texture.source instanceof VideoSource
+        ) {
+          const resource = this.sprite.texture.source.resource;
+          if (value) {
+            resource.play();
+          } else {
+            resource.pause();
+          }
+        } else if (this.sprite instanceof GifSprite) {
+          const gif = this.sprite as GifSprite;
+          if (value) {
+            gif.play();
+          } else {
+            gif.stop();
+          }
+        }
+      }
+    );
   }
 
   layerName(): string {
@@ -186,6 +211,7 @@ export class ImageLayer extends ContainerLayer {
       VideoSource.defaultOptions = {
         ...VideoSource.defaultOptions,
         loop: true,
+        autoPlay: DataStore.getInstance().getStore("playing") || false,
       };
 
       //GET THE CONTENT
@@ -195,6 +221,19 @@ export class ImageLayer extends ContainerLayer {
         content.startsWith("data:image/gif;") ||
         content.indexOf(".gif") >= 0
       ) {
+        Assets.load(content).then((tex) => {
+          this.sprite = new GifSprite({
+            source: tex,
+            animationSpeed: 1,
+            loop: true,
+            autoPlay: DataStore.getInstance().getStore("playing") || false,
+          });
+          this.container.addChild(this.sprite);
+          this.reposition();
+          DataStore.getInstance().touch("layers");
+        });
+
+        /*
         fetch(content)
           .then((res) => res.arrayBuffer())
           .then(AnimatedGIF.fromBuffer)
@@ -204,6 +243,7 @@ export class ImageLayer extends ContainerLayer {
             this.reposition();
             DataStore.getInstance().touch("layers");
           });
+          */
       } else {
         const texturePromise = Assets.load<Texture>(content);
         texturePromise.then((resolvedTexture: Texture) => {
@@ -220,6 +260,8 @@ export class ImageLayer extends ContainerLayer {
 
     //this.sprite.interactive = true;
     console.log("INTERACTIVE", this.sprite.interactive);
+    console.log("SPRITE", this.sprite);
+    console.log("TEXXTURE", this.sprite.texture);
   }
 
   urlContentToDataUri(url: string): Promise<string> {
@@ -263,6 +305,27 @@ export class ImageLayer extends ContainerLayer {
         this.state.imageHash = hash;
         this.repaint();
       });
+    }
+  }
+
+  tick(time: Ticker, loop: boolean): void {
+    super.tick(time, loop);
+    if (loop) {
+      if (
+        this.sprite.texture &&
+        this.sprite.texture.source instanceof VideoSource
+      ) {
+        const resource = this.sprite.texture.source.resource;
+        resource.currentTime =
+          DataStore.getInstance().getStore("elapsedTime") / 1000;
+      } else if (this.sprite instanceof GifSprite) {
+        const gif = this.sprite as GifSprite;
+        gif.currentFrame =
+          Math.floor(
+            (DataStore.getInstance().getStore("elapsedTime") / 1000) *
+              GifSprite.defaultOptions.fps!
+          ) % gif.totalFrames;
+      }
     }
   }
 }

@@ -15,26 +15,26 @@ import { registerModulatorsFromState } from "../../helpers/modulators";
 import DataStore from "../../ui/core/data_store";
 import vertex from "./time_fade_shader.vert?raw";
 
-export type TimeFadeSampleShaderState = ShaderState & {
+export type TimeFadeShaderState = ShaderState & {
   strength: number;
   dynamicStrength: boolean;
 };
 
-export type TimeFadeSampleShaderSetting = {
+export type TimeFadeShaderSetting = {
   field: ShaderSetting["field"] | "strength" | "dynamicStrength" | "refresh";
   type: ShaderSetting["type"] | "float" | "boolean" | "modulator_only";
   onchange: (value: string) => void;
 };
 
-export class TimeFadeSampleShader extends ShaderLayer {
-  static SHADER_NAME: string = "time_fade_sample_shader";
-  declare state: TimeFadeSampleShaderState;
+export class TimeFadeShader extends ShaderLayer {
+  static SHADER_NAME: string = "time_fade_shader";
+  declare state: TimeFadeShaderState;
   fragment: string = fragment;
 
   timeTexture!: Texture;
   textureMatrix!: TextureMatrix;
 
-  settings: TimeFadeSampleShaderSetting[] = [
+  settings: TimeFadeShaderSetting[] = [
     {
       field: "strength",
       type: "float",
@@ -83,10 +83,7 @@ export class TimeFadeSampleShader extends ShaderLayer {
     ...this.defaultSettings(),
   ];
 
-  constructor(
-    state?: TimeFadeSampleShaderState,
-    includeModulators: boolean = false
-  ) {
+  constructor(state?: TimeFadeShaderState, includeModulators: boolean = false) {
     super(state);
 
     if (state) {
@@ -102,10 +99,10 @@ export class TimeFadeSampleShader extends ShaderLayer {
   }
 
   shaderName(): string {
-    return TimeFadeSampleShader.SHADER_NAME;
+    return TimeFadeShader.SHADER_NAME;
   }
 
-  defaultState(): TimeFadeSampleShaderState {
+  defaultState(): TimeFadeShaderState {
     return { ...super.defaultState(), strength: 0.1, dynamicStrength: false };
   }
 

@@ -72,13 +72,13 @@ import {
   PaletteRecolourShaderState,
 } from "../shaders/palette_recolour/palette_recolour_shader";
 import {
-  TimeFadeSampleShader,
-  TimeFadeSampleShaderState,
-} from "../shaders/time_fade/time_fade_shader";
-import {
   AdjustmentShader,
   AdjustmentShaderState,
 } from "../shaders/adjustment/adjustment_shader";
+import {
+  TimeFadeShader,
+  TimeFadeShaderState,
+} from "../shaders/time_fade/time_fade_shader";
 
 export type ShaderClass = {
   SHADER_NAME: string;
@@ -105,7 +105,7 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   HueOffsetShader,
   HuePosterizeShader,
   PaletteRecolourShader,
-  TimeFadeSampleShader,
+  TimeFadeShader,
   AdjustmentShader,
 ];
 
@@ -189,11 +189,8 @@ export const getShaderByName = (
       state as PaletteRecolourShaderState,
       includeModulators
     );
-  } else if (shaderName === TimeFadeSampleShader.SHADER_NAME) {
-    return new TimeFadeSampleShader(
-      state as TimeFadeSampleShaderState,
-      includeModulators
-    );
+  } else if (shaderName === TimeFadeShader.SHADER_NAME) {
+    return new TimeFadeShader(state as TimeFadeShaderState, includeModulators);
   } else if (shaderName === AdjustmentShader.SHADER_NAME) {
     return new AdjustmentShader(
       state as AdjustmentShaderState,

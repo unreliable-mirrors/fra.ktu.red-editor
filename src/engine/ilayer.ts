@@ -17,5 +17,5 @@ export interface ILayer {
 
   bind(container: Container, layer?: ILayer): void;
   unbind(): void;
-  tick(time: Ticker): void;
+  tick(time: Ticker, loop: boolean): void;
 }
