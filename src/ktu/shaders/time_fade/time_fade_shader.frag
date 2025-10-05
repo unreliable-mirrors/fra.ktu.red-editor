@@ -5,7 +5,6 @@ in vec2 vTimeCoord;
 uniform sampler2D uTexture;
 uniform sampler2D uTimeTexture;
 
-uniform vec2 uSize;
 uniform float uStrength;
 uniform int uDynamicStrength;
 uniform float uDryWet;

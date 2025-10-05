@@ -1,5 +1,6 @@
 import { Container, Point } from "pixi.js";
 import { KeyboardManager } from "../helpers/keyboard_manager";
+import EventDispatcher from "../ui/core/event_dispatcher";
 
 export class Camera {
   container: Container;
@@ -68,6 +69,7 @@ export class Camera {
       this.offset.y +
       (window.innerHeight - window.innerHeight * this.scaleOffset) / 2;
     this.container.scale = this.scaleOffset;
+    EventDispatcher.getInstance().dispatchEvent("camera", "reposition", this);
   }
 
   reset() {

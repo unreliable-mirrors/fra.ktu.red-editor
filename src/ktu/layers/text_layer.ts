@@ -1,6 +1,8 @@
 import {
+  Application,
   Container,
   Point,
+  Sprite,
   Text,
   TextStyleFontStyle,
   TextStyleFontWeight,
@@ -9,6 +11,7 @@ import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import DataStore from "../ui/core/data_store";
 import { getStartingText } from "../helpers/sparkle";
 import { registerModulatorsFromState } from "../helpers/modulators";
+import EventDispatcher from "../ui/core/event_dispatcher";
 
 export type TextLayerState = ContainerLayerState & {
   text: string;
@@ -54,6 +57,7 @@ export class TextLayer extends ContainerLayer {
   panning: boolean = false;
   panStart?: Point | null;
   clickStart?: Point | null;
+  changed: boolean = false;
   settings: TextLayerSetting[] = [
     {
       field: "text",
@@ -145,6 +149,16 @@ export class TextLayer extends ContainerLayer {
         registerModulatorsFromState(this, state.modulators);
       }
     }
+    this.container.onRender = () => {
+      if (this.changed) {
+        EventDispatcher.getInstance().dispatchEvent(
+          this.getUniqueId() + "",
+          "change",
+          { sprite: this.mainSprite }
+        );
+        this.changed = false;
+      }
+    };
   }
 
   layerName(): string {
@@ -198,7 +212,7 @@ export class TextLayer extends ContainerLayer {
   }
 
   repaint() {
-    this.container.removeChildren();
+    this.container.removeChild(this.text);
     this.text.destroy();
     this.text = new Text({
       text: this.state.text,
@@ -219,6 +233,24 @@ export class TextLayer extends ContainerLayer {
       ? -this.text.scale.x
       : this.text.scale.x;
     this.container.addChild(this.text);
+    this.retexture();
+  }
+
+  retexture() {
+    if (!this.mainSprite) {
+      this.mainSprite = new Sprite();
+      this.container.addChild(this.mainSprite);
+    }
+
+    const texture = (
+      DataStore.getInstance().getStore("app") as Application
+    ).renderer.generateTexture(this.text);
+    this.mainSprite.texture = texture;
+    this.mainSprite.anchor.set(this.text.anchor.x, this.text.anchor.y);
+    this.mainSprite.position.set(this.text.x, this.text.y);
+    this.mainSprite.visible = false;
+
+    this.changed = true;
   }
 
   getFontData(): {

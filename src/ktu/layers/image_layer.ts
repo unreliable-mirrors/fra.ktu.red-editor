@@ -32,7 +32,6 @@ export type ImageLayerSetting = {
 export class ImageLayer extends ContainerLayer {
   static LAYER_NAME: string = "image_layer";
   declare state: ImageLayerState;
-  sprite: Sprite;
   clicking: boolean = false;
   panning: boolean = false;
   panStart?: Point | null;
@@ -90,8 +89,8 @@ export class ImageLayer extends ContainerLayer {
   constructor(state?: ImageLayerState, includeModulators: boolean = false) {
     super(state);
     console.log("LAYER_ID", this.layerId);
-    this.sprite = new Sprite();
-    this.container.addChild(this.sprite);
+    this.mainSprite = new Sprite();
+    this.container.addChild(this.mainSprite);
     console.log("STATE LAYER_ID", this.state.layerId);
     if (state) {
       this.state = {
@@ -116,17 +115,17 @@ export class ImageLayer extends ContainerLayer {
       "update",
       (value: boolean) => {
         if (
-          this.sprite.texture &&
-          this.sprite.texture.source instanceof VideoSource
+          this.mainSprite.texture &&
+          this.mainSprite.texture.source instanceof VideoSource
         ) {
-          const resource = this.sprite.texture.source.resource;
+          const resource = this.mainSprite.texture.source.resource;
           if (value) {
             resource.play();
           } else {
             resource.pause();
           }
-        } else if (this.sprite instanceof GifSprite) {
-          const gif = this.sprite as GifSprite;
+        } else if (this.mainSprite instanceof GifSprite) {
+          const gif = this.mainSprite as GifSprite;
           if (value) {
             gif.play();
           } else {
@@ -198,7 +197,7 @@ export class ImageLayer extends ContainerLayer {
   unbind(): void {
     super.unbind();
 
-    this.sprite.destroy();
+    this.mainSprite.destroy();
     if (this.state.imageHash) {
       freeAsset(this.state.imageHash, this.layerId);
     }
@@ -206,7 +205,7 @@ export class ImageLayer extends ContainerLayer {
 
   repaint() {
     this.container.removeChildren();
-    this.sprite.destroy();
+    this.mainSprite.destroy();
     if (this.state.imageHash) {
       VideoSource.defaultOptions = {
         ...VideoSource.defaultOptions,
@@ -216,52 +215,41 @@ export class ImageLayer extends ContainerLayer {
 
       //GET THE CONTENT
       const content = getAsset(this.state.imageHash, this.layerId);
-      console.log("REPAINT", this.state.imageHash, content);
       if (
         content.startsWith("data:image/gif;") ||
         content.indexOf(".gif") >= 0
       ) {
         Assets.load(content).then((tex) => {
-          this.sprite = new GifSprite({
+          this.mainSprite = new GifSprite({
             source: tex,
             animationSpeed: 1,
             loop: true,
             autoPlay: DataStore.getInstance().getStore("playing") || false,
+            onFrameChange: (_currentFrame: number) => {
+              EventDispatcher.getInstance().dispatchEvent(
+                this.getUniqueId() + "",
+                "change",
+                { sprite: this.mainSprite }
+              );
+            },
           });
-          this.container.addChild(this.sprite);
+          this.container.addChild(this.mainSprite);
           this.reposition();
           DataStore.getInstance().touch("layers");
         });
-
-        /*
-        fetch(content)
-          .then((res) => res.arrayBuffer())
-          .then(AnimatedGIF.fromBuffer)
-          .then((image: AnimatedGIF) => {
-            this.sprite = image;
-            this.container.addChild(image);
-            this.reposition();
-            DataStore.getInstance().touch("layers");
-          });
-          */
       } else {
         const texturePromise = Assets.load<Texture>(content);
         texturePromise.then((resolvedTexture: Texture) => {
-          this.sprite = Sprite.from(resolvedTexture);
-          this.container.addChild(this.sprite);
+          this.mainSprite = Sprite.from(resolvedTexture);
+          this.container.addChild(this.mainSprite);
           this.reposition();
           DataStore.getInstance().touch("layers");
         });
       }
     } else {
-      this.sprite = new Sprite();
-      this.container.addChild(this.sprite);
+      this.mainSprite = new Sprite();
+      this.container.addChild(this.mainSprite);
     }
-
-    //this.sprite.interactive = true;
-    console.log("INTERACTIVE", this.sprite.interactive);
-    console.log("SPRITE", this.sprite);
-    console.log("TEXXTURE", this.sprite.texture);
   }
 
   urlContentToDataUri(url: string): Promise<string> {
@@ -281,16 +269,16 @@ export class ImageLayer extends ContainerLayer {
   }
 
   reposition() {
-    this.sprite.scale = this.state.scale / 100;
-    this.sprite.anchor.set(0.5, 0.5);
-    this.sprite.x = this.state.panX + this.sprite.width / 2;
-    this.sprite.y = this.state.panY + this.sprite.height / 2;
-    this.sprite.scale.y = this.state.vFlip
-      ? -this.sprite.scale.y
-      : this.sprite.scale.y;
-    this.sprite.scale.x = this.state.hFlip
-      ? -this.sprite.scale.x
-      : this.sprite.scale.x;
+    this.mainSprite.scale = this.state.scale / 100;
+    this.mainSprite.anchor.set(0.5, 0.5);
+    this.mainSprite.x = this.state.panX + this.mainSprite.width / 2;
+    this.mainSprite.y = this.state.panY + this.mainSprite.height / 2;
+    this.mainSprite.scale.y = this.state.vFlip
+      ? -this.mainSprite.scale.y
+      : this.mainSprite.scale.y;
+    this.mainSprite.scale.x = this.state.hFlip
+      ? -this.mainSprite.scale.x
+      : this.mainSprite.scale.x;
   }
 
   loadImage(value: string) {
@@ -312,14 +300,14 @@ export class ImageLayer extends ContainerLayer {
     super.tick(time, loop);
     if (loop) {
       if (
-        this.sprite.texture &&
-        this.sprite.texture.source instanceof VideoSource
+        this.mainSprite.texture &&
+        this.mainSprite.texture.source instanceof VideoSource
       ) {
-        const resource = this.sprite.texture.source.resource;
+        const resource = this.mainSprite.texture.source.resource;
         resource.currentTime =
           DataStore.getInstance().getStore("elapsedTime") / 1000;
-      } else if (this.sprite instanceof GifSprite) {
-        const gif = this.sprite as GifSprite;
+      } else if (this.mainSprite instanceof GifSprite) {
+        const gif = this.mainSprite as GifSprite;
         gif.currentFrame =
           Math.floor(
             (DataStore.getInstance().getStore("elapsedTime") / 1000) *

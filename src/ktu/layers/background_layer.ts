@@ -11,6 +11,7 @@ export type BackgroundLayerSetting = {
   field: "color";
   type: "color" | "float";
   onchange: (value: string) => void;
+  currentValue: () => any;
 };
 
 export class BackgroundLayer extends ContainerLayer {
@@ -26,6 +27,9 @@ export class BackgroundLayer extends ContainerLayer {
       onchange: (value) => {
         this.state.color = value;
         this.repaint();
+      },
+      currentValue: () => {
+        return this.state.color;
       },
     },
   ];
@@ -63,8 +67,8 @@ export class BackgroundLayer extends ContainerLayer {
     };
   }
 
-  tick(time: Ticker): void {
-    super.tick(time);
+  tick(time: Ticker, loop: boolean): void {
+    super.tick(time, loop);
     if (
       this.backgroundSize.x != window.innerWidth ||
       this.backgroundSize.y != window.innerHeight

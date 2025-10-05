@@ -5,8 +5,10 @@ import {
 import { ContainerLayer, ContainerLayerState } from "../layers/container_layer";
 import { DrawLayer, DrawLayerState } from "../layers/draw_layer";
 import { ImageLayer, ImageLayerState } from "../layers/image_layer";
+import { RgbMixinLayer, RgbMixinLayerState } from "../layers/rgb_mixin_layer";
 import { ShapeLayer, ShapeLayerState } from "../layers/shape_layer";
 import { TextLayer, TextLayerState } from "../layers/text_layer";
+import DataStore from "../ui/core/data_store";
 
 export type LayerClass = {
   LAYER_NAME: string;
@@ -16,11 +18,16 @@ export const AVAILABLE_LAYERS: LayerClass[] = [
   DrawLayer,
   ImageLayer,
   TextLayer,
-  ShapeLayer,
+  RgbMixinLayer,
 ];
+
 export const AVAILABLE_LAYER_NAMES: string[] = AVAILABLE_LAYERS.map(
   (e) => e.LAYER_NAME
 );
+
+export const isMixin = (layerName: string): boolean => {
+  return layerName === RgbMixinLayer.LAYER_NAME;
+};
 
 export const getLayerByName = (
   layerName: string,
@@ -40,6 +47,14 @@ export const getLayerByName = (
     return new TextLayer(state as TextLayerState, includeModulators);
   } else if (layerName === ShapeLayer.LAYER_NAME) {
     return new ShapeLayer(state as ShapeLayerState, includeModulators);
+  } else if (layerName === RgbMixinLayer.LAYER_NAME) {
+    return new RgbMixinLayer(state as RgbMixinLayerState, includeModulators);
   }
   return null;
+};
+
+export const getLayerById = (layerId: number): ContainerLayer | null => {
+  return DataStore.getInstance()
+    .getStore("layers")
+    .find((l: ContainerLayer) => l.getUniqueId() === layerId);
 };
