@@ -19,6 +19,9 @@ import {
 import { ImageLayer } from "../../../layers/image_layer";
 import { BindModulatorButton } from "../modulators/bind_modulator_button";
 import { ModulatorHint } from "../modulators/modulator_hint";
+import { BindLayerButton } from "./bind_layer_button";
+import { LayerHint } from "./layer_hint";
+import { getLayerById } from "../../../helpers/layers";
 
 export class LayerComponent extends KTUComponent {
   layer: ContainerLayer;
@@ -170,6 +173,29 @@ export class LayerComponent extends KTUComponent {
                 new ModulatorHint(setting.modulator_id, setting.modulator_name!)
               )}
               {new BindModulatorButton(this.layer, setting)}
+            </>
+          );
+        } else if (setting.type === "layer") {
+          input = (
+            <>
+              {" "}
+              {(this.layer.state as { [key: string]: any })[setting.field] >=
+                0 &&
+              getLayerById(
+                (this.layer.state as { [key: string]: any })[setting.field]
+              ) ? (
+                new LayerHint(
+                  (this.layer.state as { [key: string]: any })[
+                    setting.field
+                  ] as number,
+                  getLayerById(
+                    (this.layer.state as { [key: string]: any })[setting.field]
+                  )!.layerName()
+                )
+              ) : (
+                <></>
+              )}
+              {new BindLayerButton(this.layer, setting)}
             </>
           );
         }

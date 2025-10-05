@@ -18,6 +18,7 @@ import { IModulator, ModulatorState } from "../../engine/imodulator";
 import { getModulatorByName } from "../helpers/modulators";
 import { IModulable } from "../../engine/imodulable";
 import { LayerSetting } from "../../engine/ilayer";
+import { RgbMixinLayer } from "../layers/rgb_mixin_layer";
 
 export type EditorSceneState = {
   layers: ContainerLayerState[];
@@ -627,8 +628,15 @@ export class EditorScene extends BaseScene {
     const importedModulators: {
       [key: number]: { layer: IModulable; setting: LayerSetting }[];
     } = {};
+    const importedLayers: { [key: number]: IEditorLayer } = {};
+    const rgbMixinLayers: RgbMixinLayer[] = [];
+
     for (const state of payload.layers) {
       const layer = this.addGenericLayer(state.name, state);
+      importedLayers[state.layerId] = layer;
+      if (layer instanceof RgbMixinLayer) {
+        rgbMixinLayers.push(layer);
+      }
       state.modulators?.forEach((m) => {
         if (!importedModulators[m.modulatorId]) {
           importedModulators[m.modulatorId] = [];
@@ -693,10 +701,23 @@ export class EditorScene extends BaseScene {
       });
     }
 
+    for (const layer of rgbMixinLayers) {
+      if (layer.state.red >= 0) {
+        layer.bindRed(importedLayers[layer.state.red].getUniqueId());
+      }
+      if (layer.state.green >= 0) {
+        layer.bindGreen(importedLayers[layer.state.green].getUniqueId());
+      }
+      if (layer.state.blue >= 0) {
+        layer.bindBlue(importedLayers[layer.state.blue].getUniqueId());
+      }
+    }
+
     if (!importing) {
       this.metadata = payload.metadata;
       DataStore.getInstance().setStore("metadata", this.metadata);
     }
+    DataStore.getInstance().touch("layers");
   }
   activateModulator(modulator: IModulator) {
     this.deactivateLayer();
@@ -738,10 +759,8 @@ export class EditorScene extends BaseScene {
     DataStore.getInstance().setStore("shaders", this.shaders);
   }
   deactivateLayer() {
-    console.log("DEACTIVATE");
     if (this.activeLayer) this.activeLayer.active = false;
     this.activeLayer = undefined;
-    console.log("AL", this.activeLayer);
     DataStore.getInstance().setStore("activeLayer", this.activeLayer);
     DataStore.getInstance().setStore("layers", this.layers);
     DataStore.getInstance().setStore("shaders", this.shaders);

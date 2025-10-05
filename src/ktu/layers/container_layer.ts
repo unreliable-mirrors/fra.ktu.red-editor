@@ -3,6 +3,7 @@ import {
   FederatedPointerEvent,
   Filter,
   Point,
+  Sprite,
   Ticker,
 } from "pixi.js";
 import { EditorLayerState, IEditorLayer } from "./ieditor_layer";
@@ -22,12 +23,15 @@ export type ContainerLayerState = EditorLayerState & {
 export abstract class ContainerLayer implements IEditorLayer {
   layerId: number;
   container: Container;
+  mainSprite!: Sprite;
   state: ContainerLayerState;
   abstract settings: LayerSetting[];
   active: boolean;
   shaders: ShaderLayer[];
   lastSize: Point;
   absorbingLayer: boolean = false;
+  changed: boolean = false;
+  firstRender: boolean = true;
 
   public constructor(state?: ContainerLayerState) {
     this.container = new Container();
@@ -61,6 +65,21 @@ export abstract class ContainerLayer implements IEditorLayer {
     }
     this.visible = this.state.visible;
     this.lastSize = new Point(0, 0);
+  }
+
+  onChange() {
+    EventDispatcher.getInstance().dispatchEvent(
+      this.getUniqueId() + "",
+      "change",
+      { sprite: this.mainSprite }
+    );
+  }
+
+  touch(deep: boolean = false) {
+    if (deep) {
+      this.firstRender = true;
+    }
+    this.changed = true;
   }
 
   onClick(event: FederatedPointerEvent) {
@@ -312,6 +331,12 @@ export abstract class ContainerLayer implements IEditorLayer {
         this.settings.find((s) => s.field === modulator.field)!
       );
     }
+    EventDispatcher.getInstance().dispatchEvent(
+      this.getUniqueId() + "",
+      "unbind",
+      this
+    );
+    EventDispatcher.getInstance().clearTarget(this.getUniqueId() + "");
   }
 
   tick(time: Ticker, _loop: boolean): void {
@@ -326,6 +351,15 @@ export abstract class ContainerLayer implements IEditorLayer {
     }
     for (const shader of this.shaders) {
       shader.tick(time, _loop);
+    }
+
+    if (!this.firstRender && this.changed) {
+      this.onChange();
+      this.changed = false;
+    }
+    if (this.firstRender) {
+      this.firstRender = false;
+      this.touch();
     }
   }
 

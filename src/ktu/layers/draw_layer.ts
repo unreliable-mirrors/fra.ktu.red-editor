@@ -1,4 +1,4 @@
-import { Graphics, Point } from "pixi.js";
+import { Application, Graphics, Point, Sprite } from "pixi.js";
 
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import DataStore from "../ui/core/data_store";
@@ -34,6 +34,9 @@ export class DrawLayer extends ContainerLayer {
   stroke: Record<string, boolean>;
   declare state: DrawLayerState;
   absorbingLayer: boolean = true;
+
+  minX: number = 999999;
+  minY: number = 999999;
 
   settings: DrawLayerSetting[] = [
     {
@@ -91,7 +94,9 @@ export class DrawLayer extends ContainerLayer {
   constructor(state?: DrawLayerState, includeModulators: boolean = false) {
     super(state);
     this.graphics = new Graphics();
+
     this.container.addChild(this.graphics);
+    this.retexture();
     this.stroke = {};
 
     if (state) {
@@ -225,12 +230,16 @@ export class DrawLayer extends ContainerLayer {
   }
 
   repaint() {
+    this.minX = 999999;
+    this.minY = 999999;
     this.graphics.clear();
     for (var key in this.state.points) {
       const x = parseInt(key.split("X")[0]);
       const y = parseInt(key.split("X")[1]);
       this.drawPoint(x, y);
     }
+
+    this.retexture();
   }
 
   paint(x: number, y: number) {
@@ -240,6 +249,23 @@ export class DrawLayer extends ContainerLayer {
     } else if (!this.hardPainting) {
       this.erase(x, y);
     }
+    this.retexture();
+  }
+
+  retexture() {
+    if (!this.mainSprite) {
+      this.mainSprite = new Sprite();
+      this.container.addChild(this.mainSprite);
+    }
+
+    const texture = (
+      DataStore.getInstance().getStore("app") as Application
+    ).renderer.generateTexture(this.graphics);
+    this.mainSprite.texture = texture;
+    this.mainSprite.position.set(this.minX, this.minY);
+    this.mainSprite.visible = false;
+
+    this.touch();
   }
 
   drawPoint(x: number, y: number) {
@@ -283,6 +309,14 @@ export class DrawLayer extends ContainerLayer {
         )
         .stroke({ width: 2, color: this.state.color });
     }
+    this.minX = Math.min(
+      this.minX,
+      x * this.state.gridSize + this.state.panX - this.state.gridSize / 2
+    );
+    this.minY = Math.min(
+      this.minY,
+      y * this.state.gridSize + this.state.panY - this.state.gridSize / 2
+    );
   }
   erase(x: number, y: number) {
     delete this.state.points[`${x}X${y}`];

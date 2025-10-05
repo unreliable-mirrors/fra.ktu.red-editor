@@ -23,6 +23,10 @@ class EventDispatcher {
     }
   }
 
+  clearTarget(target: string) {
+    delete this._listeners[target];
+  }
+
   static getInstance() {
     if (!this._instance) {
       this._instance = new EventDispatcher();
