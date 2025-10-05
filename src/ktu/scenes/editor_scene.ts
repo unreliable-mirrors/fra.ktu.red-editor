@@ -629,14 +629,35 @@ export class EditorScene extends BaseScene {
       [key: number]: { layer: IModulable; setting: LayerSetting }[];
     } = {};
     const importedLayers: { [key: number]: IEditorLayer } = {};
-    const rgbMixinLayers: RgbMixinLayer[] = [];
+    const layerSettings: { setting: LayerSetting; id: number }[] = [];
 
     for (const state of payload.layers) {
       const layer = this.addGenericLayer(state.name, state);
       importedLayers[state.layerId] = layer;
-      if (layer instanceof RgbMixinLayer) {
-        rgbMixinLayers.push(layer);
-      }
+      layer.settings.forEach((s) => {
+        if (
+          s.type === "layer" &&
+          (layer.state as { [key: string]: any })[s.field] >= 0
+        ) {
+          layerSettings.push({
+            setting: s,
+            id: (layer.state as { [key: string]: any })[s.field],
+          });
+        }
+        (layer as ContainerLayer).shaders.forEach((shader) => {
+          shader.settings.forEach((s) => {
+            if (
+              s.type === "layer" &&
+              (shader.state as { [key: string]: any })[s.field] >= 0
+            ) {
+              layerSettings.push({
+                setting: s,
+                id: (shader.state as { [key: string]: any })[s.field],
+              });
+            }
+          });
+        });
+      });
       state.modulators?.forEach((m) => {
         if (!importedModulators[m.modulatorId]) {
           importedModulators[m.modulatorId] = [];
@@ -674,6 +695,17 @@ export class EditorScene extends BaseScene {
           setting: layer.settings.find((s) => s.field === m.field)!,
         });
       });
+      layer.settings.forEach((s) => {
+        if (
+          s.type === "layer" &&
+          (layer.state as { [key: string]: any })[s.field] >= 0
+        ) {
+          layerSettings.push({
+            setting: s,
+            id: (layer.state as { [key: string]: any })[s.field],
+          });
+        }
+      });
     }
 
     const oldModulatorIds: { [key: number]: IModulator } = {};
@@ -701,16 +733,8 @@ export class EditorScene extends BaseScene {
       });
     }
 
-    for (const layer of rgbMixinLayers) {
-      if (layer.state.red >= 0) {
-        layer.bindRed(importedLayers[layer.state.red].getUniqueId());
-      }
-      if (layer.state.green >= 0) {
-        layer.bindGreen(importedLayers[layer.state.green].getUniqueId());
-      }
-      if (layer.state.blue >= 0) {
-        layer.bindBlue(importedLayers[layer.state.blue].getUniqueId());
-      }
+    for (const setting of layerSettings) {
+      setting.setting.onchange(importedLayers[setting.id].getUniqueId() + "");
     }
 
     if (!importing) {

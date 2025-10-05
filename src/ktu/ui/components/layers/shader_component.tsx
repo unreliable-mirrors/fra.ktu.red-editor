@@ -15,6 +15,9 @@ import { ContainerLayer } from "../../../layers/container_layer";
 import DataStore from "../../core/data_store";
 import { BindModulatorButton } from "../modulators/bind_modulator_button";
 import { ModulatorHint } from "../modulators/modulator_hint";
+import { getLayerById } from "../../../helpers/layers";
+import { LayerHint } from "./layer_hint";
+import { BindLayerButton } from "./bind_layer_button";
 
 export class ShaderComponent extends KTUComponent {
   shader: ShaderLayer;
@@ -179,6 +182,29 @@ export class ShaderComponent extends KTUComponent {
                   )
                 : "-"}
               {new BindModulatorButton(this.shader, setting)}
+            </div>
+          );
+        } else if (setting.type === "layer") {
+          settings.push(
+            <div>
+              {" "}
+              {(this.shader.state as { [key: string]: any })[setting.field] >=
+                0 &&
+              getLayerById(
+                (this.shader.state as { [key: string]: any })[setting.field]
+              ) ? (
+                new LayerHint(
+                  (this.shader.state as { [key: string]: any })[
+                    setting.field
+                  ] as number,
+                  getLayerById(
+                    (this.shader.state as { [key: string]: any })[setting.field]
+                  )!.layerName()
+                )
+              ) : (
+                <></>
+              )}
+              {new BindLayerButton(this.shader, setting)}
             </div>
           );
         }

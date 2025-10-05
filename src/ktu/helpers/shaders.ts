@@ -79,6 +79,7 @@ import {
   TimeFadeShader,
   TimeFadeShaderState,
 } from "../shaders/time_fade/time_fade_shader";
+import { MaskShader, MaskShaderState } from "../shaders/mask/mask_shader";
 
 export type ShaderClass = {
   SHADER_NAME: string;
@@ -107,6 +108,7 @@ export const AVAILABLE_SHADERS: ShaderClass[] = [
   PaletteRecolourShader,
   TimeFadeShader,
   AdjustmentShader,
+  MaskShader,
 ];
 
 export const AVAILABLE_SHADERS_MAP: Record<string, ShaderClass> =
@@ -196,6 +198,8 @@ export const getShaderByName = (
       state as AdjustmentShaderState,
       includeModulators
     );
+  } else if (shaderName === MaskShader.SHADER_NAME) {
+    return new MaskShader(state as MaskShaderState, includeModulators);
   }
 
   return null;

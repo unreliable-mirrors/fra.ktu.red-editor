@@ -239,9 +239,7 @@ export class RgbMixinLayer extends ContainerLayer {
     EventDispatcher.getInstance().addEventListener(
       "camera",
       "reposition",
-      () => {
-        this.touch(true);
-      }
+      this.onRepositionCamera
     );
   }
 
@@ -298,9 +296,14 @@ export class RgbMixinLayer extends ContainerLayer {
     EventDispatcher.getInstance().removeEventListener(
       "camera",
       "reposition",
-      () => {
-        this.touch(true);
-      }
+      this.onRepositionCamera
     );
+    this.unbindRed();
+    this.unbindGreen();
+    this.unbindBlue();
   }
+
+  onRepositionCamera = () => {
+    this.touch(true);
+  };
 }
