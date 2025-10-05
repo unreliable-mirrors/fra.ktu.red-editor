@@ -17,6 +17,8 @@ import { ExportViewportButtonComponent } from "./ktu/ui/components/file/export_v
 import { ModulatorsList } from "./ktu/ui/components/modulators/modulators_list";
 import { PlaybackControlsComponent } from "./ktu/ui/components/file/playback_controls";
 import { TimeRendererComponent } from "./ktu/ui/components/file/time_renderer";
+import { ContainerLayer } from "./ktu/layers/container_layer";
+import { getLayerById } from "./ktu/helpers/layers";
 
 declare global {
   interface Window {
@@ -48,7 +50,9 @@ window.KTUFullscreen = () => {
   });
 };
 
+getLayerById;
 export default {
+  ContainerLayer,
   LayersList,
   ExportStateButtonComponent,
   ImportStateButtonComponent,

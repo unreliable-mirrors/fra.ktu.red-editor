@@ -348,6 +348,7 @@ export abstract class ContainerLayer implements IEditorLayer {
       for (const shader of this.shaders) {
         shader.resize(this.container);
       }
+      this.touch(true);
     }
     for (const shader of this.shaders) {
       shader.tick(time, _loop);

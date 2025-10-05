@@ -279,6 +279,7 @@ export class ImageLayer extends ContainerLayer {
     this.mainSprite.scale.x = this.state.hFlip
       ? -this.mainSprite.scale.x
       : this.mainSprite.scale.x;
+    this.touch(true);
   }
 
   loadImage(value: string) {
