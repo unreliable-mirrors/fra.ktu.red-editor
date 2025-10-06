@@ -17,7 +17,6 @@ export type LayerClass = {
 export const AVAILABLE_LAYERS: LayerClass[] = [
   BackgroundLayer,
   DrawLayer,
-  ImageLayer,
   VideoLayer,
   TextLayer,
   RgbMixinLayer,

@@ -26,7 +26,8 @@ const texts: Record<string, string> = {
   add_palette_recolour_shader_button: "Palette Recolour",
   add_time_fade_shader_button: "Time Fade",
   add_adjustment_shader_button: "Adjustment",
-  add_mask_shader_button: "Mask",
+  add_mask_shader_button: "Mask From",
+  add_mask_to_shader_button: "Mask To",
 
   add_sine_modulator_button: "Sine",
   add_square_modulator_button: "Square",
