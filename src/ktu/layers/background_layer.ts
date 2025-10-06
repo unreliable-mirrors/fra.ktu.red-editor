@@ -1,7 +1,15 @@
-import { Container, Graphics, Point, Ticker } from "pixi.js";
+import {
+  Application,
+  Container,
+  Graphics,
+  Point,
+  Sprite,
+  Ticker,
+} from "pixi.js";
 import { ContainerLayer, ContainerLayerState } from "./container_layer";
 import { getFunColor } from "../helpers/sparkle";
 import { registerModulatorsFromState } from "../helpers/modulators";
+import DataStore from "../ui/core/data_store";
 
 export type BackgroundLayerState = ContainerLayerState & {
   color: string;
@@ -88,5 +96,23 @@ export class BackgroundLayer extends ContainerLayer {
     this.graphics
       .rect(0, 0, window.innerWidth, window.innerHeight)
       .fill({ color: this.state.color });
+
+    this.retexture();
+  }
+
+  retexture() {
+    console.log("RETEXURE BACKGROUND");
+    if (!this.mainSprite) {
+      this.mainSprite = new Sprite();
+      this.container.addChild(this.mainSprite);
+    }
+
+    const texture = (
+      DataStore.getInstance().getStore("app") as Application
+    ).renderer.generateTexture(this.graphics);
+    this.mainSprite.texture = texture;
+    this.mainSprite.visible = false;
+
+    this.touch();
   }
 }
