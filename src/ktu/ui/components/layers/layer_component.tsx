@@ -198,6 +198,30 @@ export class LayerComponent extends KTUComponent {
               {new BindLayerButton(this.layer, setting)}
             </>
           );
+        } else if (setting.type === "bigfloat") {
+          input = (
+            <>
+              {setting.modulator_id === undefined ? (
+                <input
+                  type="number"
+                  value={
+                    (this.layer.state as { [key: string]: any })[setting.field]
+                  }
+                  min="0"
+                  step="0.01"
+                  spellcheck="false"
+                  autocomplete="off"
+                  aria-autocomplete="none"
+                  oninput={(e) => {
+                    setting.onchange((e.target as HTMLInputElement).value);
+                  }}
+                ></input>
+              ) : (
+                new ModulatorHint(setting.modulator_id, setting.modulator_name!)
+              )}
+              {new BindModulatorButton(this.layer, setting)}
+            </>
+          );
         }
         settings.push(
           <div>

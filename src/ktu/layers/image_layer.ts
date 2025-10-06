@@ -24,8 +24,8 @@ export type ImageLayerState = ContainerLayerState & {
 };
 
 export type ImageLayerSetting = {
-  field: "imageSource" | "panX" | "panY" | "scale" | "vFlip" | "hFlip";
-  type: "file" | "float" | "integer" | "boolean";
+  field: "imageSource" | "panX" | "panY" | "scale" | "vFlip" | "hFlip" | string;
+  type: "file" | "float" | "integer" | "boolean" | string;
   onchange: (value: string) => void;
 };
 
@@ -86,7 +86,11 @@ export class ImageLayer extends ContainerLayer {
     },
   ];
 
-  constructor(state?: ImageLayerState, includeModulators: boolean = false) {
+  constructor(
+    state?: ImageLayerState,
+    includeModulators: boolean = false,
+    includeShaders: boolean = true
+  ) {
     super(state);
     console.log("LAYER_ID", this.layerId);
     this.mainSprite = new Sprite();
@@ -102,8 +106,10 @@ export class ImageLayer extends ContainerLayer {
         vFlip: state.vFlip,
         hFlip: state.hFlip,
       };
-      for (var shader of state.shaders) {
-        this.addShaderFromState(shader.name, shader, includeModulators);
+      if (includeShaders) {
+        for (var shader of state.shaders) {
+          this.addShaderFromState(shader.name, shader, includeModulators);
+        }
       }
       if (includeModulators) {
         registerModulatorsFromState(this, state.modulators);
@@ -135,6 +141,10 @@ export class ImageLayer extends ContainerLayer {
       }
     );
   }
+
+  defaultSettings = (): ImageLayerSetting[] => {
+    return this.settings;
+  };
 
   layerName(): string {
     return ImageLayer.LAYER_NAME;
@@ -300,21 +310,25 @@ export class ImageLayer extends ContainerLayer {
   tick(time: Ticker, loop: boolean): void {
     super.tick(time, loop);
     if (loop) {
-      if (
-        this.mainSprite.texture &&
-        this.mainSprite.texture.source instanceof VideoSource
-      ) {
-        const resource = this.mainSprite.texture.source.resource;
-        resource.currentTime =
-          DataStore.getInstance().getStore("elapsedTime") / 1000;
-      } else if (this.mainSprite instanceof GifSprite) {
-        const gif = this.mainSprite as GifSprite;
-        gif.currentFrame =
-          Math.floor(
-            (DataStore.getInstance().getStore("elapsedTime") / 1000) *
-              GifSprite.defaultOptions.fps!
-          ) % gif.totalFrames;
-      }
+      this.correctTime();
+    }
+  }
+
+  correctTime(): void {
+    if (
+      this.mainSprite.texture &&
+      this.mainSprite.texture.source instanceof VideoSource
+    ) {
+      const resource = this.mainSprite.texture.source.resource;
+      resource.currentTime =
+        DataStore.getInstance().getStore("elapsedTime") / 1000;
+    } else if (this.mainSprite instanceof GifSprite) {
+      const gif = this.mainSprite as GifSprite;
+      gif.currentFrame =
+        Math.floor(
+          (DataStore.getInstance().getStore("elapsedTime") / 1000) *
+            GifSprite.defaultOptions.fps!
+        ) % gif.totalFrames;
     }
   }
 }
