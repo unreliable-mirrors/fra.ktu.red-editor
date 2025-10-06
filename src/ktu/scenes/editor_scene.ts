@@ -18,7 +18,6 @@ import { IModulator, ModulatorState } from "../../engine/imodulator";
 import { getModulatorByName } from "../helpers/modulators";
 import { IModulable } from "../../engine/imodulable";
 import { LayerSetting } from "../../engine/ilayer";
-import { RgbMixinLayer } from "../layers/rgb_mixin_layer";
 
 export type EditorSceneState = {
   layers: ContainerLayerState[];

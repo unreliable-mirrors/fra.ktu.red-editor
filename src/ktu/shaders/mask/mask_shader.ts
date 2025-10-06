@@ -1,6 +1,5 @@
 import {
   Application,
-  Container,
   Matrix,
   Sprite,
   Texture,

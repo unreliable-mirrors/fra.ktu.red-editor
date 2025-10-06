@@ -8,6 +8,7 @@ import { ImageLayer, ImageLayerState } from "../layers/image_layer";
 import { RgbMixinLayer, RgbMixinLayerState } from "../layers/rgb_mixin_layer";
 import { ShapeLayer, ShapeLayerState } from "../layers/shape_layer";
 import { TextLayer, TextLayerState } from "../layers/text_layer";
+import { VideoLayer, VideoLayerState } from "../layers/video_layer";
 import DataStore from "../ui/core/data_store";
 
 export type LayerClass = {
@@ -17,6 +18,7 @@ export const AVAILABLE_LAYERS: LayerClass[] = [
   BackgroundLayer,
   DrawLayer,
   ImageLayer,
+  VideoLayer,
   TextLayer,
   RgbMixinLayer,
 ];
@@ -49,6 +51,8 @@ export const getLayerByName = (
     return new ShapeLayer(state as ShapeLayerState, includeModulators);
   } else if (layerName === RgbMixinLayer.LAYER_NAME) {
     return new RgbMixinLayer(state as RgbMixinLayerState, includeModulators);
+  } else if (layerName === VideoLayer.LAYER_NAME) {
+    return new VideoLayer(state as VideoLayerState, includeModulators);
   }
   return null;
 };
