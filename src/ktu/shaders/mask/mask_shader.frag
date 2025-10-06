@@ -5,6 +5,8 @@ in vec2 vMaskCoord;
 uniform sampler2D uTexture;
 uniform sampler2D uMaskTexture;
 
+uniform int uInverse;
+
 uniform float uDryWet;
 
 vec3 rgb2hsv(vec3 c)
@@ -31,11 +33,15 @@ void main(){
     vec4 maskTex = texture(uMaskTexture, vMaskCoord);
 
     float maskLightness = rgb2hsv(maskTex.xyz).z;
+    if (uInverse == 1) {
+        maskLightness = 1.0 - maskLightness;
+    }
 
     gl_FragColor = vec4(0.0,0.0,0.0,0.0);
     if((vMaskCoord.x > 0.0 && vMaskCoord.x < 1.0) && (vMaskCoord.y > 0.0 && vMaskCoord.y < 1.0) && maskLightness > 0.0){
         gl_FragColor = tex;
-        gl_FragColor.a = min(maskLightness, tex.a);
+        gl_FragColor *= min(maskLightness, tex.a);
+        //gl_FragColor.a = min(maskLightness, tex.a);
     }
 
     gl_FragColor = ((1.0-uDryWet)*tex) + (uDryWet * gl_FragColor);

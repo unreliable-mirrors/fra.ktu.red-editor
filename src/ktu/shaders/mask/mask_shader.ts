@@ -18,11 +18,12 @@ import vertex from "./mask_shader.vert?raw";
 
 export type MaskShaderState = ShaderState & {
   mask: number;
+  inverse: boolean;
 };
 
 export type MaskShaderSetting = {
-  field: ShaderSetting["field"] | "mask";
-  type: ShaderSetting["type"] | "layer";
+  field: ShaderSetting["field"] | "mask" | "inverse";
+  type: ShaderSetting["type"] | "layer" | "boolean";
   onchange: (value: string) => void;
 };
 
@@ -53,6 +54,14 @@ export class MaskShader extends ShaderLayer {
         }
       },
     },
+    {
+      field: "inverse",
+      type: "boolean",
+      onchange: (value) => {
+        this.state.inverse = "true" === value || parseFloat(value) >= 1;
+        this.uniforms.uniforms.uInverse = this.state.inverse ? 1 : 0;
+      },
+    },
     ...this.defaultSettings(),
   ];
 
@@ -63,6 +72,7 @@ export class MaskShader extends ShaderLayer {
       this.state = {
         ...this.state,
         mask: state.mask,
+        inverse: state.inverse,
       };
       if (includeModulators) {
         registerModulatorsFromState(this, state.modulators);
@@ -179,35 +189,37 @@ export class MaskShader extends ShaderLayer {
     }
   };
 
-  shaderName = (): string => {
+  shaderName(): string {
     return MaskShader.SHADER_NAME;
-  };
+  }
 
-  defaultState = (): MaskShaderState => {
+  defaultState(): MaskShaderState {
     return {
       ...super.defaultState(),
       mask: -1,
+      inverse: false,
     };
-  };
+  }
 
-  getExtraTextures = (): { [key: string]: TextureSource } => {
+  getExtraTextures(): { [key: string]: TextureSource } {
     if (this.mask === undefined) {
       this.mask = this.buildTexture("mask", new Sprite());
     }
     return {
       uMaskTexture: this.mask.texture.source,
     };
-  };
+  }
 
-  getVertex = (): string => {
+  getVertex(): string {
     return vertex;
-  };
+  }
 
-  setupUniformValues = (): { [key: string]: UniformData } => {
+  setupUniformValues(): { [key: string]: UniformData } {
     return {
       uMaskMatrix: { value: new Matrix(), type: "mat3x3<f32>" },
+      uInverse: { value: this.state.inverse ? 1 : 0, type: "i32" },
     };
-  };
+  }
 
   unbind = () => {
     super.unbind();
