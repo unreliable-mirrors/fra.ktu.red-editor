@@ -3,6 +3,7 @@ import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./recolour_shader.frag?raw";
 import { registerModulatorsFromState } from "../../helpers/modulators";
+import { getFunColor } from "../../helpers/sparkle";
 
 export type RecolourShaderState = ShaderState & {
   fromColor: string;
@@ -118,8 +119,8 @@ export class RecolourShader extends ShaderLayer {
   defaultState(): RecolourShaderState {
     return {
       ...super.defaultState(),
-      fromColor: "#000000",
-      toColor: "#FF0000",
+      fromColor: getFunColor(),
+      toColor: getFunColor(),
       threshold: 0.1,
       onlyHue: false,
       onlySaturation: false,

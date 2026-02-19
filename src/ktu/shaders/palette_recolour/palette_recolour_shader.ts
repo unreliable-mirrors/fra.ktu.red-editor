@@ -3,6 +3,7 @@ import { ShaderLayer, ShaderSetting, ShaderState } from "../shader_layer";
 
 import fragment from "./palette_recolour_shader.frag?raw";
 import { registerModulatorsFromState } from "../../helpers/modulators";
+import { getFunColor } from "../../helpers/sparkle";
 
 export type PaletteRecolourShaderState = ShaderState & {
   color1: string;
@@ -152,11 +153,11 @@ export class PaletteRecolourShader extends ShaderLayer {
   defaultState(): PaletteRecolourShaderState {
     return {
       ...super.defaultState(),
-      color1: "#000000",
-      color2: "#000000",
-      color3: "#000000",
-      color4: "#000000",
-      color5: "#000000",
+      color1: getFunColor(),
+      color2: getFunColor(),
+      color3: getFunColor(),
+      color4: getFunColor(),
+      color5: getFunColor(),
       onlyHue: false,
       onlySaturation: false,
       onlyLightness: false,
